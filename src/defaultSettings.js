@@ -8,16 +8,17 @@ export default {
     unit_col: 'STRESU',
     normal_col_low: 'STNRLO',
     normal_col_high: 'STNRHI',
+    filters: null,
 
     x: {
         type: 'linear',
         column: null, // sync to [ time_col ]
-        label: 'Study day'
+        label: 'Study Day'
     },
     y: {
         type: 'linear',
         column: null, // sync to [ value_col ]
-        label: 'Value'
+        label: ''
     },
     marks: [
         {
@@ -41,7 +42,8 @@ export default {
         }
     ],
     resizable: false,
-    aspect: 1.5
+    width: 500,
+    height: 250
 };
 
 export function syncSettings(settings) {
@@ -57,4 +59,21 @@ export function syncSettings(settings) {
     ];
 
     return syncedSettings;
+}
+
+export const controlInputs = [
+    {
+        type: 'subsetter',
+        value_col: null,
+        label: 'Measures',
+        multiple: true
+    }
+];
+
+export function syncControlInputs(controlInputs, settings) {
+    const syncedControlInputs = clone(controlInputs);
+    syncedControlInputs.filter(controlInput => controlInput.label === 'Measures')[0].value_col =
+        settings.measure_col;
+
+    return syncedControlInputs;
 }

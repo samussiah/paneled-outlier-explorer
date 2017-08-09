@@ -1,8 +1,8 @@
 import defineStyles from './util/defineStyles';
 import clone from './util/clone';
 import './util/object-assign';
-import defaultSettings, { syncSettings } from './defaultSettings';
-import { createChart } from 'webcharts';
+import defaultSettings, { syncSettings, controlInputs, syncControlInputs } from './defaultSettings';
+import { createControls, createChart } from 'webcharts';
 import init from './init';
 import callbacks from './callbacks/index';
 
@@ -14,7 +14,9 @@ export default function paneledOutlierExplorer(element, settings) {
     const initialSettings = clone(settings),
         mergedSettings = Object.assign({}, defaultSettings, initialSettings),
         syncedSettings = syncSettings(mergedSettings),
-        chart = createChart(element, syncedSettings);
+        syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
+        //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
+        chart = createChart(element, syncedSettings); //, controls);
 
     //Define chart callbacks.
     for (const callback in callbacks)

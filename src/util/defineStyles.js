@@ -1,5 +1,6 @@
 export default function defineStyles() {
     const styles = [
+            'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}',
             'circle.brushed {' +
                 '    stroke: orange;' +
                 '    stroke-width: 2px;' +

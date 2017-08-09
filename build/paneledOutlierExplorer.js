@@ -9,6 +9,9 @@
 
     function defineStyles() {
         var styles = [
+                'div.wc-layout.wc-small-multiples > div.wc-chart {' +
+                    '    padding-right: 1em;' +
+                    '}',
                 'circle.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 2px;' +
@@ -111,16 +114,17 @@
         unit_col: 'STRESU',
         normal_col_low: 'STNRLO',
         normal_col_high: 'STNRHI',
+        filters: null,
 
         x: {
             type: 'linear',
             column: null, // sync to [ time_col ]
-            label: 'Study day'
+            label: 'Study Day'
         },
         y: {
             type: 'linear',
             column: null, // sync to [ value_col ]
-            label: 'Value'
+            label: ''
         },
         marks: [
             {
@@ -144,7 +148,8 @@
             }
         ],
         resizable: false,
-        aspect: 1.5
+        width: 500,
+        height: 250
     };
 
     function syncSettings(settings) {
@@ -160,6 +165,25 @@
         ];
 
         return syncedSettings;
+    }
+
+    var controlInputs = [
+        {
+            type: 'subsetter',
+            value_col: null,
+            label: 'Measures',
+            multiple: true
+        }
+    ];
+
+    function syncControlInputs(controlInputs, settings) {
+        var syncedControlInputs = clone(controlInputs);
+        syncedControlInputs.filter(function(controlInput) {
+            return controlInput.label === 'Measures';
+        })[0].value_col =
+            settings.measure_col;
+
+        return syncedControlInputs;
     }
 
     function init(data) {
@@ -518,7 +542,9 @@
         var initialSettings = clone(settings),
             mergedSettings = Object.assign({}, defaultSettings, initialSettings),
             syncedSettings = syncSettings(mergedSettings),
-            chart = webcharts.createChart(element, syncedSettings);
+            syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
+            //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
+            chart = webcharts.createChart(element, syncedSettings); //, controls);
 
         //Define chart callbacks.
         for (var callback in callbacks) {

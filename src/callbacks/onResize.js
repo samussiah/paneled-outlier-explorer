@@ -25,8 +25,7 @@ export default function onResize() {
         height: this.plot_height,
         'fill-opacity': 0
     });
-    if (!this.measures)
-        this.measures = {};
+    if (!this.measures) this.measures = {};
     this.measures[this.currentMeasure] = this.package;
 
     //Attach additional data to SVG and marks.

@@ -25,6 +25,8 @@ export default function onResize() {
         height: this.plot_height,
         'fill-opacity': 0
     });
+    if (!this.measures)
+        this.measures = {};
     this.measures[this.currentMeasure] = this.package;
 
     //Attach additional data to SVG and marks.
@@ -34,13 +36,13 @@ export default function onResize() {
     const points = this.svg.selectAll('.point-supergroup g.point circle');
     points.each(d => {
         d.key1 = d.values.raw[0].key;
-        d.id = d.values.raw[0].USUBJID;
+        d.id = d.values.raw[0][chart.config.id_col];
     });
 
     //lines
     const lines = this.svg.selectAll('.line-supergroup g.line path');
     lines.each(function(d, i) {
-        d.id = d.values[0].values.raw[0].USUBJID;
+        d.id = d.values[0].values.raw[0][chart.config.id_col];
         d.lines = d.values.map((di, i) => {
             var line;
             if (i) {
@@ -50,7 +52,6 @@ export default function onResize() {
                     x1: di.values.x,
                     y1: di.values.y
                 };
-                line.slope = slope(line);
             }
             return line;
         });
@@ -78,10 +79,6 @@ export default function onResize() {
                 bottom = { x0: x0, y0: y1, x1: x1, y1: y1 },
                 left = { x0: x0, y0: y0, x1: x0, y1: y1 },
                 sides = [top, right, bottom, left];
-            left.slope = slope(left);
-            bottom.slope = slope(bottom);
-            right.slope = slope(right);
-            top.slope = slope(top);
 
             //brushed points
             const brushedPoints = points

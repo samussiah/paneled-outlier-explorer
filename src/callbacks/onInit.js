@@ -9,7 +9,7 @@ export default function onInit() {
 
         //then sort by key variables
         if (sort === 0) {
-            this.config.keys.forEach(key => {
+            [this.config.id_col, this.config.time_col].forEach(key => {
                 if (sort === 0) sort = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
             });
         }

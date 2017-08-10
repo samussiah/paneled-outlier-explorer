@@ -24,7 +24,6 @@ export default function paneledOutlierExplorer(element, settings) {
 
     //Attach element to chart.
     chart.config.element = element;
-    chart.measures = {};
 
     //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer.init().
     Object.defineProperty(chart, 'init', {

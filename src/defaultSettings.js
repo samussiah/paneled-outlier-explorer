@@ -8,6 +8,7 @@ export default {
     unit_col: 'STRESU',
     normal_col_low: 'STNRLO',
     normal_col_high: 'STNRHI',
+    measures: null,
     filters: null,
 
     x: {
@@ -42,8 +43,11 @@ export default {
         }
     ],
     resizable: false,
-    width: 500,
-    height: 250
+    width: 600,
+    height: 300,
+    margin: {
+        left: 50
+    }
 };
 
 export function syncSettings(settings) {

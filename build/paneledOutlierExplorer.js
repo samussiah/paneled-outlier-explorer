@@ -4,13 +4,50 @@
         : typeof define === 'function' && define.amd
           ? define(['webcharts', 'd3'], factory)
           : (global.paneledOutlierExplorer = factory(global.webCharts, global.d3));
-})(this, function(webcharts, d3) {
+})(this, function(webcharts, d3$1) {
     'use strict';
 
     function defineStyles() {
         var styles = [
+                '.hidden {' + '    display: none !important;' + '}',
+                '#measure-list-container {' + '    width: 15%;' + '    float: left;' + '}',
+                '#measure-list-header {' +
+                    '    font-size: 150%;' +
+                    '    border-bottom: 1px solid lightgray;' +
+                    '    font-weight: lighter;' +
+                    '    padding-bottom: 1%;' +
+                    '    margin-bottom: 1%;' +
+                    '    text-align: right;' +
+                    '}',
+                '#measure-list {' +
+                    '    list-style-type: none;' +
+                    '    font-weight: lighter;' +
+                    '}',
+                '.measure-item {' + '}',
+                '.measure-item-container {' + '    text-align: right;' + '}',
+                '.measure-checkbox {' +
+                    '    margin-left: 5px;' +
+                    '    margin-top: 5px;' +
+                    '    float: right;' +
+                    '}',
+                'div.wc-layout.wc-small-multiples {' +
+                    '    width: 83%;' +
+                    '    float: right;' +
+                    '    border-left: 1px solid lightgray;' +
+                    '}',
                 'div.wc-layout.wc-small-multiples > div.wc-chart {' +
                     '    padding-right: 1em;' +
+                    '}',
+                'div.wc-layout.wc-small-multiples > div.wc-chart .delete-chart {' +
+                    '    float: right;' +
+                    '    cursor: pointer;' +
+                    '    border: 1px solid black;' +
+                    '    border-radius: 3px;' +
+                    '    padding: 0px 4px 1px 3px;' +
+                    '}',
+                'div.wc-layout.wc-small-multiples > div.wc-chart .delete-chart:hover {' +
+                    '    background: black;' +
+                    '    color: white;' +
                     '}',
                 'circle.brushed {' +
                     '    stroke: orange;' +
@@ -114,6 +151,7 @@
         unit_col: 'STRESU',
         normal_col_low: 'STNRLO',
         normal_col_high: 'STNRHI',
+        measures: null,
         filters: null,
 
         x: {
@@ -148,8 +186,11 @@
             }
         ],
         resizable: false,
-        width: 500,
-        height: 250
+        width: 600,
+        height: 300,
+        margin: {
+            left: 50
+        }
     };
 
     function syncSettings(settings) {
@@ -187,11 +228,31 @@
     }
 
     function init(data) {
-        webcharts.multiply(this, data, this.config.measure_col);
+        var _this = this;
+
+        var sortedData = data.sort(function(a, b) {
+            var aValue = a[_this.config.measure_col],
+                bValue = b[_this.config.measure_col],
+                leftSort = aValue < bValue,
+                rightSort = aValue > bValue;
+
+            if (_this.config.measures && _this.config.measures.length) {
+                var aPos = _this.config.measures.indexOf(aValue),
+                    bPos = _this.config.measures.indexOf(bValue),
+                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+
+                return diff
+                    ? diff
+                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+            } else return leftSort ? -1 : rightSort ? 1 : 0;
+        });
+        webcharts.multiply(this, sortedData, this.config.measure_col);
     }
 
     function onInit() {
         var _this = this;
+
+        this.currentMeasure = this.filters[0].val;
 
         //Sort data by key variables.
         this.raw_data = this.raw_data.sort(function(a, b) {
@@ -221,16 +282,114 @@
 
             d.key = key;
         });
+
+        //Capture unique measures.
+        this.config.allMeasures = d3$1
+            .set(
+                this.raw_data.map(function(d) {
+                    return d[_this.config.measure_col];
+                })
+            )
+            .values()
+            .sort(function(a, b) {
+                var leftSort = a < b,
+                    rightSort = a > b;
+
+                if (_this.config.measures && _this.config.measures.length) {
+                    var aPos = _this.config.measures.indexOf(a),
+                        bPos = _this.config.measures.indexOf(b),
+                        diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+
+                    return diff
+                        ? diff
+                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                } else return leftSort ? -1 : rightSort ? 1 : 0;
+            });
+        this.config.measures =
+            this.config.measures && this.config.measures.length
+                ? this.config.measures
+                : this.config.allMeasures;
     }
 
-    function onLayout() {}
+    function onLayout() {
+        var _this = this;
+
+        var chart = this;
+
+        //Define displayed measures.
+        if (d3$1.select('#measure-list-container').size() === 0) {
+            var measureListContainer = d3$1
+                    .select(this.config.element)
+                    .insert('div', ':first-child')
+                    .attr('id', 'measure-list-container'),
+                measureListHeader = measureListContainer
+                    .append('div')
+                    .attr('id', 'measure-list-header')
+                    .text('Measure List'),
+                measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
+                measureItems = measureList
+                    .selectAll('li.measure')
+                    .data(this.config.allMeasures)
+                    .enter()
+                    .append('li')
+                    .classed('measure-item', true)
+                    .each(function(d) {
+                        var measureItemContainer = d3$1
+                                .select(this)
+                                .append('div')
+                                .classed('measure-item-container', true)
+                                .text(d),
+                            checked = chart.config.measures.indexOf(d) > -1,
+                            measureItemCheckbox = measureItemContainer
+                                .append('input')
+                                .classed('measure-checkbox', true)
+                                .attr({
+                                    type: 'checkbox',
+                                    title: checked ? 'Remove chart' : 'Display chart'
+                                })
+                                .property('checked', checked);
+                    });
+            measureItems.on('change', function(d) {
+                var checkbox = d3.select(this).select('input'),
+                    checked = checkbox.property('checked');
+                checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
+                d3
+                    .select(chart.config.element)
+                    .selectAll('.wc-chart')
+                    .filter(function(di) {
+                        return di.measure === d;
+                    })
+                    .classed('hidden', !checked);
+            });
+        }
+
+        //Add ability to remove charts.
+        this.wrap
+            .select('.wc-chart-title')
+            .append('span')
+            .classed('delete-chart', true)
+            .html('&#10006;')
+            .attr('title', 'Remove chart')
+            .on('click', function() {
+                d3
+                    .selectAll('.measure-item')
+                    .filter(function(d) {
+                        return d === _this.currentMeasure;
+                    })
+                    .select('input')
+                    .property('checked', false);
+                _this.wrap.classed('hidden', true);
+            });
+
+        //Hide measures not listed in [ settings.measures ].
+        this.wrap.classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+    }
 
     function onPreprocess() {
         var _this = this;
 
         //Set the y-domain individually for each measure.
-        this.currentMeasure = this.filters[0].val;
-        this.config.y.domain = d3.extent(
+        this.config.y.domain = d3$1.extent(
             this.raw_data.filter(function(d) {
                 return d.TEST === _this.currentMeasure;
             }),
@@ -238,13 +397,15 @@
                 return +d.STRESN;
             }
         );
+        var range = this.config.y.domain[1] - this.config.y.domain[0];
+        this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
     }
 
     function onDatatransform() {}
 
     function onDraw() {}
 
-    d3.selection.prototype.moveToFront = function() {
+    d3$1.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
@@ -366,33 +527,8 @@
         return true;
     }
 
-    function onResize() {
+    function brush() {
         var chart = this;
-
-        //Capture each multiple's scale.
-        var bbox = this.svg.node().getBBox();
-        this.package = {
-            overlay: this.svg.append('g').classed('brush', true),
-            value: this.currentMeasure,
-            domain: clone(this.config.y.domain),
-            xScale: clone(this.x),
-            yScale: clone(this.y),
-            brush: d3.svg.brush().x(this.x).y(this.y)
-        };
-
-        //define invisible brush overlay
-        this.package.overlay.append('rect').attr({
-            x: 0,
-            y: 0,
-            width: this.plot_width,
-            height: this.plot_height,
-            'fill-opacity': 0
-        });
-        if (!this.measures) this.measures = {};
-        this.measures[this.currentMeasure] = this.package;
-
-        //Attach additional data to SVG and marks.
-        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.currentMeasure });
 
         //points
         var points = this.svg.selectAll('.point-supergroup g.point circle');
@@ -421,17 +557,16 @@
         });
 
         //Apply brush.
-        this.measures[this.currentMeasure].brush
+        this.package.brush
             .on('brushstart', function() {})
             .on('brush', function() {
-                var measure = d3.select(this).datum().measure;
-                for (var prop in chart.measures) {
-                    if (prop !== measure)
-                        chart.measures[prop].overlay.call(chart.measures[prop].brush.clear());
-                }
+                var measure = d3$1.select(this).datum().measure;
+                d3.selectAll(chart.config.element).selectAll('.wc-chart').each(function(d) {
+                    if (d.measure !== measure) d.overlay.call(d.brush.clear());
+                });
 
                 //brush
-                var extent$$1 = chart.measures[measure].brush.extent(),
+                var extent$$1 = chart.package.brush.extent(),
                     x0 = extent$$1[0][0],
                     // top left x-coordinate
                     y0 = extent$$1[1][1],
@@ -460,7 +595,7 @@
                         .map(function(d) {
                             return d.key1;
                         }),
-                    allPoints = d3
+                    allPoints = d3$1
                         .select(chart.config.element)
                         .selectAll('.point-supergroup g.point circle')
                         .classed('brushed selected', false);
@@ -470,7 +605,7 @@
                     })
                     .classed('brushed', true)
                     .each(function() {
-                        d3.select(this.parentNode).moveToFront();
+                        d3$1.select(this.parentNode).moveToFront();
                     });
 
                 //brushed lines
@@ -495,7 +630,7 @@
                         .map(function(d) {
                             return d.id;
                         }),
-                    allLines = d3
+                    allLines = d3$1
                         .select(chart.config.element)
                         .selectAll('.line-supergroup g.line path')
                         .classed('brushed', false);
@@ -505,7 +640,7 @@
                     })
                     .classed('brushed', true)
                     .each(function() {
-                        d3.select(this.parentNode).moveToFront();
+                        d3$1.select(this.parentNode).moveToFront();
                     });
                 allPoints
                     .filter(function(d) {
@@ -513,13 +648,46 @@
                     })
                     .classed('selected', true)
                     .each(function() {
-                        d3.select(this.parentNode).moveToFront();
+                        d3$1.select(this.parentNode).moveToFront();
                     });
             })
             .on('brushend', function() {});
 
         //Initialize brush on brush overlay.
         this.package.overlay.call(this.package.brush);
+    }
+
+    function onResize() {
+        var chart = this;
+
+        //Capture each multiple's scale.
+        var bbox = this.svg.node().getBBox();
+        this.package = {
+            measure: this.currentMeasure,
+            container: this.wrap,
+            overlay: this.svg.append('g').classed('brush', true),
+            value: this.currentMeasure,
+            domain: clone(this.config.y.domain),
+            xScale: clone(this.x),
+            yScale: clone(this.y),
+            brush: d3$1.svg.brush().x(this.x).y(this.y)
+        };
+        this.wrap.datum(this.package);
+
+        //Define invisible brush overlay.
+        this.package.overlay.append('rect').attr({
+            x: 0,
+            y: 0,
+            width: this.plot_width,
+            height: this.plot_height,
+            'fill-opacity': 0
+        });
+
+        //Attach additional data to SVG and marks.
+        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.currentMeasure });
+
+        //Add brush functionality.
+        brush.call(this);
     }
 
     function onDestroy() {}
@@ -551,7 +719,6 @@
             chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
         } //Attach element to chart.
         chart.config.element = element;
-        chart.measures = {};
 
         //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer.init().
         Object.defineProperty(chart, 'init', {

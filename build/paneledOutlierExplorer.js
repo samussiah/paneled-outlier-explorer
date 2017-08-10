@@ -4,7 +4,7 @@
         : typeof define === 'function' && define.amd
           ? define(['webcharts', 'd3'], factory)
           : (global.paneledOutlierExplorer = factory(global.webCharts, global.d3));
-})(this, function(webcharts, d3$1) {
+})(this, function(webcharts, d3) {
     'use strict';
 
     function defineStyles() {
@@ -285,7 +285,7 @@
         });
 
         //Capture unique measures.
-        this.config.allMeasures = d3$1
+        this.config.allMeasures = d3
             .set(
                 this.raw_data.map(function(d) {
                     return d[_this.config.measure_col];
@@ -318,8 +318,8 @@
         var chart = this;
 
         //Define chart display toggles.
-        if (d3$1.select('#measure-list-container').size() === 0) {
-            var measureListContainer = d3$1
+        if (d3.select('#measure-list-container').size() === 0) {
+            var measureListContainer = d3
                     .select(this.config.element)
                     .insert('div', ':first-child')
                     .attr('id', 'measure-list-container'),
@@ -342,17 +342,17 @@
                         this.config.measures.length === this.config.allMeasures.length
                     )
                     .on('click', function() {
-                        var checkbox = d3$1.select(this),
+                        var checkbox = d3.select(this),
                             checked = checkbox.property('checked');
                         checkbox.attr(
                             'title',
                             checked ? 'Remove all charts' : 'Display all charts'
                         );
-                        d3$1
+                        d3
                             .select(chart.config.element)
                             .selectAll('.wc-chart')
                             .classed('hidden', !checked);
-                        d3$1.selectAll('.measure-checkbox').property('checked', checked);
+                        d3.selectAll('.measure-checkbox').property('checked', checked);
                     }),
                 measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
                 measureItems = measureList
@@ -363,7 +363,7 @@
                     .classed('measure-item', true)
                     .each(function(d) {
                         //Append div inside list item.
-                        var measureItemContainer = d3$1
+                        var measureItemContainer = d3
                                 .select(this)
                                 .append('div')
                                 .classed('measure-item-container', true)
@@ -382,10 +382,10 @@
                     });
             measureItems.on('change', function(d) {
                 //Determine state of checkbox.
-                var checkbox = d3$1.select(this).select('input'),
+                var checkbox = d3.select(this).select('input'),
                     checked = checkbox.property('checked');
                 checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-                d3$1
+                d3
                     .select(chart.config.element)
                     .selectAll('.wc-chart')
                     .filter(function(di) {
@@ -414,7 +414,7 @@
             .on('click', function() {
                 _this.wrap.classed('hidden', true);
                 //Sync measureItems.
-                var measureItems = d3$1.selectAll('.measure-item');
+                var measureItems = d3.selectAll('.measure-item');
                 measureItems
                     .filter(function(d) {
                         return d === _this.currentMeasure;
@@ -427,7 +427,7 @@
                         return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
                     })
                 )
-                    d3$1
+                    d3
                         .select('#measure-list-checkbox')
                         .attr('title', 'Display all charts')
                         .property('checked', false);
@@ -441,7 +441,7 @@
         var _this = this;
 
         //Set the y-domain individually for each measure.
-        this.config.y.domain = d3$1.extent(
+        this.config.y.domain = d3.extent(
             this.raw_data.filter(function(d) {
                 return d.TEST === _this.currentMeasure;
             }),
@@ -457,7 +457,7 @@
 
     function onDraw() {}
 
-    d3$1.selection.prototype.moveToFront = function() {
+    d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
@@ -612,7 +612,7 @@
         this.package.brush
             .on('brushstart', function() {})
             .on('brush', function() {
-                var measure = d3$1.select(this).datum().measure;
+                var measure = d3.select(this).datum().measure;
                 d3.selectAll(chart.config.element).selectAll('.wc-chart').each(function(d) {
                     if (d.measure !== measure) d.overlay.call(d.brush.clear());
                 });
@@ -647,7 +647,7 @@
                         .map(function(d) {
                             return d.key1;
                         }),
-                    allPoints = d3$1
+                    allPoints = d3
                         .select(chart.config.element)
                         .selectAll('.point-supergroup g.point circle')
                         .classed('brushed selected', false);
@@ -657,7 +657,7 @@
                     })
                     .classed('brushed', true)
                     .each(function() {
-                        d3$1.select(this.parentNode).moveToFront();
+                        d3.select(this.parentNode).moveToFront();
                     });
 
                 //brushed lines
@@ -682,7 +682,7 @@
                         .map(function(d) {
                             return d.id;
                         }),
-                    allLines = d3$1
+                    allLines = d3
                         .select(chart.config.element)
                         .selectAll('.line-supergroup g.line path')
                         .classed('brushed', false);
@@ -692,7 +692,7 @@
                     })
                     .classed('brushed', true)
                     .each(function() {
-                        d3$1.select(this.parentNode).moveToFront();
+                        d3.select(this.parentNode).moveToFront();
                     });
                 allPoints
                     .filter(function(d) {
@@ -700,7 +700,7 @@
                     })
                     .classed('selected', true)
                     .each(function() {
-                        d3$1.select(this.parentNode).moveToFront();
+                        d3.select(this.parentNode).moveToFront();
                     });
             })
             .on('brushend', function() {});
@@ -722,7 +722,7 @@
             domain: clone(this.config.y.domain),
             xScale: clone(this.x),
             yScale: clone(this.y),
-            brush: d3$1.svg.brush().x(this.x).y(this.y)
+            brush: d3.svg.brush().x(this.x).y(this.y)
         };
         this.wrap.datum(this.package);
 

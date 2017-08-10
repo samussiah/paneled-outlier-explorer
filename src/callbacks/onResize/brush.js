@@ -1,4 +1,4 @@
-import { select } from 'd3';
+import { select, selectAll } from 'd3';
 import doLineSegmentsIntersect from './lineIntersection';
 
 export default function brush() {
@@ -35,7 +35,7 @@ export default function brush() {
         .on('brushstart', function() {})
         .on('brush', function() {
             const measure = select(this).datum().measure;
-            d3.selectAll(chart.config.element).selectAll('.wc-chart').each(d => {
+            selectAll(chart.config.element).selectAll('.wc-chart').each(d => {
                 if (d.measure !== measure) d.overlay.call(d.brush.clear());
             });
 

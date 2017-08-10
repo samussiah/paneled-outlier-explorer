@@ -2,7 +2,7 @@ import defineStyles from './util/defineStyles';
 import clone from './util/clone';
 import './util/object-assign';
 import defaultSettings, { syncSettings, controlInputs, syncControlInputs } from './defaultSettings';
-import { createControls, createChart } from 'webcharts';
+import { createChart } from 'webcharts';
 import init from './init';
 import callbacks from './callbacks/index';
 

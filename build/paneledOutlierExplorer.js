@@ -443,10 +443,10 @@
         //Set the y-domain individually for each measure.
         this.config.y.domain = d3.extent(
             this.raw_data.filter(function(d) {
-                return d.TEST === _this.currentMeasure;
+                return d[_this.config.measure_col] === _this.currentMeasure;
             }),
             function(d) {
-                return +d.STRESN;
+                return +d[_this.config.value_col];
             }
         );
         var range = this.config.y.domain[1] - this.config.y.domain[0];

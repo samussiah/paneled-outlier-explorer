@@ -1,7 +1,7 @@
 export default function defineStyles() {
     const styles = [
             '.hidden {' + '    display: none !important;' + '}',
-            '#measure-list-container {' + '    width: 15%;' + '    float: left;' + '}',
+            '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}',
             '#measure-list-header {' +
                 '    font-size: 150%;' +
                 '    border-bottom: 1px solid lightgray;' +
@@ -10,6 +10,7 @@ export default function defineStyles() {
                 '    margin-bottom: 1%;' +
                 '    text-align: right;' +
                 '}',
+            '#measure-list-checkbox {' + '    margin-left: 5px;' + '}',
             '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}',
             '.measure-item {' + '}',
             '.measure-item-container {' + '    text-align: right;' + '}',
@@ -19,7 +20,7 @@ export default function defineStyles() {
                 '    float: right;' +
                 '}',
             'div.wc-layout.wc-small-multiples {' +
-                '    width: 83%;' +
+                '    width: 80%;' +
                 '    float: right;' +
                 '    border-left: 1px solid lightgray;' +
                 '}',

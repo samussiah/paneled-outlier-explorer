@@ -10,7 +10,7 @@
     function defineStyles() {
         var styles = [
                 '.hidden {' + '    display: none !important;' + '}',
-                '#measure-list-container {' + '    width: 15%;' + '    float: left;' + '}',
+                '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}',
                 '#measure-list-header {' +
                     '    font-size: 150%;' +
                     '    border-bottom: 1px solid lightgray;' +
@@ -19,6 +19,7 @@
                     '    margin-bottom: 1%;' +
                     '    text-align: right;' +
                     '}',
+                '#measure-list-checkbox {' + '    margin-left: 5px;' + '}',
                 '#measure-list {' +
                     '    list-style-type: none;' +
                     '    font-weight: lighter;' +
@@ -31,7 +32,7 @@
                     '    float: right;' +
                     '}',
                 'div.wc-layout.wc-small-multiples {' +
-                    '    width: 83%;' +
+                    '    width: 80%;' +
                     '    float: right;' +
                     '    border-left: 1px solid lightgray;' +
                     '}',
@@ -316,7 +317,7 @@
 
         var chart = this;
 
-        //Define displayed measures.
+        //Define chart display toggles.
         if (d3$1.select('#measure-list-container').size() === 0) {
             var measureListContainer = d3$1
                     .select(this.config.element)
@@ -325,7 +326,34 @@
                 measureListHeader = measureListContainer
                     .append('div')
                     .attr('id', 'measure-list-header')
-                    .text('Measure List'),
+                    .text('Measures'),
+                measureListCheckbox = measureListHeader
+                    .append('input')
+                    .attr({
+                        id: 'measure-list-checkbox',
+                        type: 'checkbox',
+                        title:
+                            this.config.measures.length === this.config.allMeasures.length
+                                ? 'Remove all charts'
+                                : 'Display all charts'
+                    })
+                    .property(
+                        'checked',
+                        this.config.measures.length === this.config.allMeasures.length
+                    )
+                    .on('click', function() {
+                        var checkbox = d3$1.select(this),
+                            checked = checkbox.property('checked');
+                        checkbox.attr(
+                            'title',
+                            checked ? 'Remove all charts' : 'Display all charts'
+                        );
+                        d3$1
+                            .select(chart.config.element)
+                            .selectAll('.wc-chart')
+                            .classed('hidden', !checked);
+                        d3$1.selectAll('.measure-checkbox').property('checked', checked);
+                    }),
                 measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
                 measureItems = measureList
                     .selectAll('li.measure')
@@ -334,12 +362,15 @@
                     .append('li')
                     .classed('measure-item', true)
                     .each(function(d) {
+                        //Append div inside list item.
                         var measureItemContainer = d3$1
                                 .select(this)
                                 .append('div')
                                 .classed('measure-item-container', true)
                                 .text(d),
+                            //Check whether measure should by displayed initially.
                             checked = chart.config.measures.indexOf(d) > -1,
+                            //Append checkbox inside div.
                             measureItemCheckbox = measureItemContainer
                                 .append('input')
                                 .classed('measure-checkbox', true)
@@ -350,20 +381,30 @@
                                 .property('checked', checked);
                     });
             measureItems.on('change', function(d) {
-                var checkbox = d3.select(this).select('input'),
+                //Determine state of checkbox.
+                var checkbox = d3$1.select(this).select('input'),
                     checked = checkbox.property('checked');
                 checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-                d3
+                d3$1
                     .select(chart.config.element)
                     .selectAll('.wc-chart')
                     .filter(function(di) {
                         return di.measure === d;
                     })
                     .classed('hidden', !checked);
+                //If any checkbox is unchecked, uncheck measureListCheckbox.
+                if (
+                    measureItems[0].some(function(measureItem) {
+                        return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
+                    })
+                )
+                    measureListCheckbox
+                        .attr('title', 'Display all charts')
+                        .property('checked', false);
             });
         }
 
-        //Add ability to remove charts.
+        //Add ability to remove charts in the chart title.
         this.wrap
             .select('.wc-chart-title')
             .append('span')
@@ -371,14 +412,25 @@
             .html('&#10006;')
             .attr('title', 'Remove chart')
             .on('click', function() {
-                d3
-                    .selectAll('.measure-item')
+                _this.wrap.classed('hidden', true);
+                //Sync measureItems.
+                var measureItems = d3$1.selectAll('.measure-item');
+                measureItems
                     .filter(function(d) {
                         return d === _this.currentMeasure;
                     })
                     .select('input')
                     .property('checked', false);
-                _this.wrap.classed('hidden', true);
+                //If any checkbox is unchecked, uncheck measureListCheckbox.
+                if (
+                    measureItems[0].some(function(measureItem) {
+                        return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
+                    })
+                )
+                    d3$1
+                        .select('#measure-list-checkbox')
+                        .attr('title', 'Display all charts')
+                        .property('checked', false);
             });
 
         //Hide measures not listed in [ settings.measures ].

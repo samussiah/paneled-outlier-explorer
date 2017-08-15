@@ -25,14 +25,14 @@ export default function defineStyles() {
                 '    border-left: 1px solid lightgray;' +
                 '}',
             'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .delete-chart {' +
+            'div.wc-layout.wc-small-multiples > div.wc-chart .remove-chart {' +
                 '    float: right;' +
                 '    cursor: pointer;' +
                 '    border: 1px solid black;' +
                 '    border-radius: 3px;' +
                 '    padding: 0px 4px 1px 3px;' +
                 '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .delete-chart:hover {' +
+            'div.wc-layout.wc-small-multiples > div.wc-chart .remove-chart:hover {' +
                 '    background: black;' +
                 '    color: white;' +
                 '}',

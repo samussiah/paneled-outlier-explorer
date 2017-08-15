@@ -406,11 +406,18 @@
 
         //Add ability to remove charts in the chart title.
         this.wrap
+            .on('mouseover', function() {
+                _this.wrap.select('.wc-chart-title span').style('visibility', 'visible');
+            })
+            .on('mouseout', function() {
+                _this.wrap.select('.wc-chart-title span').style('visibility', 'hidden');
+            })
             .select('.wc-chart-title')
             .append('span')
             .classed('delete-chart', true)
             .html('&#10006;')
             .attr('title', 'Remove chart')
+            .style('visibility', 'hidden')
             .on('click', function() {
                 _this.wrap.classed('hidden', true);
                 //Sync measureItems.

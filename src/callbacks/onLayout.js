@@ -1,4 +1,5 @@
 import { select, selectAll } from 'd3';
+import m__imize from './onLayout/m__imize';
 
 export default function onLayout() {
     const chart = this;
@@ -78,11 +79,17 @@ export default function onLayout() {
     this.wrap
         .select('.wc-chart-title')
         .append('span')
-        .classed('delete-chart', true)
+        .classed('delete-chart chart-button', true)
         .html('&#10006;')
         .attr('title', 'Remove chart')
         .on('click', () => {
+          //Minimize chart.
+            if (this.wrap.classed('full-screen'))
+                m__imize(this);
+
+          //Hide chart.
             this.wrap.classed('hidden', true);
+
             //Sync measureItems.
             const measureItems = selectAll('.measure-item');
             measureItems
@@ -98,6 +105,19 @@ export default function onLayout() {
                 select('#measure-list-checkbox')
                     .attr('title', 'Display all charts')
                     .property('checked', false);
+        });
+
+    //Add ability to maximize charts in the chart title.
+    const
+        m__imizeButton = this.wrap
+            .select('.wc-chart-title')
+            .append('span')
+            .classed('m__imize-chart chart-button', true)
+            .html('&plus;')
+            .attr('title', 'Maximize chart');
+    m__imizeButton
+        .on('click', () => {
+            m__imize(this);
         });
 
     //Hide measures not listed in [ settings.measures ].

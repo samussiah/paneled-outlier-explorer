@@ -40,7 +40,9 @@ export default function brush() {
             });
 
             //brush
-            const extent = chart.package.brush.extent(),
+            chart.config.extent = chart.package.brush.extent();
+            const
+                extent = chart.config.extent,
                 x0 = extent[0][0], // top left x-coordinate
                 y0 = extent[1][1], // top left y-coordinate
                 x1 = extent[1][0], // bottom right x-coordinate
@@ -113,4 +115,12 @@ export default function brush() {
 
     //Initialize brush on brush overlay.
     this.package.overlay.call(this.package.brush);
+
+    if (!this.config.extent)
+        this.config.extent = this.package.brush.extent();
+    if (this.config.extent !== this.package.brush.extent()) {
+        this.package.brush.extent(this.config.extent);
+        console.log(this.config.extent);
+        console.log(this.package.brush.extent());
+    } 
 }

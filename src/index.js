@@ -17,6 +17,7 @@ export default function paneledOutlierExplorer(element, settings) {
         syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
         //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
         chart = createChart(element, syncedSettings); //, controls);
+    chart.config.initialSettings = clone(syncedSettings);
 
     //Define chart callbacks.
     for (const callback in callbacks)

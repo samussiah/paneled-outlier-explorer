@@ -83,11 +83,10 @@ export default function onLayout() {
         .html('&#10006;')
         .attr('title', 'Remove chart')
         .on('click', () => {
-          //Minimize chart.
-            if (this.wrap.classed('full-screen'))
-                m__imize(this);
+            //Minimize chart.
+            if (this.wrap.classed('full-screen')) m__imize(this);
 
-          //Hide chart.
+            //Hide chart.
             this.wrap.classed('hidden', true);
 
             //Sync measureItems.
@@ -108,17 +107,15 @@ export default function onLayout() {
         });
 
     //Add ability to maximize charts in the chart title.
-    const
-        m__imizeButton = this.wrap
-            .select('.wc-chart-title')
-            .append('span')
-            .classed('m__imize-chart chart-button', true)
-            .html('&plus;')
-            .attr('title', 'Maximize chart');
-    m__imizeButton
-        .on('click', () => {
-            m__imize(this);
-        });
+    const m__imizeButton = this.wrap
+        .select('.wc-chart-title')
+        .append('span')
+        .classed('m__imize-chart chart-button', true)
+        .html('&plus;')
+        .attr('title', 'Maximize chart');
+    m__imizeButton.on('click', () => {
+        m__imize(this);
+    });
 
     //Hide measures not listed in [ settings.measures ].
     this.wrap.classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);

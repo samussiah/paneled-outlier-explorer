@@ -6,9 +6,9 @@ export default function brush() {
 
     //points
     const points = this.svg.selectAll('.point-supergroup g.point circle');
-    points.each((d,i) => {
+    points.each((d, i) => {
         d.id = d.values.raw[0][chart.config.id_col];
-        d.time = d.values.raw[0][chart.config.time_col]
+        d.time = d.values.raw[0][chart.config.time_col];
         d.key1 = d.id + '|' + d.time;
     });
 
@@ -58,13 +58,9 @@ export default function brush() {
     this.package.brush
         .on('brushstart', function() {})
         .on('brush', function() {
-            const measure = select(this).datum().measure;
-            selectAll(chart.config.element)
-                .selectAll('.wc-chart')
-                .each(d => {
-                    if (d.measure !== measure)
-                        d.overlay.call(d.brush.clear());
-                });
+            selectAll(chart.config.element).selectAll('.wc-chart').each(d => {
+                if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
+            });
             chart.config.extent = chart.package.brush.extent();
 
             //brush marks
@@ -75,14 +71,16 @@ export default function brush() {
     //Initialize brush on brush overlay.
     this.package.overlay.call(this.package.brush);
 
-    if (!this.config.extent)
-        this.config.extent = this.package.brush.extent();
-    if (this.config.extent[0][0] !== this.package.brush.extent()[0][0] ||
-        this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
-        this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
-        this.config.extent[1][1] !== this.package.brush.extent()[1][1]) {
+    if (!this.config.extent) this.config.extent = this.package.brush.extent();
+    if (
+        (this.config.extent[0][0] !== this.package.brush.extent()[0][0] ||
+            this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
+            this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
+            this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
+        this.currentMeasure === select(chart.wrap.node().parentNode).datum().measure
+    ) {
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
         brushMarks(chart, points, lines);
-    } 
+    }
 }

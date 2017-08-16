@@ -2,8 +2,7 @@ import { select } from 'd3';
 import doLineSegmentsIntersect from './lineIntersection';
 
 export default function brushMarks(chart, points, lines) {
-    const
-        extent = chart.config.extent,
+    const extent = chart.config.extent,
         x0 = extent[0][0], // top left x-coordinate
         y0 = extent[1][1], // top left y-coordinate
         x1 = extent[1][0], // bottom right x-coordinate
@@ -17,12 +16,7 @@ export default function brushMarks(chart, points, lines) {
     //brush points
     const brushedPoints = points
             .filter(d => {
-                return (
-                    x0 <= d.values.x &&
-                    y0 >= d.values.y &&
-                    x1 >= d.values.x &&
-                    y1 <= d.values.y
-                );
+                return x0 <= d.values.x && y0 >= d.values.y && x1 >= d.values.x && y1 <= d.values.y;
             })
             .data()
             .map(d => d.key1),
@@ -59,12 +53,9 @@ export default function brushMarks(chart, points, lines) {
         allLines = select(chart.config.element)
             .selectAll('.line-supergroup g.line path')
             .classed('brushed', false);
-    allLines
-        .filter(d => brushedLines.indexOf(d.id) > -1)
-        .classed('brushed', true)
-        .each(function() {
-            select(this.parentNode).moveToFront();
-        });
+    allLines.filter(d => brushedLines.indexOf(d.id) > -1).classed('brushed', true).each(function() {
+        select(this.parentNode).moveToFront();
+    });
     allPoints
         .filter(d => brushedLines.indexOf(d.id) > -1)
         .classed('selected', true)
@@ -72,9 +63,10 @@ export default function brushMarks(chart, points, lines) {
             select(this.parentNode).moveToFront();
         });
 
-  //Attach select points and lines to multiples container.
-    select(chart.wrap.node().parentNode)
-        .datum(
-            {points: brushedPoints
-            ,lines: brushedLines});
+    //Attach select points and lines to multiples container.
+    select(chart.wrap.node().parentNode).datum({
+        measure: chart.currentMeasure,
+        points: brushedPoints,
+        lines: brushedLines
+    });
 }

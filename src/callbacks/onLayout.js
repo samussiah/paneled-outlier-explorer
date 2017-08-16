@@ -1,6 +1,7 @@
 import { select, selectAll } from 'd3';
 import toggleCharts from './onLayout/toggleCharts';
 import toggleChart from './onLayout/toggleChart';
+import m__imize from './onLayout/m__imize';
 
 export default function onLayout() {
     const chart = this;
@@ -60,18 +61,39 @@ export default function onLayout() {
 
     //Add ability to remove charts in the chart title.
     this.wrap
+        .on('mouseover', () => {
+            this.wrap.select('.wc-chart-title span').style('visibility', 'visible');
+        })
+        .on('mouseout', () => {
+            this.wrap.select('.wc-chart-title span').style('visibility', 'hidden');
+        })
         .select('.wc-chart-title')
         .append('span')
-        .classed('remove-chart', true)
+        .classed('remove-chart chart-button', true)
         .html('&#10006;')
         .attr('title', 'Remove chart')
+        .style('visibility', 'hidden')
         .on('click', () => {
+            //Minimize chart.
+            if (this.wrap.classed('full-screen')) m__imize(this);
+
             const li = d3.select(
                 'li.measure-item.' + this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
             );
             li.select('input').property('checked', false);
             toggleChart(this, li.node());
         });
+
+    //Add ability to maximize charts in the chart title.
+    const m__imizeButton = this.wrap
+        .select('.wc-chart-title')
+        .append('span')
+        .classed('m__imize-chart chart-button', true)
+        .html('&plus;')
+        .attr('title', 'Maximize chart');
+    m__imizeButton.on('click', () => {
+        m__imize(this);
+    });
 
     //Hide measures not listed in [ settings.measures ].
     this.wrap

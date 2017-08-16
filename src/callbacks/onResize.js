@@ -7,7 +7,6 @@ export default function onResize() {
     const chart = this;
 
     //Capture each multiple's scale.
-    var bbox = this.svg.node().getBBox();
     this.package = {
         measure: this.currentMeasure,
         container: this.wrap,

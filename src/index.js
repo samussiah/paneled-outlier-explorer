@@ -17,15 +17,16 @@ export default function paneledOutlierExplorer(element, settings) {
         syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
         //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
         chart = createChart(element, syncedSettings); //, controls);
+    chart.config.initialSettings = clone(syncedSettings);
 
     //Define chart callbacks.
     for (const callback in callbacks)
         chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
 
-    //Attach element to chart.
+    //Attach element to chart config.
     chart.config.element = element;
 
-    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer.init().
+    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
     Object.defineProperty(chart, 'init', {
         enumerable: false,
         configurable: true,

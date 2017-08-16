@@ -25,14 +25,24 @@ export default function defineStyles() {
                 '    border-left: 1px solid lightgray;' +
                 '}',
             'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .remove-chart {' +
+            'div.wc-layout.wc-small-multiples > div.wc-chart.full-screen {' +
+                '    z-index: 9999;' +
+                '    width: 100%;' +
+                '    height: 100%;' +
+                '    position: fixed;' +
+                '    top: 0;' +
+                '    left: 0;' +
+                '    background: white;' +
+                ' }',
+            'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' +
                 '    float: right;' +
                 '    cursor: pointer;' +
                 '    border: 1px solid black;' +
                 '    border-radius: 3px;' +
                 '    padding: 0px 4px 1px 3px;' +
+                '    margin-left: 5px;' +
                 '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .remove-chart:hover {' +
+            'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' +
                 '    background: black;' +
                 '    color: white;' +
                 '}',

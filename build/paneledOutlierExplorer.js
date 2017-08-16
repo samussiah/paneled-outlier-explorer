@@ -4,7 +4,7 @@
         : typeof define === 'function' && define.amd
           ? define(['webcharts', 'd3'], factory)
           : (global.paneledOutlierExplorer = factory(global.webCharts, global.d3));
-})(this, function(webcharts, d3) {
+})(this, function(webcharts, d3$1) {
     'use strict';
 
     function defineStyles() {
@@ -259,7 +259,7 @@
         });
 
         //Capture unique measures.
-        this.config.allMeasures = d3
+        this.config.allMeasures = d3$1
             .set(
                 data.map(function(d) {
                     return d[_this.config.measure_col];
@@ -312,14 +312,59 @@
         }
     }
 
+    function toggleChart(chart, li) {
+        //Determine state of checkbox.
+        var checkbox = d3$1.select(li).select('input'),
+            checked = checkbox.property('checked');
+        checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
+        d3$1
+            .select(chart.config.element)
+            .selectAll('.wc-chart')
+            .filter(function(di) {
+                return di.measure === d3$1.select(li).datum();
+            })
+            .classed('hidden', !checked);
+
+        //If any checkbox is unchecked, uncheck measureListCheckbox.
+        toggleCharts(chart, false);
+    }
+
+    function toggleCharts(chart) {
+        var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+        var measureListCheckbox = d3$1.select('#measure-list-checkbox'),
+            checked = measureListCheckbox.property('checked'),
+            measureItems = d3$1.selectAll('li.measure-item'),
+            anyUnchecked = measureItems[0].some(function(measureItem) {
+                return !measureItem.getElementsByTagName('input')[0].checked;
+            });
+
+        //Handle overall toggle.
+        if (toggle) {
+            measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
+            measureItems.each(function(d) {
+                d3.select(this).select('input').property('checked', checked);
+                toggleChart(chart, this, d);
+            });
+            measureListCheckbox.property('checked', checked);
+        } else {
+            //Handle individual toggles.
+            measureListCheckbox.attr(
+                'title',
+                anyUnchecked ? 'Display all charts' : 'Remove all charts'
+            );
+            measureListCheckbox.property('checked', !anyUnchecked);
+        }
+    }
+
     function onLayout() {
         var _this = this;
 
         var chart = this;
 
         //Define chart display toggles.
-        if (d3.select('#measure-list-container').size() === 0) {
-            var measureListContainer = d3
+        if (d3$1.select('#measure-list-container').size() === 0) {
+            var measureListContainer = d3$1
                     .select(this.config.element)
                     .insert('div', ':first-child')
                     .attr('id', 'measure-list-container'),
@@ -342,28 +387,20 @@
                         this.config.measures.length === this.config.allMeasures.length
                     )
                     .on('click', function() {
-                        var checkbox = d3.select(this),
-                            checked = checkbox.property('checked');
-                        checkbox.attr(
-                            'title',
-                            checked ? 'Remove all charts' : 'Display all charts'
-                        );
-                        d3
-                            .select(chart.config.element)
-                            .selectAll('.wc-chart')
-                            .classed('hidden', !checked);
-                        d3.selectAll('.measure-checkbox').property('checked', checked);
+                        toggleCharts(chart, this);
                     }),
                 measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
                 measureItems = measureList
-                    .selectAll('li.measure')
+                    .selectAll('li.measure-item')
                     .data(this.config.allMeasures)
                     .enter()
                     .append('li')
-                    .classed('measure-item', true)
+                    .attr('class', function(d) {
+                        return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
+                    })
                     .each(function(d) {
                         //Append div inside list item.
-                        var measureItemContainer = d3
+                        var measureItemContainer = d3$1
                                 .select(this)
                                 .append('div')
                                 .classed('measure-item-container', true)
@@ -381,26 +418,7 @@
                                 .property('checked', checked);
                     });
             measureItems.on('change', function(d) {
-                //Determine state of checkbox.
-                var checkbox = d3.select(this).select('input'),
-                    checked = checkbox.property('checked');
-                checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-                d3
-                    .select(chart.config.element)
-                    .selectAll('.wc-chart')
-                    .filter(function(di) {
-                        return di.measure === d;
-                    })
-                    .classed('hidden', !checked);
-                //If any checkbox is unchecked, uncheck measureListCheckbox.
-                if (
-                    measureItems[0].some(function(measureItem) {
-                        return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
-                    })
-                )
-                    measureListCheckbox
-                        .attr('title', 'Display all charts')
-                        .property('checked', false);
+                toggleChart(chart, this);
             });
         }
 
@@ -414,35 +432,19 @@
             })
             .select('.wc-chart-title')
             .append('span')
-            .classed('delete-chart chart-button', true)
+            .classed('remove-chart chart-button', true)
             .html('&#10006;')
             .attr('title', 'Remove chart')
             .style('visibility', 'hidden')
             .on('click', function() {
                 //Minimize chart.
                 if (_this.wrap.classed('full-screen')) m__imize(_this);
-
-                //Hide chart.
-                _this.wrap.classed('hidden', true);
-
-                //Sync measureItems.
-                var measureItems = d3.selectAll('.measure-item');
-                measureItems
-                    .filter(function(d) {
-                        return d === _this.currentMeasure;
-                    })
-                    .select('input')
-                    .property('checked', false);
-                //If any checkbox is unchecked, uncheck measureListCheckbox.
-                if (
-                    measureItems[0].some(function(measureItem) {
-                        return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
-                    })
-                )
-                    d3
-                        .select('#measure-list-checkbox')
-                        .attr('title', 'Display all charts')
-                        .property('checked', false);
+          
+                var li = d3.select(
+                    'li.measure-item.' + _this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
+                );
+                li.select('input').property('checked', false);
+                toggleChart(_this, li.node());
             });
 
         //Add ability to maximize charts in the chart title.
@@ -457,14 +459,16 @@
         });
 
         //Hide measures not listed in [ settings.measures ].
-        this.wrap.classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+        this.wrap
+            .classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true)
+            .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
     }
 
     function onPreprocess() {
         var _this = this;
 
         //Set the y-domain individually for each measure.
-        this.config.y.domain = d3.extent(
+        this.config.y.domain = d3$1.extent(
             this.raw_data.filter(function(d) {
                 return d[_this.config.measure_col] === _this.currentMeasure;
             }),
@@ -482,7 +486,7 @@
         if (this.package) this.package.overlay.call(this.package.brush.clear());
     }
 
-    d3.selection.prototype.moveToFront = function() {
+    d3$1.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
@@ -797,7 +801,7 @@
             domain: clone(this.config.y.domain),
             xScale: clone(this.x),
             yScale: clone(this.y),
-            brush: d3.svg.brush().x(this.x).y(this.y)
+            brush: d3$1.svg.brush().x(this.x).y(this.y)
         };
         this.wrap.datum(this.package);
 

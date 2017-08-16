@@ -1,4 +1,6 @@
 import { select, selectAll } from 'd3';
+import toggleCharts from './onLayout/toggleCharts';
+import toggleChart from './onLayout/toggleChart';
 import m__imize from './onLayout/m__imize';
 
 export default function onLayout() {
@@ -25,19 +27,15 @@ export default function onLayout() {
                 })
                 .property('checked', this.config.measures.length === this.config.allMeasures.length)
                 .on('click', function() {
-                    const checkbox = select(this),
-                        checked = checkbox.property('checked');
-                    checkbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
-                    select(chart.config.element).selectAll('.wc-chart').classed('hidden', !checked);
-                    selectAll('.measure-checkbox').property('checked', checked);
+                    toggleCharts(chart, this);
                 }),
             measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
             measureItems = measureList
-                .selectAll('li.measure')
+                .selectAll('li.measure-item')
                 .data(this.config.allMeasures)
                 .enter()
                 .append('li')
-                .classed('measure-item', true)
+                .attr('class', d => 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-'))
                 .each(function(d) {
                     //Append div inside list item.
                     const measureItemContainer = select(this)
@@ -57,21 +55,7 @@ export default function onLayout() {
                             .property('checked', checked);
                 });
         measureItems.on('change', function(d) {
-            //Determine state of checkbox.
-            const checkbox = select(this).select('input'),
-                checked = checkbox.property('checked');
-            checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-            select(chart.config.element)
-                .selectAll('.wc-chart')
-                .filter(di => di.measure === d)
-                .classed('hidden', !checked);
-            //If any checkbox is unchecked, uncheck measureListCheckbox.
-            if (
-                measureItems[0].some(
-                    measureItem => measureItem.getElementsByClassName('measure-checkbox')[0].checked
-                )
-            )
-                measureListCheckbox.attr('title', 'Display all charts').property('checked', false);
+            toggleChart(chart, this);
         });
     }
 
@@ -85,7 +69,7 @@ export default function onLayout() {
         })
         .select('.wc-chart-title')
         .append('span')
-        .classed('delete-chart chart-button', true)
+        .classed('remove-chart chart-button', true)
         .html('&#10006;')
         .attr('title', 'Remove chart')
         .style('visibility', 'hidden')
@@ -93,24 +77,11 @@ export default function onLayout() {
             //Minimize chart.
             if (this.wrap.classed('full-screen')) m__imize(this);
 
-            //Hide chart.
-            this.wrap.classed('hidden', true);
-
-            //Sync measureItems.
-            const measureItems = selectAll('.measure-item');
-            measureItems
-                .filter(d => d === this.currentMeasure)
-                .select('input')
-                .property('checked', false);
-            //If any checkbox is unchecked, uncheck measureListCheckbox.
-            if (
-                measureItems[0].some(
-                    measureItem => measureItem.getElementsByClassName('measure-checkbox')[0].checked
-                )
-            )
-                select('#measure-list-checkbox')
-                    .attr('title', 'Display all charts')
-                    .property('checked', false);
+            const li = d3.select(
+                'li.measure-item.' + this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
+            );
+            li.select('input').property('checked', false);
+            toggleChart(this, li.node());
         });
 
     //Add ability to maximize charts in the chart title.
@@ -125,5 +96,7 @@ export default function onLayout() {
     });
 
     //Hide measures not listed in [ settings.measures ].
-    this.wrap.classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+    this.wrap
+        .classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true)
+        .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
 }

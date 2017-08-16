@@ -76,11 +76,18 @@ export default function onLayout() {
 
     //Add ability to remove charts in the chart title.
     this.wrap
+        .on('mouseover', () => {
+            this.wrap.select('.wc-chart-title span').style('visibility', 'visible');
+        })
+        .on('mouseout', () => {
+            this.wrap.select('.wc-chart-title span').style('visibility', 'hidden');
+        })
         .select('.wc-chart-title')
         .append('span')
         .classed('delete-chart', true)
         .html('&#10006;')
         .attr('title', 'Remove chart')
+        .style('visibility', 'hidden')
         .on('click', () => {
             this.wrap.classed('hidden', true);
             //Sync measureItems.

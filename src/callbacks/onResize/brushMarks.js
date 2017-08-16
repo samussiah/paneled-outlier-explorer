@@ -71,4 +71,10 @@ export default function brushMarks(chart, points, lines) {
         .each(function() {
             select(this.parentNode).moveToFront();
         });
+
+  //Attach select points and lines to multiples container.
+    select(chart.wrap.node().parentNode)
+        .datum(
+            {points: brushedPoints
+            ,lines: brushedLines});
 }

@@ -168,42 +168,9 @@ function init(data) {
             return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
         } else return leftSort ? -1 : rightSort ? 1 : 0;
     });
-    webcharts.multiply(this, sortedData, this.config.measure_col);
-}
-
-function onInit() {
-    var _this = this;
-
-    this.currentMeasure = this.filters[0].val;
-
-    //Sort data by key variables.
-    this.raw_data = this.raw_data.sort(function (a, b) {
-        //sort first by panel
-        var sort = a[_this.config.panel_col] < b[_this.config.panel_col] ? -1 : a[_this.config.panel_col] > b[_this.config.panel_col] ? 1 : 0;
-
-        //then sort by key variables
-        if (sort === 0) {
-            [_this.config.id_col, _this.config.time_col].forEach(function (key) {
-                if (sort === 0) sort = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
-            });
-        }
-
-        return sort;
-    });
-
-    //Define unique identifier.
-    var key = void 0;
-    this.raw_data.forEach(function (d, i) {
-        var previousMeasure = i > 0 ? _this.raw_data[i - 1][_this.config.panel_col] : null;
-
-        if (d[_this.config.panel_col] !== previousMeasure) key = 0;
-        key++;
-
-        d.key = key;
-    });
 
     //Capture unique measures.
-    this.config.allMeasures = d3.set(this.raw_data.map(function (d) {
+    this.config.allMeasures = d3.set(data.map(function (d) {
         return d[_this.config.measure_col];
     })).values().sort(function (a, b) {
         var leftSort = a < b,
@@ -218,6 +185,12 @@ function onInit() {
         } else return leftSort ? -1 : rightSort ? 1 : 0;
     });
     this.config.measures = this.config.measures && this.config.measures.length ? this.config.measures : this.config.allMeasures;
+
+    webcharts.multiply(this, sortedData, this.config.measure_col);
+}
+
+function onInit() {
+    this.currentMeasure = this.filters[0].val;
 }
 
 function m__imize(chart) {
@@ -506,6 +479,10 @@ function brushMarks(chart, points, lines) {
     }).classed('selected', true).each(function () {
         d3.select(this.parentNode).moveToFront();
     });
+
+    //Attach select points and lines to multiples container.
+    d3.select(chart.wrap.node().parentNode).datum({ points: brushedPoints,
+        lines: brushedLines });
 }
 
 function brush() {
@@ -513,9 +490,10 @@ function brush() {
 
     //points
     var points = this.svg.selectAll('.point-supergroup g.point circle');
-    points.each(function (d) {
-        d.key1 = d.values.raw[0].key;
+    points.each(function (d, i) {
         d.id = d.values.raw[0][chart.config.id_col];
+        d.time = d.values.raw[0][chart.config.time_col];
+        d.key1 = d.id + '|' + d.time;
     });
 
     //lines
@@ -536,6 +514,26 @@ function brush() {
         });
         d.lines.shift();
     });
+
+    //Highlight previously brushed points.
+    var multiplesContainer = d3.select(this.wrap.node().parentNode);
+    if (multiplesContainer.datum()) {
+        points.filter(function (d) {
+            return multiplesContainer.datum().points.indexOf(d.key1) > -1;
+        }).classed('brushed', true).each(function () {
+            d3.select(this.parentNode).moveToFront();
+        });
+        lines.filter(function (d) {
+            return multiplesContainer.datum().lines.indexOf(d.id) > -1;
+        }).classed('brushed', true).each(function () {
+            d3.select(this.parentNode).moveToFront();
+        });
+        points.filter(function (d) {
+            return multiplesContainer.datum().lines.indexOf(d.id) > -1;
+        }).classed('selected', true).each(function () {
+            d3.select(this.parentNode).moveToFront();
+        });
+    }
 
     //Apply brush.
     this.package.brush.on('brushstart', function () {}).on('brush', function () {
@@ -621,10 +619,10 @@ function paneledOutlierExplorer(element, settings) {
     //Define chart callbacks.
     for (var callback in callbacks) {
         chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
-    } //Attach element to chart.
+    } //Attach element to chart config.
     chart.config.element = element;
 
-    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer.init().
+    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
     Object.defineProperty(chart, 'init', {
         enumerable: false,
         configurable: true,

@@ -23,10 +23,10 @@ export default function paneledOutlierExplorer(element, settings) {
     for (const callback in callbacks)
         chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
 
-    //Attach element to chart.
+    //Attach element to chart config.
     chart.config.element = element;
 
-    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer.init().
+    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
     Object.defineProperty(chart, 'init', {
         enumerable: false,
         configurable: true,

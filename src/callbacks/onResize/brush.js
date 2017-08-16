@@ -6,9 +6,10 @@ export default function brush() {
 
     //points
     const points = this.svg.selectAll('.point-supergroup g.point circle');
-    points.each(d => {
-        d.key1 = d.values.raw[0].key;
+    points.each((d,i) => {
         d.id = d.values.raw[0][chart.config.id_col];
+        d.time = d.values.raw[0][chart.config.time_col]
+        d.key1 = d.id + '|' + d.time;
     });
 
     //lines
@@ -29,6 +30,29 @@ export default function brush() {
         });
         d.lines.shift();
     });
+
+    //Highlight previously brushed points.
+    const multiplesContainer = select(this.wrap.node().parentNode);
+    if (multiplesContainer.datum()) {
+        points
+            .filter(d => multiplesContainer.datum().points.indexOf(d.key1) > -1)
+            .classed('brushed', true)
+            .each(function() {
+                select(this.parentNode).moveToFront();
+            });
+        lines
+            .filter(d => multiplesContainer.datum().lines.indexOf(d.id) > -1)
+            .classed('brushed', true)
+            .each(function() {
+                select(this.parentNode).moveToFront();
+            });
+        points
+            .filter(d => multiplesContainer.datum().lines.indexOf(d.id) > -1)
+            .classed('selected', true)
+            .each(function() {
+                select(this.parentNode).moveToFront();
+            });
+    }
 
     //Apply brush.
     this.package.brush

@@ -58,7 +58,7 @@ export default function brush() {
     this.package.brush
         .on('brushstart', function() {})
         .on('brush', function() {
-            selectAll(chart.config.element).selectAll('.wc-chart').each(d => {
+            select(chart.div).selectAll('.wc-chart').each(d => {
                 if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
             });
             chart.config.extent = chart.package.brush.extent();

@@ -1,5 +1,6 @@
 import { set } from 'd3';
 import { multiply } from 'webcharts';
+import layout from './init/layout';
 
 export default function init(data) {
     const sortedData = data.sort((a, b) => {
@@ -39,5 +40,15 @@ export default function init(data) {
             ? this.config.measures
             : this.config.allMeasures;
 
+    this.data = data;
+    layout.call(this);
+
+  //Charts
+    this.wrap.attr('id', 'Charts');
     multiply(this, sortedData, this.config.measure_col);
+
+  //Listing
+    this.listing.wrap.attr('id', 'Listing');
+    this.listing.init(data.splice(0,25));
+    this.listing.wrap.classed('hidden', true);
 }

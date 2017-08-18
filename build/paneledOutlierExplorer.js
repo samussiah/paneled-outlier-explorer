@@ -5,7 +5,7 @@
 }(this, (function (webcharts,d3$1) { 'use strict';
 
 function defineStyles() {
-    var styles = ['.hidden {' + '    display: none !important;' + '}', '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}', '#measure-list-header {' + '    font-size: 150%;' + '    border-bottom: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding-bottom: 1%;' + '    margin-bottom: 1%;' + '    text-align: right;' + '}', '#measure-list-checkbox {' + '    margin-left: 5px;' + '}', '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '.measure-item {' + '}', '.measure-item-container {' + '    text-align: right;' + '}', '.measure-checkbox {' + '    margin-left: 5px;' + '    margin-top: 5px;' + '    float: right;' + '}', 'div.wc-layout.wc-small-multiples {' + '    width: 80%;' + '    float: right;' + '    border-left: 1px solid lightgray;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' + '    width: 100%;' + ' }', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 4px 1px 3px;' + '    margin-left: 5px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', 'circle.brushed {' + '    stroke: orange;' + '    stroke-width: 2px;' + '    fill: black;' + '    r: 4px;' + '}', 'path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'],
+    var styles = ['.hidden {' + '    display: none !important;' + '}', '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}', '#measure-list-header {' + '    font-size: 150%;' + '    border-bottom: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding: 14px 0;' + '    text-align: right;' + '}', '#measure-list-checkbox {' + '    margin-left: 5px;' + '}', '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '.measure-item {' + '}', '.measure-item-container {' + '    text-align: right;' + '}', '.measure-checkbox {' + '    margin-left: 5px;' + '    margin-top: 5px;' + '    float: right;' + '}', 'ul#navigation-bar {' + '    list-style-type: none;' + '    margin: 0;' + '    padding: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 80%;' + '    border-left: 2px solid lightgray;' + '    float: right;' + '}', 'ul#navigation-bar li.navigation {' + '    float: left;' + '    cursor: pointer;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    text-align: center;' + '    padding: 14px 16px;' + '    text-decoration: none;' + '}', 'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}', 'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}', 'div.wc-layout.wc-small-multiples#Charts,' + 'div.wc-chart#Listing {' + '    width: 80%;' + '    float: right;' + '    border-left: 2px solid lightgray;' + '    padding-top: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' + '    width: 100%;' + ' }', 'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    padding-left: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}', 'circle.brushed {' + '    stroke: orange;' + '    stroke-width: 2px;' + '    fill: black;' + '    r: 4px;' + '}', 'path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'],
         style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = styles.join('\n');
@@ -103,26 +103,19 @@ var defaultSettings = {
         type: 'line',
         per: null, // sync to [ id_col ] and [ measure_col ]
         attributes: {
-            'stroke-width': 0.5,
-            'stroke-opacity': 0.5,
-            stroke: '#999'
-        }
-    }, {
-        type: 'circle',
-        per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
-        radius: 2,
-        attributes: {
-            'stroke-width': 0.5,
-            'stroke-opacity': 0.5,
-            'fill-opacity': 1
+            'stroke-width': 1,
+            'stroke-opacity': .2,
+            stroke: 'black'
         }
     }],
     resizable: false,
-    width: 600,
-    height: 300,
+    scale_text: false,
+    width: 400,
+    height: 200,
     margin: {
-        left: 50
-    }
+        left: 40
+    },
+    gridlines: 'xy'
 };
 
 function syncSettings(settings) {
@@ -130,7 +123,12 @@ function syncSettings(settings) {
     syncedSettings.x.column = settings.time_col;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
-    syncedSettings.marks[1].per = [settings.id_col, settings.measure_col, settings.time_col, settings.value_col];
+    //syncedSettings.marks[1].per = [
+    //    settings.id_col,
+    //    settings.measure_col,
+    //    settings.time_col,
+    //    settings.value_col
+    //];
 
     return syncedSettings;
 }
@@ -149,6 +147,104 @@ function syncControlInputs(controlInputs, settings) {
     })[0].value_col = settings.measure_col;
 
     return syncedControlInputs;
+}
+
+function toggleCharts(chart) {
+    var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+    var measureListCheckbox = d3$1.select('#measure-list-checkbox'),
+        checked = measureListCheckbox.property('checked'),
+        measureItems = d3$1.selectAll('li.measure-item'),
+        anyUnchecked = measureItems[0].some(function (measureItem) {
+        return !measureItem.getElementsByTagName('input')[0].checked;
+    });
+
+    //Handle overall toggle.
+    if (toggle) {
+        measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
+        measureItems.each(function (d) {
+            d3.select(this).select('input').property('checked', checked);
+            toggleChart(chart, this, d);
+        });
+        measureListCheckbox.property('checked', checked);
+    } else {
+        //Handle individual toggles.
+        measureListCheckbox.attr('title', anyUnchecked ? 'Display all charts' : 'Remove all charts');
+        measureListCheckbox.property('checked', !anyUnchecked);
+    }
+}
+
+function toggleChart(chart, li) {
+    //Determine state of checkbox.
+    var checkbox = d3$1.select(li).select('input'),
+        checked = checkbox.property('checked');
+    checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
+    d3$1.select(chart.div).selectAll('.wc-chart').filter(function (di) {
+        return di.measure === d3$1.select(li).datum();
+    }).classed('hidden', !checked);
+
+    //If any checkbox is unchecked, uncheck measureListCheckbox.
+    toggleCharts(chart, false);
+}
+
+function layout() {
+    var chart = this,
+
+
+    //Create navigation bar.
+    navigationBar = d3$1.select(this.div).insert('ul', ':first-child').attr('id', 'navigation-bar'),
+        navigationButtons = navigationBar.selectAll('li.navigation').data(['Charts', 'Listing']).enter().append('li').classed('navigation', true).classed('active', function (d) {
+        return d === 'Charts';
+    }).text(function (d) {
+        return d;
+    }).on('click', function (d) {
+        navigationButtons.filter(function (di) {
+            return di === d;
+        }).classed('active', true);
+        navigationButtons.filter(function (di) {
+            return di !== d;
+        }).classed('active', false);
+        if (d === 'Charts') {
+            d3$1.select('#Listing').classed('hidden', true);
+            d3$1.select('#Charts').classed('hidden', false);
+        } else {
+            d3$1.select('#Charts').classed('hidden', true);
+            d3$1.select('#Listing').classed('hidden', false);
+        }
+    }),
+
+
+    //Define all-chart toggle.
+    measureListContainer = d3$1.select(this.div).insert('ul', ':first-child').attr('id', 'measure-list-container'),
+        measureListHeader = measureListContainer.append('div').attr('id', 'measure-list-header').text('Measures'),
+        measureListCheckbox = measureListHeader.append('input').attr({
+        id: 'measure-list-checkbox',
+        type: 'checkbox',
+        title: this.config.measures.length === this.config.allMeasures.length ? 'Remove all charts' : 'Display all charts'
+    }).property('checked', this.config.measures.length === this.config.allMeasures.length).on('click', function () {
+        toggleCharts(chart, this);
+    }),
+
+
+    //Define individual chart toggles.
+    measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
+        measureItems = measureList.selectAll('li.measure-item').data(this.config.allMeasures).enter().append('li').attr('class', function (d) {
+        return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
+    }).each(function (d) {
+        //Append div inside list item.
+        var measureItemContainer = d3$1.select(this).append('div').classed('measure-item-container', true).text(d),
+
+        //Check whether measure should by displayed initially.
+        checked = chart.config.measures.indexOf(d) > -1,
+
+        //Append checkbox inside div.
+        measureItemCheckbox = measureItemContainer.append('input').classed('measure-checkbox', true).attr({
+            type: 'checkbox',
+            title: checked ? 'Remove chart' : 'Display chart'
+        }).property('checked', checked);
+    }).on('change', function (d) {
+        toggleChart(chart, this);
+    });
 }
 
 function init(data) {
@@ -186,49 +282,21 @@ function init(data) {
     });
     this.config.measures = this.config.measures && this.config.measures.length ? this.config.measures : this.config.allMeasures;
 
+    this.data = data;
+    layout.call(this);
+
+    //Charts
+    this.wrap.attr('id', 'Charts');
     webcharts.multiply(this, sortedData, this.config.measure_col);
+
+    //Listing
+    this.listing.wrap.attr('id', 'Listing');
+    this.listing.init(data.splice(0, 25));
+    this.listing.wrap.classed('hidden', true);
 }
 
 function onInit() {
     this.currentMeasure = this.filters[0].val;
-}
-
-function toggleChart(chart, li) {
-    //Determine state of checkbox.
-    var checkbox = d3$1.select(li).select('input'),
-        checked = checkbox.property('checked');
-    checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-    d3$1.select(chart.div).selectAll('.wc-chart').filter(function (di) {
-        return di.measure === d3$1.select(li).datum();
-    }).classed('hidden', !checked);
-
-    //If any checkbox is unchecked, uncheck measureListCheckbox.
-    toggleCharts(chart, false);
-}
-
-function toggleCharts(chart) {
-    var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-    var measureListCheckbox = d3$1.select('#measure-list-checkbox'),
-        checked = measureListCheckbox.property('checked'),
-        measureItems = d3$1.selectAll('li.measure-item'),
-        anyUnchecked = measureItems[0].some(function (measureItem) {
-        return !measureItem.getElementsByTagName('input')[0].checked;
-    });
-
-    //Handle overall toggle.
-    if (toggle) {
-        measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
-        measureItems.each(function (d) {
-            d3.select(this).select('input').property('checked', checked);
-            toggleChart(chart, this, d);
-        });
-        measureListCheckbox.property('checked', checked);
-    } else {
-        //Handle individual toggles.
-        measureListCheckbox.attr('title', anyUnchecked ? 'Display all charts' : 'Remove all charts');
-        measureListCheckbox.property('checked', !anyUnchecked);
-    }
 }
 
 function minimize(chart) {
@@ -290,38 +358,6 @@ function onLayout() {
     var _this = this;
 
     var chart = this;
-
-    //Define chart display toggles.
-    if (d3$1.select('#measure-list-container').size() === 0) {
-        var measureListContainer = d3$1.select(this.div.parentNode).insert('div', ':first-child').attr('id', 'measure-list-container'),
-            measureListHeader = measureListContainer.append('div').attr('id', 'measure-list-header').text('Measures'),
-            measureListCheckbox = measureListHeader.append('input').attr({
-            id: 'measure-list-checkbox',
-            type: 'checkbox',
-            title: this.config.measures.length === this.config.allMeasures.length ? 'Remove all charts' : 'Display all charts'
-        }).property('checked', this.config.measures.length === this.config.allMeasures.length).on('click', function () {
-            toggleCharts(chart, this);
-        }),
-            measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
-            measureItems = measureList.selectAll('li.measure-item').data(this.config.allMeasures).enter().append('li').attr('class', function (d) {
-            return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
-        }).each(function (d) {
-            //Append div inside list item.
-            var measureItemContainer = d3$1.select(this).append('div').classed('measure-item-container', true).text(d),
-
-            //Check whether measure should by displayed initially.
-            checked = chart.config.measures.indexOf(d) > -1,
-
-            //Append checkbox inside div.
-            measureItemCheckbox = measureItemContainer.append('input').classed('measure-checkbox', true).attr({
-                type: 'checkbox',
-                title: checked ? 'Remove chart' : 'Display chart'
-            }).property('checked', checked);
-        });
-        measureItems.on('change', function (d) {
-            toggleChart(chart, this);
-        });
-    }
 
     //Add ability to remove charts in the chart title.
     this.wrap.on('mouseover', function () {
@@ -541,6 +577,12 @@ function brushMarks(chart, points, lines) {
         points: brushedPoints,
         lines: brushedLines
     });
+
+    //Draw brushed data points.
+    var brushedData = chart.raw_data.filter(function (d) {
+        return brushedLines.indexOf(d[chart.config.id_col]) > -1;
+    });
+    chart.parent.listing.draw(brushedData.length ? brushedData : chart.raw_data.splice(0, 25));
 }
 
 function brush() {
@@ -670,8 +712,12 @@ function paneledOutlierExplorer(element, settings) {
         syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
 
     //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
-    chart = webcharts.createChart(element, syncedSettings); //, controls);
+    chart = webcharts.createChart(element, syncedSettings),
+        //, controls),
+    listing = webcharts.createTable(element);
     chart.config.initialSettings = clone(syncedSettings);
+    chart.listing = listing;
+    listing.chart = chart;
 
     //Define chart callbacks.
     for (var callback in callbacks) {

@@ -6,59 +6,6 @@ import m__imize from './onLayout/m__imize';
 export default function onLayout() {
     const chart = this;
 
-    //Define chart display toggles.
-    if (select('#measure-list-container').size() === 0) {
-        const measureListContainer = select(this.div.parentNode)
-                .insert('div', ':first-child')
-                .attr('id', 'measure-list-container'),
-            measureListHeader = measureListContainer
-                .append('div')
-                .attr('id', 'measure-list-header')
-                .text('Measures'),
-            measureListCheckbox = measureListHeader
-                .append('input')
-                .attr({
-                    id: 'measure-list-checkbox',
-                    type: 'checkbox',
-                    title:
-                        this.config.measures.length === this.config.allMeasures.length
-                            ? 'Remove all charts'
-                            : 'Display all charts'
-                })
-                .property('checked', this.config.measures.length === this.config.allMeasures.length)
-                .on('click', function() {
-                    toggleCharts(chart, this);
-                }),
-            measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
-            measureItems = measureList
-                .selectAll('li.measure-item')
-                .data(this.config.allMeasures)
-                .enter()
-                .append('li')
-                .attr('class', d => 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-'))
-                .each(function(d) {
-                    //Append div inside list item.
-                    const measureItemContainer = select(this)
-                            .append('div')
-                            .classed('measure-item-container', true)
-                            .text(d),
-                        //Check whether measure should by displayed initially.
-                        checked = chart.config.measures.indexOf(d) > -1,
-                        //Append checkbox inside div.
-                        measureItemCheckbox = measureItemContainer
-                            .append('input')
-                            .classed('measure-checkbox', true)
-                            .attr({
-                                type: 'checkbox',
-                                title: checked ? 'Remove chart' : 'Display chart'
-                            })
-                            .property('checked', checked);
-                });
-        measureItems.on('change', function(d) {
-            toggleChart(chart, this);
-        });
-    }
-
     //Add ability to remove charts in the chart title.
     this.wrap
         .on('mouseover', () => {

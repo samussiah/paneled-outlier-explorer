@@ -6,7 +6,7 @@ export default function toggleChart(chart, li) {
     const checkbox = select(li).select('input'),
         checked = checkbox.property('checked');
     checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-    select(chart.config.element)
+    select(chart.div)
         .selectAll('.wc-chart')
         .filter(di => di.measure === select(li).datum())
         .classed('hidden', !checked);

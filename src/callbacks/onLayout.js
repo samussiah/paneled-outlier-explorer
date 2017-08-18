@@ -8,7 +8,7 @@ export default function onLayout() {
 
     //Define chart display toggles.
     if (select('#measure-list-container').size() === 0) {
-        const measureListContainer = select(this.config.element)
+        const measureListContainer = select(this.div.parentNode)
                 .insert('div', ':first-child')
                 .attr('id', 'measure-list-container'),
             measureListHeader = measureListContainer

@@ -20,7 +20,7 @@ export default function brushMarks(chart, points, lines) {
             })
             .data()
             .map(d => d.key1),
-        allPoints = select(chart.config.element)
+        allPoints = select(chart.div)
             .selectAll('.point-supergroup g.point circle')
             .classed('brushed selected', false);
     allPoints
@@ -50,7 +50,7 @@ export default function brushMarks(chart, points, lines) {
             })
             .data()
             .map(d => d.id),
-        allLines = select(chart.config.element)
+        allLines = select(chart.div)
             .selectAll('.line-supergroup g.line path')
             .classed('brushed', false);
     allLines.filter(d => brushedLines.indexOf(d.id) > -1).classed('brushed', true).each(function() {

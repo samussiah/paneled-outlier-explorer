@@ -1,19 +1,15 @@
 import { select, selectAll } from 'd3';
-import toggleChart from '../callbacks/onLayout/toggleChart';
-import toggleCharts from '../callbacks/onLayout/toggleCharts';
+import toggleChart from './toggleChart';
+import toggleCharts from './toggleCharts';
 
 export default function layout() {
-    const
-        chart = this,
-
-      //Create navigation bar.
-        navigationBar = select(this.div)
-            .insert('ul', ':first-child')
-            .attr('id', 'navigation-bar'),
+    const chart = this,
+        //Create navigation bar.
+        navigationBar = select(this.div).insert('ul', ':first-child').attr('id', 'navigation-bar'),
         navigationButtons = navigationBar
             .selectAll('li.navigation')
-                .data(['Charts', 'Listing'])
-                .enter()
+            .data(['Charts', 'Listing'])
+            .enter()
             .append('li')
             .classed('navigation', true)
             .classed('active', d => d === 'Charts')
@@ -29,8 +25,7 @@ export default function layout() {
                     select('#Listing').classed('hidden', false);
                 }
             }),
-
-      //Define all-chart toggle.
+        //Define all-chart toggle.
         measureListContainer = select(this.div)
             .insert('ul', ':first-child')
             .attr('id', 'measure-list-container'),
@@ -52,8 +47,7 @@ export default function layout() {
             .on('click', function() {
                 toggleCharts(chart, this);
             }),
-
-      //Define individual chart toggles.
+        //Define individual chart toggles.
         measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
         measureItems = measureList
             .selectAll('li.measure-item')

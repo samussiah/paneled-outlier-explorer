@@ -5,7 +5,7 @@
 }(this, (function (webcharts,d3$1) { 'use strict';
 
 function defineStyles() {
-    var styles = ['.hidden {' + '    display: none !important;' + '}', '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}', '#measure-list-header {' + '    font-size: 150%;' + '    border-bottom: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding: 14px 0;' + '    text-align: right;' + '}', '#measure-list-checkbox {' + '    margin-left: 5px;' + '}', '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '.measure-item {' + '}', '.measure-item-container {' + '    text-align: right;' + '}', '.measure-checkbox {' + '    margin-left: 5px;' + '    margin-top: 5px;' + '    float: right;' + '}', 'ul#navigation-bar {' + '    list-style-type: none;' + '    margin: 0;' + '    padding: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 80%;' + '    border-left: 2px solid lightgray;' + '    float: right;' + '}', 'ul#navigation-bar li.navigation {' + '    float: left;' + '    cursor: pointer;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    text-align: center;' + '    padding: 14px 16px;' + '    text-decoration: none;' + '}', 'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}', 'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}', 'div.wc-layout.wc-small-multiples#Charts,' + 'div.wc-chart#Listing {' + '    width: 80%;' + '    float: right;' + '    border-left: 2px solid lightgray;' + '    padding-top: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' + '    width: 100%;' + ' }', 'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    padding-left: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}', 'circle.brushed {' + '    stroke: orange;' + '    stroke-width: 2px;' + '    fill: black;' + '    r: 4px;' + '}', 'path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'],
+    var styles = ['.hidden {' + '    display: none !important;' + '}', '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}', '#measure-list-header {' + '    font-size: 150%;' + '    border-bottom: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding: 14px 0;' + '    text-align: right;' + '}', '#measure-list-checkbox {' + '    margin-left: 5px;' + '}', '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '.measure-item {' + '}', '.measure-item-container {' + '    text-align: right;' + '}', '.measure-checkbox {' + '    margin-left: 5px;' + '    margin-top: 5px;' + '    float: right;' + '}', 'ul#navigation-bar {' + '    list-style-type: none;' + '    margin: 0;' + '    padding: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 80%;' + '    border-left: 2px solid lightgray;' + '    float: right;' + '}', 'ul#navigation-bar li.navigation {' + '    float: left;' + '    cursor: pointer;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    text-align: center;' + '    padding: 14px 16px;' + '    text-decoration: none;' + '}', 'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}', 'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}', 'div.wc-layout.wc-small-multiples#Charts,' + 'div.wc-chart#Listing {' + '    width: 80%;' + '    float: right;' + '    border-left: 2px solid lightgray;' + '    padding-top: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' + '    width: 100%;' + ' }', 'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    padding-left: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}', 'div.wc-chart#Listing .pagination-container a {' + '    text-decoration: none;' + '    padding: 5px 10px;' + '}', 'div.wc-chart#Listing .pagination-container a:first-child {' + '    margin-left: 5px;' + '}', 'div.wc-chart#Listing .pagination-container a.active {' + '    border: 2px solid gray;' + '    border-radius: 4px;' + '}', 'circle.brushed {' + '    stroke: orange;' + '    stroke-width: 2px;' + '    fill: black;' + '    r: 4px;' + '}', 'path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'],
         style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = styles.join('\n');
@@ -104,9 +104,19 @@ var defaultSettings = {
         per: null, // sync to [ id_col ] and [ measure_col ]
         attributes: {
             'stroke-width': 1,
-            'stroke-opacity': .2,
+            'stroke-opacity': 0.2,
             stroke: 'black'
         }
+        //{
+        //    type: 'circle',
+        //    per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
+        //    radius: 2,
+        //    attributes: {
+        //        'stroke-width': 0.5,
+        //        'stroke-opacity': 0.5,
+        //        'fill-opacity': 1
+        //    }
+        //}
     }],
     resizable: false,
     scale_text: false,
@@ -190,7 +200,6 @@ function toggleChart(chart, li) {
 function layout() {
     var chart = this,
 
-
     //Create navigation bar.
     navigationBar = d3$1.select(this.div).insert('ul', ':first-child').attr('id', 'navigation-bar'),
         navigationButtons = navigationBar.selectAll('li.navigation').data(['Charts', 'Listing']).enter().append('li').classed('navigation', true).classed('active', function (d) {
@@ -213,7 +222,6 @@ function layout() {
         }
     }),
 
-
     //Define all-chart toggle.
     measureListContainer = d3$1.select(this.div).insert('ul', ':first-child').attr('id', 'measure-list-container'),
         measureListHeader = measureListContainer.append('div').attr('id', 'measure-list-header').text('Measures'),
@@ -224,7 +232,6 @@ function layout() {
     }).property('checked', this.config.measures.length === this.config.allMeasures.length).on('click', function () {
         toggleCharts(chart, this);
     }),
-
 
     //Define individual chart toggles.
     measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
@@ -254,19 +261,28 @@ function init(data) {
         var aValue = a[_this.config.measure_col],
             bValue = b[_this.config.measure_col],
             leftSort = aValue < bValue,
-            rightSort = aValue > bValue;
+            rightSort = aValue > bValue,
+            aID = a[_this.config.id_col],
+            bID = b[_this.config.id_col],
+            aTime = a[_this.config.time_col],
+            bTime = b[_this.config.time_col];
 
+        var sort = void 0;
         if (_this.config.measures && _this.config.measures.length) {
             var aPos = _this.config.measures.indexOf(aValue),
                 bPos = _this.config.measures.indexOf(bValue),
                 diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-            return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-        } else return leftSort ? -1 : rightSort ? 1 : 0;
+            sort = diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+        } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+
+        if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+
+        return sort;
     });
 
     //Capture unique measures.
-    this.config.allMeasures = d3$1.set(data.map(function (d) {
+    this.config.allMeasures = d3$1.set(sortedData.map(function (d) {
         return d[_this.config.measure_col];
     })).values().sort(function (a, b) {
         var leftSort = a < b,
@@ -282,17 +298,21 @@ function init(data) {
     });
     this.config.measures = this.config.measures && this.config.measures.length ? this.config.measures : this.config.allMeasures;
 
-    this.data = data;
+    this.data = sortedData;
     layout.call(this);
 
     //Charts
     this.wrap.attr('id', 'Charts');
     webcharts.multiply(this, sortedData, this.config.measure_col);
+    this.wrap.classed('hidden', true);
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');
-    this.listing.init(data.splice(0, 25));
-    this.listing.wrap.classed('hidden', true);
+    this.listing.data = sortedData;
+    this.listing.init(sortedData.filter(function (d, i) {
+        return i < 25;
+    }));
+    //this.listing.wrap.classed('hidden', true);
 }
 
 function onInit() {
@@ -342,16 +362,15 @@ function m__imize(chart) {
             elemRect = chart.wrap.node().getBoundingClientRect(),
             offset = elemRect.top - bodyRect.top;
         window.scrollTo(0, offset);
-    }
-    //Minimize chart
-    else {
-            minimize(chart);
+    } else {
+        //Minimize chart
+        minimize(chart);
 
-            //Revert to default sort.
-            d3$1.select(chart.div).selectAll('.wc-chart').sort(function (a, b) {
-                return chart.config.measures.indexOf(a.measure) - chart.config.measures.indexOf(b.measure);
-            });
-        }
+        //Revert to default sort.
+        d3$1.select(chart.div).selectAll('.wc-chart').sort(function (a, b) {
+            return chart.config.measures.indexOf(a.measure) - chart.config.measures.indexOf(b.measure);
+        });
+    }
 }
 
 function onLayout() {
@@ -691,7 +710,7 @@ function onResize() {
 
 function onDestroy() {}
 
-var callbacks = {
+var chartCallbacks = {
     onInit: onInit,
     onLayout: onLayout,
     onPreprocess: onPreprocess,
@@ -699,6 +718,128 @@ var callbacks = {
     onDraw: onDraw,
     onResize: onResize,
     onDestroy: onDestroy
+};
+
+function onInit$1() {}
+
+function onLayout$1() {
+    //pagination config
+    this.pagination = {};
+    this.pagination.wrap = this.wrap.append('div').classed('pagination-container', true);
+    this.pagination.rowsShown = 25;
+    this.pagination.activeLink = 0;
+}
+
+function onPreprocess$1() {}
+
+function onDatatransform$1() {}
+
+function updatePagination() {
+    var _this = this;
+
+    //Reset pagination.
+    this.pagination.links.classed('active', false);
+
+    //Set to active the selected page link.
+    var activeLink = this.pagination.links.filter(function (link) {
+        return +link.rel === +_this.pagination.activeLink;
+    }).classed('active', true);
+
+    //Define and draw selected page.
+    this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
+    this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
+    this.draw(this.data.filter(function (d, i) {
+        return _this.pagination.startItem <= i && i < _this.pagination.endItem;
+    }));
+
+    //Update displayed page links.
+    if (activeLink.classed('hidden')) this.pagination.links.classed('hidden', true).filter(function (d) {
+        return _this.pagination.activeLink - 3 < d.rel && d.rel < _this.pagination.activeLink + 3;
+    }).classed('hidden', false);
+}
+
+function addLinks() {
+    var _this = this;
+
+    //Count rows.
+    this.pagination.rowsTotal = this.data.length;
+
+    //Calculate number of pages needed and create a link for each page.
+    this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
+    this.pagination.wrap.selectAll('a').remove();
+
+    for (var i = 0; i < this.pagination.numPages; i++) {
+        this.pagination.wrap.append('a').datum({ rel: i }).attr({
+            href: '#',
+            rel: i
+        }).text(i + 1).classed('page-link', true).classed('active', function (d) {
+            return d.rel == _this.pagination.activeLink;
+        }).classed('hidden', i > 4);
+    }
+
+    this.pagination.links = this.pagination.wrap.selectAll('a.page-link');
+}
+
+function addArrows() {
+    var prev = this.pagination.activeLink - 1,
+        next = this.pagination.activeLink + 1;
+    if (prev < 0) prev = 0;
+    if (next > this.pagination.numPages) next = this.pagination.numPages;
+
+    this.pagination.prev = this.pagination.wrap.insert('a', ':first-child').classed('arrow-link', true).attr({
+        href: '#',
+        rel: prev
+    }).text('<');
+
+    this.pagination.next = this.pagination.wrap.append('a').classed('arrow-link', true).attr({
+        href: '#',
+        rel: next
+    }).text('>');
+
+    this.pagination.arrows = this.pagination.wrap.selectAll('a.arrow-link');
+}
+
+function addPagination() {
+    var listing = this;
+
+    //Render page links.
+    addLinks.call(this);
+
+    //Render a different page on click.
+    this.pagination.links.on('click', function () {
+        listing.pagination.activeLink = +d3$1.select(this).attr('rel');
+        updatePagination.call(listing);
+    });
+
+    //Render arrow links.
+    addArrows.call(this);
+
+    //Render a different page on click.
+    this.pagination.arrows.on('click', function () {
+        listing.pagination.activeLink = +d3$1.select(this).attr('rel');
+        listing.pagination.prev.attr('rel', listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0);
+        listing.pagination.next.attr('rel', listing.pagination.activeLink < listing.pagination.numPages ? listing.pagination.activeLink + 1 : listing.pagination.numPages);
+        updatePagination.call(listing);
+    });
+}
+
+function onDraw$1() {
+    //Add pagination functionality.
+    addPagination.call(this);
+}
+
+function onResize$1() {}
+
+function onDestroy$1() {}
+
+var listingCallbacks = {
+    onInit: onInit$1,
+    onLayout: onLayout$1,
+    onPreprocess: onPreprocess$1,
+    onDatatransform: onDatatransform$1,
+    onDraw: onDraw$1,
+    onResize: onResize$1,
+    onDestroy: onDestroy$1
 };
 
 function paneledOutlierExplorer(element, settings) {
@@ -720,8 +861,11 @@ function paneledOutlierExplorer(element, settings) {
     listing.chart = chart;
 
     //Define chart callbacks.
-    for (var callback in callbacks) {
-        chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
+    for (var callback in chartCallbacks) {
+        chart.on(callback.substring(2).toLowerCase(), chartCallbacks[callback]);
+    } //Define listing callbacks.
+    for (var _callback in listingCallbacks) {
+        listing.on(_callback.substring(2).toLowerCase(), listingCallbacks[_callback]);
     } //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
     Object.defineProperty(chart, 'init', {
         enumerable: false,

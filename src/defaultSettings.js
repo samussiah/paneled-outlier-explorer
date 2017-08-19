@@ -27,10 +27,10 @@ export default {
             per: null, // sync to [ id_col ] and [ measure_col ]
             attributes: {
                 'stroke-width': 1,
-                'stroke-opacity': .2,
+                'stroke-opacity': 0.2,
                 stroke: 'black'
             }
-        },
+        }
         //{
         //    type: 'circle',
         //    per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]

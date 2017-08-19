@@ -1,6 +1,5 @@
 import { select, selectAll } from 'd3';
-import toggleCharts from './onLayout/toggleCharts';
-import toggleChart from './onLayout/toggleChart';
+import toggleChart from '../init/toggleChart';
 import m__imize from './onLayout/m__imize';
 
 export default function onLayout() {

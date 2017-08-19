@@ -2,8 +2,6 @@ export default function defineStyles() {
     const styles = [
             '.hidden {' + '    display: none !important;' + '}',
 
-
-
             '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}',
             '#measure-list-header {' +
                 '    font-size: 150%;' +
@@ -21,8 +19,6 @@ export default function defineStyles() {
                 '    margin-top: 5px;' +
                 '    float: right;' +
                 '}',
-
-
 
             'ul#navigation-bar {' +
                 '    list-style-type: none;' +
@@ -44,17 +40,11 @@ export default function defineStyles() {
                 '    padding: 14px 16px;' +
                 '    text-decoration: none;' +
                 '}',
-            'ul#navigation-bar li.navigation.active {' +
-                '    background-color: #111;' +
-                '}',
-            'ul#navigation-bar li.navigation:hover {' +
-                '    background-color: #111;' +
-                '}',
-
-
+            'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}',
+            'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}',
 
             'div.wc-layout.wc-small-multiples#Charts,' +
-            'div.wc-chart#Listing {' +
+                'div.wc-chart#Listing {' +
                 '    width: 80%;' +
                 '    float: right;' +
                 '    border-left: 2px solid lightgray;' +
@@ -81,11 +71,19 @@ export default function defineStyles() {
                 '    background: black;' +
                 '    color: white;' +
                 '}',
-            'div.wc-chart#Listing table {' +
-                '    padding-left: 10px;' +
+
+            'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
+            'div.wc-chart#Listing .pagination-container a {' +
+                '    text-decoration: none;' +
+                '    padding: 5px 10px;' +
                 '}',
-
-
+            'div.wc-chart#Listing .pagination-container a:first-child {' +
+                '    margin-left: 5px;' +
+                '}',
+            'div.wc-chart#Listing .pagination-container a.active {' +
+                '    border: 2px solid gray;' +
+                '    border-radius: 4px;' +
+                '}',
 
             'circle.brushed {' +
                 '    stroke: orange;' +

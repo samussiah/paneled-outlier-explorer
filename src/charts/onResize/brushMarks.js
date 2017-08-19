@@ -70,9 +70,9 @@ export default function brushMarks(chart, points, lines) {
         lines: brushedLines
     });
 
-  //Draw brushed data points.
-    const
-        brushedData = chart.raw_data.filter(d => brushedLines.indexOf(d[chart.config.id_col]) > -1);
-    chart.parent.listing
-        .draw(brushedData.length ? brushedData : chart.raw_data.splice(0,25));
+    //Draw brushed data points.
+    const brushedData = chart.raw_data.filter(
+        d => brushedLines.indexOf(d[chart.config.id_col]) > -1
+    );
+    chart.parent.listing.draw(brushedData.length ? brushedData : chart.raw_data.splice(0, 25));
 }

@@ -4,8 +4,7 @@ import doLineSegmentsIntersect from './lineIntersection';
 export default function brushMarks(chart, lines) {
     chart.parent.brushedMeasure = chart.currentMeasure;
 
-    const
-        extent = chart.config.extent,
+    const extent = chart.config.extent,
         x0 = extent[0][0], // top left x-coordinate
         y0 = extent[1][1], // top left y-coordinate
         x1 = extent[1][0], // bottom right x-coordinate
@@ -18,7 +17,7 @@ export default function brushMarks(chart, lines) {
 
     //Determine which lines fall inside the brush.
     chart.parent.selectedIDs = lines
-        .filter((d,i) => {
+        .filter((d, i) => {
             let intersection = false;
             d.lines.forEach((line, j) => {
                 sides.forEach((side, k) => {
@@ -37,7 +36,7 @@ export default function brushMarks(chart, lines) {
         .data()
         .map(d => d.id);
 
-  //Highlight brushed lines.
+    //Highlight brushed lines.
     chart.parent.wrap
         .selectAll('.line-supergroup g.line path')
         .classed('brushed', false)
@@ -49,19 +48,19 @@ export default function brushMarks(chart, lines) {
 
     //Draw listing displaying brushed IDs first.
     if (chart.parent.selectedIDs.length) {
-        chart.parent.data
-            .forEach(d => {
-                d.brushed = chart.parent.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
-            });
+        chart.parent.data.forEach(d => {
+            d.brushed = chart.parent.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
+        });
         chart.parent.brushedData = chart.parent.data.filter(d => d.brushed);
         if (chart.parent.brushedData.length > 24)
-            chart.parent.listing
-                .draw(chart.parent.brushedData.filter((d,i) => i < 25));
+            chart.parent.listing.draw(chart.parent.brushedData.filter((d, i) => i < 25));
         else
-            chart.parent.listing
-                .draw(chart.parent.brushedData.concat(
+            chart.parent.listing.draw(
+                chart.parent.brushedData.concat(
                     chart.parent.data
                         .filter(d => !d.brushed)
-                        .filter((d,i) => i < (25 - chart.parent.brushedData.length))));
+                        .filter((d, i) => i < 25 - chart.parent.brushedData.length)
+                )
+            );
     }
 }

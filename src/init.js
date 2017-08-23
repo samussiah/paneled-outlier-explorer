@@ -21,11 +21,9 @@ export default function init(data) {
                 diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
             sort = diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-        } else
-            sort = leftSort ? -1 : rightSort ? 1 : 0;
+        } else sort = leftSort ? -1 : rightSort ? 1 : 0;
 
-        if (!sort)
-            sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+        if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
 
         return sort;
     });
@@ -68,6 +66,6 @@ export default function init(data) {
     //Listing
     this.listing.wrap.attr('id', 'Listing');
     this.listing.parent = this;
-    this.listing.init(this.data.filter((d,i) => i < 25));
+    this.listing.init(this.data.filter((d, i) => i < 25));
     this.listing.wrap.classed('hidden', true);
 }

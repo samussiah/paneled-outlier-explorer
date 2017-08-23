@@ -5,8 +5,7 @@ export default function brush() {
     const chart = this;
 
     //lines
-    const lines = this.svg
-        .selectAll('.line-supergroup g.line path');
+    const lines = this.svg.selectAll('.line-supergroup g.line path');
     lines.each(function(d, i) {
         d.id = d.values[0].values.raw[0][chart.config.id_col];
         d.lines = d.values.map((di, i) => {

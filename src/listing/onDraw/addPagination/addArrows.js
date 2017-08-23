@@ -1,10 +1,8 @@
 export default function addArrows() {
     let prev = this.pagination.activeLink - 1,
         next = this.pagination.activeLink + 1;
-    if (prev < 0)
-        prev = 0; // nothing before the first page
-    if (next >= this.pagination.numPages)
-        next = (this.pagination.numPages - 1); // nothing after the last page
+    if (prev < 0) prev = 0; // nothing before the first page
+    if (next >= this.pagination.numPages) next = this.pagination.numPages - 1; // nothing after the last page
 
     this.pagination.wrap
         .insert('span', ':first-child')
@@ -32,7 +30,7 @@ export default function addArrows() {
     this.pagination.wrap
         .append('span')
         .text('...')
-        .classed('hidden', this.pagination.activeLink >= (this.pagination.numPages - 5));
+        .classed('hidden', this.pagination.activeLink >= this.pagination.numPages - 5);
 
     this.pagination.next = this.pagination.wrap
         .append('a')

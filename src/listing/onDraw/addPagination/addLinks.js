@@ -20,11 +20,14 @@ export default function addLinks() {
             .text(i + 1)
             .classed('page-link', true)
             .classed('active', d => d.rel == this.pagination.activeLink)
-            .classed('hidden', this.pagination.activeLink <= 4
-                ? i > 4
-                    : this.pagination.activeLink >= (this.pagination.numPages - 5)
-                    ? i < (this.pagination.numPages - 5)
-                        : (i < (this.pagination.activeLink - 2) || (this.pagination.activeLink + 2) < i));
+            .classed(
+                'hidden',
+                this.pagination.activeLink <= 4
+                    ? i > 4
+                    : this.pagination.activeLink >= this.pagination.numPages - 5
+                      ? i < this.pagination.numPages - 5
+                      : i < this.pagination.activeLink - 2 || this.pagination.activeLink + 2 < i
+            );
     }
 
     this.pagination.links = this.pagination.wrap.selectAll('a.page-link');

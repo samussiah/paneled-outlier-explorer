@@ -22,12 +22,16 @@ export default function addPagination() {
     this.pagination.arrows.on('click', function() {
         if (listing.pagination.activeLink !== +select(this).attr('rel')) {
             listing.pagination.activeLink = +select(this).attr('rel');
-            listing.pagination.prev.attr('rel', listing.pagination.activeLink > 0
-                ? listing.pagination.activeLink - 1
-                : 0);
-            listing.pagination.next.attr('rel', listing.pagination.activeLink < listing.pagination.numPages
-                ? listing.pagination.activeLink + 1
-                : listing.pagination.numPages - 1);
+            listing.pagination.prev.attr(
+                'rel',
+                listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0
+            );
+            listing.pagination.next.attr(
+                'rel',
+                listing.pagination.activeLink < listing.pagination.numPages
+                    ? listing.pagination.activeLink + 1
+                    : listing.pagination.numPages - 1
+            );
             updatePagination.call(listing);
         }
     });

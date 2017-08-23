@@ -52,15 +52,11 @@ export default function brushMarks(chart, lines) {
             d.brushed = chart.parent.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
         });
         chart.parent.brushedData = chart.parent.data.filter(d => d.brushed);
-        if (chart.parent.brushedData.length > 24)
-            chart.parent.listing.draw(chart.parent.brushedData.filter((d, i) => i < 25));
-        else
-            chart.parent.listing.draw(
-                chart.parent.brushedData.concat(
-                    chart.parent.data
-                        .filter(d => !d.brushed)
-                        .filter((d, i) => i < 25 - chart.parent.brushedData.length)
-                )
-            );
+        chart.parent.listing.draw(chart.parent.brushedData);
+        select('#Listing-nav').classed('brushed', true);
+    } else {
+        chart.parent.brushedData = [];
+        chart.parent.listing.draw(chart.parent.data.filter((d, i) => i < 25));
+        select('#Listing-nav').classed('brushed', false);
     }
 }

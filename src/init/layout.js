@@ -13,6 +13,7 @@ export default function layout() {
             .append('li')
             .classed('navigation', true)
             .classed('active', d => d === 'Charts')
+            .attr('id', d => d + '-nav')
             .text(d => d)
             .on('click', function(d) {
                 navigationButtons.filter(di => di === d).classed('active', true);

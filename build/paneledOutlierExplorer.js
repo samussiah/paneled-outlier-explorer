@@ -52,6 +52,9 @@
                     '}',
                 'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}',
                 'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}',
+                'ul#navigation-bar li.navigation#Listing-nav.brushed {' +
+                    '    color: orange;' +
+                    '}',
                 'div.wc-layout.wc-small-multiples#Charts,' +
                     'div.wc-chart#Listing {' +
                     '    width: 80%;' +
@@ -336,6 +339,9 @@
                 .classed('navigation', true)
                 .classed('active', function(d) {
                     return d === 'Charts';
+                })
+                .attr('id', function(d) {
+                    return d + '-nav';
                 })
                 .text(function(d) {
                     return d;
@@ -814,24 +820,16 @@
             chart.parent.brushedData = chart.parent.data.filter(function(d) {
                 return d.brushed;
             });
-            if (chart.parent.brushedData.length > 24)
-                chart.parent.listing.draw(
-                    chart.parent.brushedData.filter(function(d, i) {
-                        return i < 25;
-                    })
-                );
-            else
-                chart.parent.listing.draw(
-                    chart.parent.brushedData.concat(
-                        chart.parent.data
-                            .filter(function(d) {
-                                return !d.brushed;
-                            })
-                            .filter(function(d, i) {
-                                return i < 25 - chart.parent.brushedData.length;
-                            })
-                    )
-                );
+            chart.parent.listing.draw(chart.parent.brushedData);
+            d3$1.select('#Listing-nav').classed('brushed', true);
+        } else {
+            chart.parent.brushedData = [];
+            chart.parent.listing.draw(
+                chart.parent.data.filter(function(d, i) {
+                    return i < 25;
+                })
+            );
+            d3$1.select('#Listing-nav').classed('brushed', false);
         }
     }
 
@@ -1122,7 +1120,10 @@
 
     function onDraw$1() {
         //Add pagination functionality.
-        addPagination.call(this);
+        if (this.parent.brushedData.length === 0) {
+            this.pagination.wrap.classed('hidden', false);
+            addPagination.call(this);
+        } else this.pagination.wrap.classed('hidden', true);
 
         //Highlight selected rows.
         this.table.selectAll('tbody tr').classed('brushed', function(d) {

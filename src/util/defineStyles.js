@@ -42,6 +42,7 @@ export default function defineStyles() {
                 '}',
             'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}',
             'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}',
+            'ul#navigation-bar li.navigation#Listing-nav.brushed {' + '    color: orange;' + '}',
 
             'div.wc-layout.wc-small-multiples#Charts,' +
                 'div.wc-chart#Listing {' +

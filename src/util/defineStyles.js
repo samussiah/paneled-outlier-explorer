@@ -73,6 +73,9 @@ export default function defineStyles() {
                 '}',
 
             'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
+            'div.wc-chart#Listing .pagination-container {' +
+                '    padding-top: 10px;' +
+                '}',
             'div.wc-chart#Listing .pagination-container a {' +
                 '    text-decoration: none;' +
                 '    padding: 5px 10px;' +
@@ -96,7 +99,10 @@ export default function defineStyles() {
                 '    stroke-width: 3px;' +
                 '    stroke-opacity: 1;' +
                 '}',
-            'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'
+            'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
+            'tr.brushed {' +
+                '    background: orange;' +
+                '}'
         ],
         style = document.createElement('style');
     style.type = 'text/css';

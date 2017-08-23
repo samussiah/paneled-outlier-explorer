@@ -5,7 +5,7 @@
 }(this, (function (webcharts,d3$1) { 'use strict';
 
 function defineStyles() {
-    var styles = ['.hidden {' + '    display: none !important;' + '}', '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}', '#measure-list-header {' + '    font-size: 150%;' + '    border-bottom: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding: 14px 0;' + '    text-align: right;' + '}', '#measure-list-checkbox {' + '    margin-left: 5px;' + '}', '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '.measure-item {' + '}', '.measure-item-container {' + '    text-align: right;' + '}', '.measure-checkbox {' + '    margin-left: 5px;' + '    margin-top: 5px;' + '    float: right;' + '}', 'ul#navigation-bar {' + '    list-style-type: none;' + '    margin: 0;' + '    padding: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 80%;' + '    border-left: 2px solid lightgray;' + '    float: right;' + '}', 'ul#navigation-bar li.navigation {' + '    float: left;' + '    cursor: pointer;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    text-align: center;' + '    padding: 14px 16px;' + '    text-decoration: none;' + '}', 'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}', 'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}', 'div.wc-layout.wc-small-multiples#Charts,' + 'div.wc-chart#Listing {' + '    width: 80%;' + '    float: right;' + '    border-left: 2px solid lightgray;' + '    padding-top: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' + '    width: 100%;' + ' }', 'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    padding-left: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}', 'div.wc-chart#Listing .pagination-container a {' + '    text-decoration: none;' + '    padding: 5px 10px;' + '}', 'div.wc-chart#Listing .pagination-container a:first-child {' + '    margin-left: 5px;' + '}', 'div.wc-chart#Listing .pagination-container a.active {' + '    border: 2px solid gray;' + '    border-radius: 4px;' + '}', 'circle.brushed {' + '    stroke: orange;' + '    stroke-width: 2px;' + '    fill: black;' + '    r: 4px;' + '}', 'path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'],
+    var styles = ['.hidden {' + '    display: none !important;' + '}', '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}', '#measure-list-header {' + '    font-size: 150%;' + '    border-bottom: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding: 14px 0;' + '    text-align: right;' + '}', '#measure-list-checkbox {' + '    margin-left: 5px;' + '}', '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '.measure-item {' + '}', '.measure-item-container {' + '    text-align: right;' + '}', '.measure-checkbox {' + '    margin-left: 5px;' + '    margin-top: 5px;' + '    float: right;' + '}', 'ul#navigation-bar {' + '    list-style-type: none;' + '    margin: 0;' + '    padding: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 80%;' + '    border-left: 2px solid lightgray;' + '    float: right;' + '}', 'ul#navigation-bar li.navigation {' + '    float: left;' + '    cursor: pointer;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    text-align: center;' + '    padding: 14px 16px;' + '    text-decoration: none;' + '}', 'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}', 'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}', 'div.wc-layout.wc-small-multiples#Charts,' + 'div.wc-chart#Listing {' + '    width: 80%;' + '    float: right;' + '    border-left: 2px solid lightgray;' + '    padding-top: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' + '    width: 100%;' + ' }', 'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    padding-left: 10px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '}', 'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}', 'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}', 'div.wc-chart#Listing .pagination-container a {' + '    text-decoration: none;' + '    padding: 5px 10px;' + '}', 'div.wc-chart#Listing .pagination-container a:first-child {' + '    margin-left: 5px;' + '}', 'div.wc-chart#Listing .pagination-container a.active {' + '    border: 2px solid gray;' + '    border-radius: 4px;' + '}', 'circle.brushed {' + '    stroke: orange;' + '    stroke-width: 2px;' + '    fill: black;' + '    r: 4px;' + '}', 'path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}', 'tr.brushed {' + '    background: orange;' + '}'],
         style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = styles.join('\n');
@@ -280,6 +280,9 @@ function init(data) {
 
         return sort;
     });
+    sortedData.forEach(function (d) {
+        d.brushed = false;
+    });
 
     //Capture unique measures.
     this.config.allMeasures = d3$1.set(sortedData.map(function (d) {
@@ -299,20 +302,22 @@ function init(data) {
     this.config.measures = this.config.measures && this.config.measures.length ? this.config.measures : this.config.allMeasures;
 
     this.data = sortedData;
+    this.selectedIDs = [];
+    this.brushedData = [];
+
     layout.call(this);
 
     //Charts
     this.wrap.attr('id', 'Charts');
-    webcharts.multiply(this, sortedData, this.config.measure_col);
-    this.wrap.classed('hidden', true);
+    webcharts.multiply(this, this.data, this.config.measure_col);
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');
-    this.listing.data = sortedData;
-    this.listing.init(sortedData.filter(function (d, i) {
+    this.listing.parent = this;
+    this.listing.init(this.data.filter(function (d, i) {
         return i < 25;
     }));
-    //this.listing.wrap.classed('hidden', true);
+    this.listing.wrap.classed('hidden', true);
 }
 
 function onInit() {
@@ -535,7 +540,9 @@ function allEqual(args) {
     return true;
 }
 
-function brushMarks(chart, points, lines) {
+function brushMarks(chart, lines) {
+    chart.parent.brushedMeasure = chart.currentMeasure;
+
     var extent$$1 = chart.config.extent,
         x0 = extent$$1[0][0],
         // top left x-coordinate
@@ -551,21 +558,8 @@ function brushMarks(chart, points, lines) {
         left = { x0: x0, y0: y0, x1: x0, y1: y1 },
         sides = [top, right, bottom, left];
 
-    //brush points
-    var brushedPoints = points.filter(function (d) {
-        return x0 <= d.values.x && y0 >= d.values.y && x1 >= d.values.x && y1 <= d.values.y;
-    }).data().map(function (d) {
-        return d.key1;
-    }),
-        allPoints = d3$1.select(chart.div).selectAll('.point-supergroup g.point circle').classed('brushed selected', false);
-    allPoints.filter(function (d) {
-        return brushedPoints.indexOf(d.key1) > -1;
-    }).classed('brushed', true).each(function () {
-        d3$1.select(this.parentNode).moveToFront();
-    });
-
-    //brushed lines
-    var brushedLines = lines.filter(function (d, i) {
+    //Determine which lines fall inside the brush.
+    chart.parent.selectedIDs = lines.filter(function (d, i) {
         var intersection = false;
         d.lines.forEach(function (line, j) {
             sides.forEach(function (side, k) {
@@ -577,43 +571,37 @@ function brushMarks(chart, points, lines) {
         return intersection;
     }).data().map(function (d) {
         return d.id;
-    }),
-        allLines = d3$1.select(chart.div).selectAll('.line-supergroup g.line path').classed('brushed', false);
-    allLines.filter(function (d) {
-        return brushedLines.indexOf(d.id) > -1;
+    });
+
+    //Highlight brushed lines.
+    chart.parent.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false).filter(function (d) {
+        return chart.parent.selectedIDs.indexOf(d.id) > -1;
     }).classed('brushed', true).each(function () {
         d3$1.select(this.parentNode).moveToFront();
     });
-    allPoints.filter(function (d) {
-        return brushedLines.indexOf(d.id) > -1;
-    }).classed('selected', true).each(function () {
-        d3$1.select(this.parentNode).moveToFront();
-    });
 
-    //Attach select points and lines to multiples container.
-    d3$1.select(chart.wrap.node().parentNode).datum({
-        measure: chart.currentMeasure,
-        points: brushedPoints,
-        lines: brushedLines
-    });
-
-    //Draw brushed data points.
-    var brushedData = chart.raw_data.filter(function (d) {
-        return brushedLines.indexOf(d[chart.config.id_col]) > -1;
-    });
-    chart.parent.listing.draw(brushedData.length ? brushedData : chart.raw_data.splice(0, 25));
+    //Draw listing displaying brushed IDs first.
+    if (chart.parent.selectedIDs.length) {
+        chart.parent.data.forEach(function (d) {
+            d.brushed = chart.parent.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
+        });
+        chart.parent.brushedData = chart.parent.data.filter(function (d) {
+            return d.brushed;
+        });
+        if (chart.parent.brushedData.length > 24) chart.parent.listing.draw(chart.parent.brushedData.filter(function (d, i) {
+            return i < 25;
+        }));else chart.parent.listing.draw(chart.parent.brushedData.concat(chart.parent.data.filter(function (d) {
+            return !d.brushed;
+        }).filter(function (d, i) {
+            return i < 25 - chart.parent.brushedData.length;
+        })));
+    }
 }
 
 function brush() {
-    var chart = this;
+    var _this = this;
 
-    //points
-    var points = this.svg.selectAll('.point-supergroup g.point circle');
-    points.each(function (d, i) {
-        d.id = d.values.raw[0][chart.config.id_col];
-        d.time = d.values.raw[0][chart.config.time_col];
-        d.key1 = d.id + '|' + d.time;
-    });
+    var chart = this;
 
     //lines
     var lines = this.svg.selectAll('.line-supergroup g.line path');
@@ -635,44 +623,33 @@ function brush() {
     });
 
     //Highlight previously brushed points.
-    var multiplesContainer = d3$1.select(this.wrap.node().parentNode);
-    if (multiplesContainer.datum()) {
-        points.filter(function (d) {
-            return multiplesContainer.datum().points.indexOf(d.key1) > -1;
-        }).classed('brushed', true).each(function () {
-            d3$1.select(this.parentNode).moveToFront();
-        });
+    if (this.parent.selectedIDs.length) {
         lines.filter(function (d) {
-            return multiplesContainer.datum().lines.indexOf(d.id) > -1;
+            return _this.parent.selectedIDs.indexOf(d[_this.config.id_col]) > -1;
         }).classed('brushed', true).each(function () {
-            d3$1.select(this.parentNode).moveToFront();
-        });
-        points.filter(function (d) {
-            return multiplesContainer.datum().lines.indexOf(d.id) > -1;
-        }).classed('selected', true).each(function () {
             d3$1.select(this.parentNode).moveToFront();
         });
     }
 
     //Apply brush.
     this.package.brush.on('brushstart', function () {}).on('brush', function () {
-        d3$1.select(chart.div).selectAll('.wc-chart').each(function (d) {
+        chart.parent.wrap.selectAll('.wc-chart').each(function (d) {
             if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
         });
         chart.config.extent = chart.package.brush.extent();
 
         //brush marks
-        brushMarks(chart, points, lines);
+        brushMarks(chart, lines);
     }).on('brushend', function () {});
 
     //Initialize brush on brush overlay.
     this.package.overlay.call(this.package.brush);
 
     if (!this.config.extent) this.config.extent = this.package.brush.extent();
-    if ((this.config.extent[0][0] !== this.package.brush.extent()[0][0] || this.config.extent[0][1] !== this.package.brush.extent()[0][1] || this.config.extent[1][0] !== this.package.brush.extent()[1][0] || this.config.extent[1][1] !== this.package.brush.extent()[1][1]) && this.currentMeasure === d3$1.select(chart.wrap.node().parentNode).datum().measure) {
+    if ((this.config.extent[0][0] !== this.package.brush.extent()[0][0] || this.config.extent[0][1] !== this.package.brush.extent()[0][1] || this.config.extent[1][0] !== this.package.brush.extent()[1][0] || this.config.extent[1][1] !== this.package.brush.extent()[1][1]) && this.currentMeasure === chart.parent.brushedMeasure) {
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
-        brushMarks(chart, points, lines);
+        brushMarks(chart, lines);
     }
 }
 
@@ -732,7 +709,12 @@ function onLayout$1() {
 
 function onPreprocess$1() {}
 
-function onDatatransform$1() {}
+function onDatatransform$1() {
+  //Hide system variables.
+  this.config.cols = this.config.cols.filter(function (col) {
+    return ['brushed'].indexOf(col) === -1;
+  });
+}
 
 function updatePagination() {
     var _this = this;
@@ -748,25 +730,20 @@ function updatePagination() {
     //Define and draw selected page.
     this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
     this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
-    this.draw(this.data.filter(function (d, i) {
+    this.draw(this.parent.data.filter(function (d, i) {
         return _this.pagination.startItem <= i && i < _this.pagination.endItem;
     }));
-
-    //Update displayed page links.
-    if (activeLink.classed('hidden')) this.pagination.links.classed('hidden', true).filter(function (d) {
-        return _this.pagination.activeLink - 3 < d.rel && d.rel < _this.pagination.activeLink + 3;
-    }).classed('hidden', false);
 }
 
 function addLinks() {
     var _this = this;
 
     //Count rows.
-    this.pagination.rowsTotal = this.data.length;
+    this.pagination.rowsTotal = this.parent.data.length;
 
     //Calculate number of pages needed and create a link for each page.
     this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
-    this.pagination.wrap.selectAll('a').remove();
+    this.pagination.wrap.selectAll('a,span').remove();
 
     for (var i = 0; i < this.pagination.numPages; i++) {
         this.pagination.wrap.append('a').datum({ rel: i }).attr({
@@ -774,7 +751,7 @@ function addLinks() {
             rel: i
         }).text(i + 1).classed('page-link', true).classed('active', function (d) {
             return d.rel == _this.pagination.activeLink;
-        }).classed('hidden', i > 4);
+        }).classed('hidden', this.pagination.activeLink <= 4 ? i > 4 : this.pagination.activeLink >= this.pagination.numPages - 5 ? i < this.pagination.numPages - 5 : i < this.pagination.activeLink - 2 || this.pagination.activeLink + 2 < i);
     }
 
     this.pagination.links = this.pagination.wrap.selectAll('a.page-link');
@@ -783,20 +760,35 @@ function addLinks() {
 function addArrows() {
     var prev = this.pagination.activeLink - 1,
         next = this.pagination.activeLink + 1;
-    if (prev < 0) prev = 0;
-    if (next > this.pagination.numPages) next = this.pagination.numPages;
+    if (prev < 0) prev = 0; // nothing before the first page
+    if (next >= this.pagination.numPages) next = this.pagination.numPages - 1; // nothing after the last page
 
-    this.pagination.prev = this.pagination.wrap.insert('a', ':first-child').classed('arrow-link', true).attr({
+    this.pagination.wrap.insert('span', ':first-child').text('...').classed('hidden', this.pagination.activeLink <= 4);
+
+    this.pagination.prev = this.pagination.wrap.insert('a', ':first-child').classed('left arrow-link', true).attr({
         href: '#',
         rel: prev
     }).text('<');
 
-    this.pagination.next = this.pagination.wrap.append('a').classed('arrow-link', true).attr({
+    this.pagination.doublePrev = this.pagination.wrap.insert('a', ':first-child').classed('left double-arrow-link', true).attr({
+        href: '#',
+        rel: 0
+    }).text('<<');
+
+    this.pagination.wrap.append('span').text('...').classed('hidden', this.pagination.activeLink >= this.pagination.numPages - 5);
+
+    this.pagination.next = this.pagination.wrap.append('a').classed('right arrow-link', true).attr({
         href: '#',
         rel: next
     }).text('>');
 
+    this.pagination.doubleNext = this.pagination.wrap.append('a').classed('right double-arrow-link', true).attr({
+        href: '#',
+        rel: this.pagination.numPages - 1
+    }).text('>>');
+
     this.pagination.arrows = this.pagination.wrap.selectAll('a.arrow-link');
+    this.pagination.doubleArrows = this.pagination.wrap.selectAll('a.double-arrow-link');
 }
 
 function addPagination() {
@@ -816,9 +808,17 @@ function addPagination() {
 
     //Render a different page on click.
     this.pagination.arrows.on('click', function () {
+        if (listing.pagination.activeLink !== +d3$1.select(this).attr('rel')) {
+            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
+            listing.pagination.prev.attr('rel', listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0);
+            listing.pagination.next.attr('rel', listing.pagination.activeLink < listing.pagination.numPages ? listing.pagination.activeLink + 1 : listing.pagination.numPages - 1);
+            updatePagination.call(listing);
+        }
+    });
+
+    //Render a different page on click.
+    this.pagination.doubleArrows.on('click', function () {
         listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-        listing.pagination.prev.attr('rel', listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0);
-        listing.pagination.next.attr('rel', listing.pagination.activeLink < listing.pagination.numPages ? listing.pagination.activeLink + 1 : listing.pagination.numPages);
         updatePagination.call(listing);
     });
 }
@@ -826,6 +826,11 @@ function addPagination() {
 function onDraw$1() {
     //Add pagination functionality.
     addPagination.call(this);
+
+    //Highlight selected rows.
+    this.table.selectAll('tbody tr').classed('brushed', function (d) {
+        return d.raw.brushed;
+    });
 }
 
 function onResize$1() {}

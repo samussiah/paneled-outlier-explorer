@@ -1,6 +1,7 @@
 import { set } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
+import './util/object-assign';
 
 export default function init(data) {
     const sortedData = data.sort((a, b) => {
@@ -28,6 +29,9 @@ export default function init(data) {
 
         return sort;
     });
+    sortedData.forEach(d => {
+        d.brushed = false;
+    });
 
     //Capture unique measures.
     this.config.allMeasures = set(sortedData.map(d => d[this.config.measure_col]))
@@ -52,16 +56,18 @@ export default function init(data) {
             : this.config.allMeasures;
 
     this.data = sortedData;
+    this.selectedIDs = [];
+    this.brushedData = [];
+
     layout.call(this);
 
     //Charts
     this.wrap.attr('id', 'Charts');
-    multiply(this, sortedData, this.config.measure_col);
-    this.wrap.classed('hidden', true);
+    multiply(this, this.data, this.config.measure_col);
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');
-    this.listing.data = sortedData;
-    this.listing.init(sortedData.filter((d,i) => i < 25));
-    //this.listing.wrap.classed('hidden', true);
+    this.listing.parent = this;
+    this.listing.init(this.data.filter((d,i) => i < 25));
+    this.listing.wrap.classed('hidden', true);
 }

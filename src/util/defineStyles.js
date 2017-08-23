@@ -98,6 +98,10 @@ export default function defineStyles() {
                 '    stroke-width: 3px;' +
                 '    stroke-opacity: 1;' +
                 '}',
+            'path.hover {' +
+                '    stroke: orange;' +
+                '    stroke-opacity: 1;' +
+                '}',
             'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
             'tr.brushed {' + '    background: orange;' + '}'
         ],

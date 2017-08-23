@@ -16,7 +16,7 @@ export default function brushMarks(chart, lines) {
         sides = [top, right, bottom, left];
 
     //Determine which lines fall inside the brush.
-    chart.parent.selectedIDs = lines
+    const brushedLines = lines
         .filter((d, i) => {
             let intersection = false;
             d.lines.forEach((line, j) => {
@@ -33,6 +33,9 @@ export default function brushMarks(chart, lines) {
             });
             return intersection;
         })
+
+    //Attached brushed IDs to chart parent object.
+    chart.parent.selectedIDs = brushedLines
         .data()
         .map(d => d.id);
 
@@ -42,7 +45,7 @@ export default function brushMarks(chart, lines) {
         .classed('brushed', false)
         .filter(d => chart.parent.selectedIDs.indexOf(d.id) > -1)
         .classed('brushed', true)
-        .each(function() {
+        .each(function(d) {
             select(this.parentNode).moveToFront();
         });
 
@@ -55,6 +58,9 @@ export default function brushMarks(chart, lines) {
         chart.parent.listing.draw(chart.parent.brushedData);
         select('#Listing-nav').classed('brushed', true);
     } else {
+        chart.parent.data.forEach(d => {
+            d.brushed = false;
+        });
         chart.parent.brushedData = [];
         chart.parent.listing.draw(chart.parent.data.filter((d, i) => i < 25));
         select('#Listing-nav').classed('brushed', false);

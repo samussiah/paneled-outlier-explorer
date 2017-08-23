@@ -8,6 +8,8 @@ export default function brush() {
     const lines = this.svg.selectAll('.line-supergroup g.line path');
     lines.each(function(d, i) {
         d.id = d.values[0].values.raw[0][chart.config.id_col];
+        d.lln = d.values[0].values.raw[0][chart.config.lln_col];
+        d.uln = d.values[0].values.raw[0][chart.config.uln_col];
         d.lines = d.values.map((di, i) => {
             var line;
             if (i) {
@@ -26,7 +28,7 @@ export default function brush() {
     //Highlight previously brushed points.
     if (this.parent.selectedIDs.length) {
         lines
-            .filter(d => this.parent.selectedIDs.indexOf(d[this.config.id_col]) > -1)
+            .filter(d => this.parent.selectedIDs.indexOf(d.id) > -1)
             .classed('brushed', true)
             .each(function() {
                 select(this.parentNode).moveToFront();

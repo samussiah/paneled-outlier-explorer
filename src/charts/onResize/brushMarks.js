@@ -16,28 +16,25 @@ export default function brushMarks(chart, lines) {
         sides = [top, right, bottom, left];
 
     //Determine which lines fall inside the brush.
-    const brushedLines = lines
-        .filter((d, i) => {
-            let intersection = false;
-            d.lines.forEach((line, j) => {
-                sides.forEach((side, k) => {
-                    if (!intersection) {
-                        intersection = doLineSegmentsIntersect(
-                            { x: line.x0, y: line.y0 },
-                            { x: line.x1, y: line.y1 },
-                            { x: side.x0, y: side.y0 },
-                            { x: side.x1, y: side.y1 }
-                        );
-                    }
-                });
+    const brushedLines = lines.filter((d, i) => {
+        let intersection = false;
+        d.lines.forEach((line, j) => {
+            sides.forEach((side, k) => {
+                if (!intersection) {
+                    intersection = doLineSegmentsIntersect(
+                        { x: line.x0, y: line.y0 },
+                        { x: line.x1, y: line.y1 },
+                        { x: side.x0, y: side.y0 },
+                        { x: side.x1, y: side.y1 }
+                    );
+                }
             });
-            return intersection;
-        })
+        });
+        return intersection;
+    });
 
     //Attached brushed IDs to chart parent object.
-    chart.parent.selectedIDs = brushedLines
-        .data()
-        .map(d => d.id);
+    chart.parent.selectedIDs = brushedLines.data().map(d => d.id);
 
     //Highlight brushed lines.
     chart.parent.wrap

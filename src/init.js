@@ -22,7 +22,9 @@ export default function init(data) {
                     bPos = this.config.measures.indexOf(bValue),
                     diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-                sort = diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                sort = diff
+                    ? diff
+                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
             } else sort = leftSort ? -1 : rightSort ? 1 : 0;
 
             if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
@@ -35,7 +37,10 @@ export default function init(data) {
     });
 
     if (data.length !== sortedData.length)
-        console.warn(`${data.length - sortedData.length} records without numeric results have been removed from the data.`);
+        console.warn(
+            `${data.length -
+                sortedData.length} records without numeric results have been removed from the data.`
+        );
 
     //Capture unique measures.
     this.config.allMeasures = set(sortedData.map(d => d[this.config.measure_col]))

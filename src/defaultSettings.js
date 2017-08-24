@@ -2,7 +2,29 @@ import clone from './util/clone';
 
 export default {
     measure_col: 'TEST',
-    time_col: 'DY',
+    time_cols: [
+        {
+            value_col: 'DY',
+            type: 'linear',
+            label: 'Study Day',
+            rotate_tick_labels: false,
+            vertical_space: 0
+        },
+        {
+            value_col: 'VISITN',
+            type: 'ordinal',
+            label: 'Visit Number',
+            rotate_tick_labels: false,
+            vertical_space: 0
+        },
+        {
+            value_col: 'VISIT',
+            type: 'ordinal',
+            label: 'Visit',
+            rotate_tick_labels: true,
+            vertical_space: 100
+        }
+    ],
     value_col: 'STRESN',
     id_col: 'USUBJID',
     unit_col: 'STRESU',
@@ -12,9 +34,9 @@ export default {
     filters: null,
 
     x: {
-        type: 'linear',
-        column: null, // sync to [ time_col ]
-        label: 'Study Day'
+        type: null, // sync to [ time_cols[0].type ]
+        column: null, // sync to [ time_cols[0].value_col ]
+        label: null // sync to [ time_cols[0].label ]
     },
     y: {
         type: 'linear',
@@ -44,17 +66,31 @@ export default {
 
 export function syncSettings(settings) {
     const syncedSettings = clone(settings);
-    syncedSettings.x.column = settings.time_col;
+    syncedSettings.x.type = settings.time_cols[0].type;
+    syncedSettings.x.column = settings.time_cols[0].value_col;
+    syncedSettings.x.label = settings.time_cols[0].label;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
     return syncedSettings;
 }
 
-export const controlInputs = [];
+export const controlInputs = [
+    {
+        type: 'dropdown',
+        label: 'X-axis',
+        option: 'x.column',
+        require: true
+    }
+];
 
 export function syncControlInputs(controlInputs, settings) {
     const syncedControlInputs = clone(controlInputs);
+
+    syncedControlInputs.filter(
+        controlInput => controlInput.label === 'X-axis'
+    )[0].values = settings.time_cols.map(d => d.value_col || d);
+
     if (settings.filters)
         settings.filters.forEach(filter => {
             syncedControlInputs.push({

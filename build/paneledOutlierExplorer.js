@@ -249,7 +249,29 @@
 
     var defaultSettings = {
         measure_col: 'TEST',
-        time_col: 'DY',
+        time_cols: [
+            {
+                value_col: 'DY',
+                type: 'linear',
+                label: 'Study Day',
+                rotate_tick_labels: false,
+                vertical_space: 0
+            },
+            {
+                value_col: 'VISITN',
+                type: 'ordinal',
+                label: 'Visit Number',
+                rotate_tick_labels: false,
+                vertical_space: 0
+            },
+            {
+                value_col: 'VISIT',
+                type: 'ordinal',
+                label: 'Visit',
+                rotate_tick_labels: true,
+                vertical_space: 100
+            }
+        ],
         value_col: 'STRESN',
         id_col: 'USUBJID',
         unit_col: 'STRESU',
@@ -259,9 +281,9 @@
         filters: null,
 
         x: {
-            type: 'linear',
-            column: null, // sync to [ time_col ]
-            label: 'Study Day'
+            type: null, // sync to [ time_cols[0].type ]
+            column: null, // sync to [ time_cols[0].value_col ]
+            label: null // sync to [ time_cols[0].label ]
         },
         y: {
             type: 'linear',
@@ -291,17 +313,33 @@
 
     function syncSettings(settings) {
         var syncedSettings = clone(settings);
-        syncedSettings.x.column = settings.time_col;
+        syncedSettings.x.type = settings.time_cols[0].type;
+        syncedSettings.x.column = settings.time_cols[0].value_col;
+        syncedSettings.x.label = settings.time_cols[0].label;
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
         return syncedSettings;
     }
 
-    var controlInputs = [];
+    var controlInputs = [
+        {
+            type: 'dropdown',
+            label: 'X-axis',
+            option: 'x.column',
+            require: true
+        }
+    ];
 
     function syncControlInputs(controlInputs, settings) {
         var syncedControlInputs = clone(controlInputs);
+
+        syncedControlInputs.filter(function(controlInput) {
+            return controlInput.label === 'X-axis';
+        })[0].values = settings.time_cols.map(function(d) {
+            return d.value_col || d;
+        });
+
         if (settings.filters)
             settings.filters.forEach(function(filter) {
                 syncedControlInputs.push({
@@ -726,6 +764,16 @@
         );
         var range = this.config.y.domain[1] - this.config.y.domain[0];
         this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
+
+        //Sync config with X-axis selection.
+        var xInput = this.controls.config.inputs.filter(function(input) {
+                return input.label === 'X-axis';
+            })[0],
+            time_col = this.config.time_cols.filter(function(time_col) {
+                return time_col.value_col === _this.config.x.column;
+            })[0];
+        this.config.x.type = time_col.type;
+        this.config.x.label = time_col.label;
     }
 
     function onDatatransform() {}
@@ -943,9 +991,15 @@
                 var line;
                 if (i) {
                     line = {
-                        x0: d.values[i - 1].values.x,
+                        x0:
+                            chart.config.x.type === 'linear'
+                                ? d.values[i - 1].values.x
+                                : chart.x(d.values[i - 1].values.x) + chart.x.rangeBand() / 2,
                         y0: d.values[i - 1].values.y,
-                        x1: di.values.x,
+                        x1:
+                            chart.config.x.type === 'linear'
+                                ? di.values.x
+                                : chart.x(di.values.x) + chart.x.rangeBand() / 2,
                         y1: di.values.y
                     };
                 }

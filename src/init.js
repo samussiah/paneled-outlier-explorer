@@ -1,38 +1,49 @@
-import { set } from 'd3';
+import { set, selectAll, select } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
-import './util/object-assign';
+import applyFilters from './init/applyFilters';
 
 export default function init(data) {
-    const sortedData = data.sort((a, b) => {
-        const aValue = a[this.config.measure_col],
-            bValue = b[this.config.measure_col],
-            leftSort = aValue < bValue,
-            rightSort = aValue > bValue,
-            aID = a[this.config.id_col],
-            bID = b[this.config.id_col],
-            aTime = a[this.config.time_col],
-            bTime = b[this.config.time_col];
+    const chart = this;
 
-        let sort;
-        if (this.config.measures && this.config.measures.length) {
-            const aPos = this.config.measures.indexOf(aValue),
-                bPos = this.config.measures.indexOf(bValue),
-                diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+    //Attach data arrays to central chart object.
+    this.data = {
+        raw: data,
+        sorted: data.sort((a, b) => {
+            const aValue = a[this.config.measure_col],
+                bValue = b[this.config.measure_col],
+                leftSort = aValue < bValue,
+                rightSort = aValue > bValue,
+                aID = a[this.config.id_col],
+                bID = b[this.config.id_col],
+                aTime = a[this.config.time_col],
+                bTime = b[this.config.time_col];
 
-            sort = diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-        } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+            let sort;
+            if (this.config.measures && this.config.measures.length) {
+                const aPos = this.config.measures.indexOf(aValue),
+                    bPos = this.config.measures.indexOf(bValue),
+                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-        if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+                sort = diff
+                    ? diff
+                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+            } else sort = leftSort ? -1 : rightSort ? 1 : 0;
 
-        return sort;
-    });
-    sortedData.forEach(d => {
+            if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+
+            return sort;
+        })
+    };
+    this.data.sorted.forEach(d => {
         d.brushed = false;
     });
+    this.data.filtered = this.data.sorted;
+    this.data.brushed = [];
+    this.data.selectedIDs = [];
 
     //Capture unique measures.
-    this.config.allMeasures = set(sortedData.map(d => d[this.config.measure_col]))
+    this.config.allMeasures = set(this.data.sorted.map(d => d[this.config.measure_col]))
         .values()
         .sort((a, b) => {
             const leftSort = a < b,
@@ -53,19 +64,26 @@ export default function init(data) {
             ? this.config.measures
             : this.config.allMeasures;
 
-    this.data = sortedData;
-    this.selectedIDs = [];
-    this.brushedData = [];
-
     layout.call(this);
 
     //Charts
     this.wrap.attr('id', 'Charts');
-    multiply(this, this.data, this.config.measure_col);
+    multiply(this, this.data.sorted, this.config.measure_col);
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');
     this.listing.parent = this;
-    this.listing.init(this.data.filter((d, i) => i < 25));
+    this.listing.init(this.data.sorted.filter((d, i) => i < 25));
     this.listing.wrap.classed('hidden', true);
+
+    //Define custom event listener for filters.
+    selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+        d.value = select(this)
+            .selectAll('option')
+            .filter(function() {
+                return this.selected;
+            })
+            .text();
+        applyFilters.call(chart);
+    });
 }

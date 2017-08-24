@@ -26,9 +26,14 @@ export default function layout() {
                     select('#Listing').classed('hidden', false);
                 }
             }),
+        //Create controls header.
+        controlsHeader = select(this.div)
+            .insert('div', ':first-child')
+            .attr('id', 'controls-header')
+            .text('Controls'),
         //Define all-chart toggle.
-        measureListContainer = select(this.div)
-            .insert('ul', ':first-child')
+        measureListContainer = select(this.element + ' #left-side')
+            .append('ul')
             .attr('id', 'measure-list-container'),
         measureListHeader = measureListContainer
             .append('div')

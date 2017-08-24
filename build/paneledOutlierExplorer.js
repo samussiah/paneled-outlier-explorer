@@ -9,27 +9,63 @@
 
     function defineStyles() {
         var styles = [
-                '.hidden {' + '    display: none !important;' + '}',
-                '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}',
-                '#measure-list-header {' +
+                /***--------------------------------------------------------------------------------------\
+    Controls
+    \--------------------------------------------------------------------------------------***/
+
+                '#controls-header {' +
+                    '    margin: 0;' +
+                    '    overflow: hidden;' +
+                    '    background-color: #333;' +
+                    '    width: 19%;' +
+                    '    float: left;' +
+                    '    font-size: 150%;' +
+                    '    display: block;' +
+                    '    color: white;' +
+                    '    text-align: right;' +
+                    '    padding: 14px 16px;' +
+                    '    box-sizing: border-box;' +
+                    '}',
+                '#left-side {' + '    width: 19%;' + '    float: left;' + '}',
+                '#left-side > * {' + '    clear: both;' + '}',
+                '#left-side .wc-controls {' + '    padding-top: 10px;' + '}',
+                '#left-side .wc-controls .control-group {' +
+                    '    float: right;' +
+                    '    clear: both;' +
+                    '    margin: 0 0 2px 0;' +
+                    '}',
+                '#left-side .wc-controls .control-group > * {' +
+                    '    display: inline-block;' +
+                    '    margin-left: 3px;' +
+                    '}',
+                '#left-side #measure-list-container #measure-list-header {' +
                     '    font-size: 150%;' +
                     '    border-bottom: 1px solid lightgray;' +
                     '    font-weight: lighter;' +
                     '    padding: 14px 0;' +
                     '    text-align: right;' +
                     '}',
-                '#measure-list-checkbox {' + '    margin-left: 5px;' + '}',
-                '#measure-list {' +
+                '#left-side #measure-list-container #measure-list-checkbox {' +
+                    '    margin-left: 5px;' +
+                    '}',
+                '#left-side #measure-list-container #measure-list {' +
                     '    list-style-type: none;' +
                     '    font-weight: lighter;' +
                     '}',
-                '.measure-item {' + '}',
-                '.measure-item-container {' + '    text-align: right;' + '}',
-                '.measure-checkbox {' +
+                '#left-side #measure-list-container .measure-item {' + '}',
+                '#left-side #measure-list-container .measure-item-container {' +
+                    '    text-align: right;' +
+                    '}',
+                '#left-side #measure-list-container .measure-checkbox {' +
                     '    margin-left: 5px;' +
                     '    margin-top: 5px;' +
                     '    float: right;' +
                     '}',
+
+                /***--------------------------------------------------------------------------------------\
+    Navigation
+    \--------------------------------------------------------------------------------------***/
+
                 'ul#navigation-bar {' +
                     '    list-style-type: none;' +
                     '    margin: 0;' +
@@ -37,7 +73,6 @@
                     '    overflow: hidden;' +
                     '    background-color: #333;' +
                     '    width: 80%;' +
-                    '    border-left: 2px solid lightgray;' +
                     '    float: right;' +
                     '}',
                 'ul#navigation-bar li.navigation {' +
@@ -55,24 +90,27 @@
                 'ul#navigation-bar li.navigation#Listing-nav.brushed {' +
                     '    color: orange;' +
                     '}',
-                'div.wc-layout.wc-small-multiples#Charts,' +
-                    'div.wc-chart#Listing {' +
+
+                /***--------------------------------------------------------------------------------------\
+    Charts
+    \--------------------------------------------------------------------------------------***/
+
+                'div.wc-layout.wc-small-multiples#Charts {' +
                     '    width: 80%;' +
                     '    float: right;' +
-                    '    border-left: 2px solid lightgray;' +
                     '    padding-top: 10px;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
                     '    padding-right: 1em;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
                     '    width: 100%;' +
                     ' }',
-                'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
                     '    text-align: left;' +
                     '    padding-left: 10px;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                     '    float: right;' +
                     '    cursor: pointer;' +
                     '    border: 1px solid black;' +
@@ -81,9 +119,19 @@
                     '    font-size: 75%;' +
                     '    margin-left: 5px;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                     '    background: black;' +
                     '    color: white;' +
+                    '}',
+
+                /***--------------------------------------------------------------------------------------\
+    Listing
+    \--------------------------------------------------------------------------------------***/
+
+                'div.wc-chart#Listing {' +
+                    '    width: 80%;' +
+                    '    float: right;' +
+                    '    padding-top: 10px;' +
                     '}',
                 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
                 'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}',
@@ -98,6 +146,12 @@
                     '    border: 2px solid gray;' +
                     '    border-radius: 4px;' +
                     '}',
+
+                /***--------------------------------------------------------------------------------------\
+    General styles
+    \--------------------------------------------------------------------------------------***/
+
+                '.hidden {' + '    display: none !important;' + '}',
                 'circle.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 2px;' +
@@ -223,21 +277,11 @@
                     'stroke-opacity': 0.2,
                     stroke: 'black'
                 }
-                //{
-                //    type: 'circle',
-                //    per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
-                //    radius: 2,
-                //    attributes: {
-                //        'stroke-width': 0.5,
-                //        'stroke-opacity': 0.5,
-                //        'fill-opacity': 1
-                //    }
-                //}
             }
         ],
         resizable: false,
         scale_text: false,
-        width: 400,
+        width: 390,
         height: 200,
         margin: {
             left: 40
@@ -250,31 +294,23 @@
         syncedSettings.x.column = settings.time_col;
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
-        //syncedSettings.marks[1].per = [
-        //    settings.id_col,
-        //    settings.measure_col,
-        //    settings.time_col,
-        //    settings.value_col
-        //];
 
         return syncedSettings;
     }
 
-    var controlInputs = [
-        {
-            type: 'subsetter',
-            value_col: null,
-            label: 'Measures',
-            multiple: true
-        }
-    ];
+    var controlInputs = [];
 
     function syncControlInputs(controlInputs, settings) {
         var syncedControlInputs = clone(controlInputs);
-        syncedControlInputs.filter(function(controlInput) {
-            return controlInput.label === 'Measures';
-        })[0].value_col =
-            settings.measure_col;
+        if (settings.filters)
+            settings.filters.forEach(function(filter) {
+                syncedControlInputs.push({
+                    type: 'subsetter',
+                    value_col: filter.value_col || filter,
+                    label: filter.label || filter.value_col || filter,
+                    multiple: false
+                });
+            });
 
         return syncedControlInputs;
     }
@@ -365,10 +401,16 @@
                         d3$1.select('#Listing').classed('hidden', false);
                     }
                 }),
+            //Create controls header.
+            controlsHeader = d3$1
+                .select(this.div)
+                .insert('div', ':first-child')
+                .attr('id', 'controls-header')
+                .text('Controls'),
             //Define all-chart toggle.
             measureListContainer = d3$1
-                .select(this.div)
-                .insert('ul', ':first-child')
+                .select(this.element + ' #left-side')
+                .append('ul')
                 .attr('id', 'measure-list-container'),
             measureListHeader = measureListContainer
                 .append('div')
@@ -422,42 +464,89 @@
                 });
     }
 
+    function applyFilters() {
+        var _this = this;
+
+        this.data.brushed = [];
+        this.data.selectedIDs = [];
+
+        //Reset brush.
+        this.multiples.forEach(function(multiple) {
+            multiple.package.overlay.call(multiple.package.brush.clear());
+            multiple.config.extent = multiple.package.brush.extent();
+        });
+
+        //De-highlight brushed lines.
+        this.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false);
+
+        //De-highlight listing.
+        d3$1.select('#Listing-nav').classed('brushed', false);
+
+        //Define filtered data.
+        this.data.filtered = this.data.sorted.filter(function(d) {
+            var filtered = false;
+
+            _this.controls.config.inputs.forEach(function(filter) {
+                if (!filtered && filter.value && filter.value !== 'All')
+                    filtered = d[filter.value_col] !== filter.value;
+            });
+
+            return !filtered;
+        });
+
+        //Redraw listing.
+        this.listing.draw(
+            this.data.filtered.filter(function(d, i) {
+                return i < 25;
+            })
+        );
+    }
+
     function init(data) {
         var _this = this;
 
-        var sortedData = data.sort(function(a, b) {
-            var aValue = a[_this.config.measure_col],
-                bValue = b[_this.config.measure_col],
-                leftSort = aValue < bValue,
-                rightSort = aValue > bValue,
-                aID = a[_this.config.id_col],
-                bID = b[_this.config.id_col],
-                aTime = a[_this.config.time_col],
-                bTime = b[_this.config.time_col];
+        var chart = this;
 
-            var sort = void 0;
-            if (_this.config.measures && _this.config.measures.length) {
-                var aPos = _this.config.measures.indexOf(aValue),
-                    bPos = _this.config.measures.indexOf(bValue),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+        //Attach data arrays to central chart object.
+        this.data = {
+            raw: data,
+            sorted: data.sort(function(a, b) {
+                var aValue = a[_this.config.measure_col],
+                    bValue = b[_this.config.measure_col],
+                    leftSort = aValue < bValue,
+                    rightSort = aValue > bValue,
+                    aID = a[_this.config.id_col],
+                    bID = b[_this.config.id_col],
+                    aTime = a[_this.config.time_col],
+                    bTime = b[_this.config.time_col];
 
-                sort = diff
-                    ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-            } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+                var sort = void 0;
+                if (_this.config.measures && _this.config.measures.length) {
+                    var aPos = _this.config.measures.indexOf(aValue),
+                        bPos = _this.config.measures.indexOf(bValue),
+                        diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-            if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+                    sort = diff
+                        ? diff
+                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                } else sort = leftSort ? -1 : rightSort ? 1 : 0;
 
-            return sort;
-        });
-        sortedData.forEach(function(d) {
+                if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+
+                return sort;
+            })
+        };
+        this.data.sorted.forEach(function(d) {
             d.brushed = false;
         });
+        this.data.filtered = this.data.sorted;
+        this.data.brushed = [];
+        this.data.selectedIDs = [];
 
         //Capture unique measures.
         this.config.allMeasures = d3$1
             .set(
-                sortedData.map(function(d) {
+                this.data.sorted.map(function(d) {
                     return d[_this.config.measure_col];
                 })
             )
@@ -481,25 +570,33 @@
                 ? this.config.measures
                 : this.config.allMeasures;
 
-        this.data = sortedData;
-        this.selectedIDs = [];
-        this.brushedData = [];
-
         layout.call(this);
 
         //Charts
         this.wrap.attr('id', 'Charts');
-        webcharts.multiply(this, this.data, this.config.measure_col);
+        webcharts.multiply(this, this.data.sorted, this.config.measure_col);
 
         //Listing
         this.listing.wrap.attr('id', 'Listing');
         this.listing.parent = this;
         this.listing.init(
-            this.data.filter(function(d, i) {
+            this.data.sorted.filter(function(d, i) {
                 return i < 25;
             })
         );
         this.listing.wrap.classed('hidden', true);
+
+        //Define custom event listener for filters.
+        d3$1.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+            d.value = d3$1
+                .select(this)
+                .selectAll('option')
+                .filter(function() {
+                    return this.selected;
+                })
+                .text();
+            applyFilters.call(chart);
+        });
     }
 
     function onInit() {
@@ -778,7 +875,7 @@
             sides = [top, right, bottom, left];
 
         //Determine which lines fall inside the brush.
-        chart.parent.selectedIDs = lines
+        chart.parent.data.selectedIDs = lines
             .filter(function(d, i) {
                 var intersection = false;
                 d.lines.forEach(function(line, j) {
@@ -805,7 +902,7 @@
             .selectAll('.line-supergroup g.line path')
             .classed('brushed', false)
             .filter(function(d) {
-                return chart.parent.selectedIDs.indexOf(d.id) > -1;
+                return chart.parent.data.selectedIDs.indexOf(d.id) > -1;
             })
             .classed('brushed', true)
             .each(function() {
@@ -813,19 +910,19 @@
             });
 
         //Draw listing displaying brushed IDs first.
-        if (chart.parent.selectedIDs.length) {
-            chart.parent.data.forEach(function(d) {
-                d.brushed = chart.parent.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
+        if (chart.parent.data.selectedIDs.length) {
+            chart.parent.data.filtered.forEach(function(d) {
+                d.brushed = chart.parent.data.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
             });
-            chart.parent.brushedData = chart.parent.data.filter(function(d) {
+            chart.parent.data.brushed = chart.parent.data.filtered.filter(function(d) {
                 return d.brushed;
             });
-            chart.parent.listing.draw(chart.parent.brushedData);
+            chart.parent.listing.draw(chart.parent.data.brushed);
             d3$1.select('#Listing-nav').classed('brushed', true);
         } else {
-            chart.parent.brushedData = [];
+            chart.parent.data.brushed = [];
             chart.parent.listing.draw(
-                chart.parent.data.filter(function(d, i) {
+                chart.parent.data.filtered.filter(function(d, i) {
                     return i < 25;
                 })
             );
@@ -858,10 +955,10 @@
         });
 
         //Highlight previously brushed points.
-        if (this.parent.selectedIDs.length) {
+        if (this.parent.data.selectedIDs.length) {
             lines
                 .filter(function(d) {
-                    return _this.parent.selectedIDs.indexOf(d[_this.config.id_col]) > -1;
+                    return _this.parent.data.selectedIDs.indexOf(d.id) > -1;
                 })
                 .classed('brushed', true)
                 .each(function() {
@@ -980,7 +1077,7 @@
         this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
         this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
         this.draw(
-            this.parent.data.filter(function(d, i) {
+            this.parent.data.filtered.filter(function(d, i) {
                 return _this.pagination.startItem <= i && i < _this.pagination.endItem;
             })
         );
@@ -990,7 +1087,7 @@
         var _this = this;
 
         //Count rows.
-        this.pagination.rowsTotal = this.parent.data.length;
+        this.pagination.rowsTotal = this.parent.data.filtered.length;
 
         //Calculate number of pages needed and create a link for each page.
         this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
@@ -1120,7 +1217,7 @@
 
     function onDraw$1() {
         //Add pagination functionality.
-        if (this.parent.brushedData.length === 0) {
+        if (this.parent.data.brushed.length === 0) {
             this.pagination.wrap.classed('hidden', false);
             addPagination.call(this);
         } else this.pagination.wrap.classed('hidden', true);
@@ -1149,15 +1246,21 @@
         //Define .css styles to avoid requiring a separate .css file.
         defineStyles();
 
+        //Create container for controls.
+        d3$1.select(element).append('div').attr('id', 'left-side');
+
         //Clone, merge, and sync settings and define chart.
         var initialSettings = clone(settings),
             mergedSettings = Object.assign({}, defaultSettings, initialSettings),
             syncedSettings = syncSettings(mergedSettings),
             syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-            //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
-            chart = webcharts.createChart(element, syncedSettings),
-            //, controls),
-            listing = webcharts.createTable(element);
+            controls = webcharts.createControls(element + ' div#left-side', {
+                location: 'top',
+                inputs: syncedControlInputs
+            }),
+            chart = webcharts.createChart(element, syncedSettings, controls),
+            listing = webcharts.createTable(element, {}, controls);
+        chart.element = element;
         chart.config.initialSettings = clone(syncedSettings);
         chart.listing = listing;
         listing.chart = chart;

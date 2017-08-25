@@ -109,6 +109,7 @@
                     '    stroke-width: 3px;' +
                     '    stroke-opacity: 1;' +
                     '}',
+                'path.hover {' + '    stroke: orange;' + '    stroke-opacity: 1;' + '}',
                 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
                 'tr.brushed {' + '    background: orange;' + '}'
             ],
@@ -199,8 +200,8 @@
         value_col: 'STRESN',
         id_col: 'USUBJID',
         unit_col: 'STRESU',
-        normal_col_low: 'STNRLO',
-        normal_col_high: 'STNRHI',
+        lln_col: 'STNRLO',
+        uln_col: 'STNRHI',
         measures: null,
         filters: null,
 
@@ -237,7 +238,7 @@
         ],
         resizable: false,
         scale_text: false,
-        width: 400,
+        width: 390,
         height: 200,
         margin: {
             left: 40
@@ -434,31 +435,46 @@
             else d.measure_unit = d[_this.config.measure_col];
         });
 
-        var sortedData = data.sort(function(a, b) {
-            var aValue = a.measure_unit,
-                bValue = b.measure_unit,
-                leftSort = aValue < bValue,
-                rightSort = aValue > bValue,
-                aID = a[_this.config.id_col],
-                bID = b[_this.config.id_col],
-                aTime = a[_this.config.time_col],
-                bTime = b[_this.config.time_col];
+        var sortedData = data
+            .filter(function(d) {
+                return /^[0-9\.]+$/.test(d[_this.config.value_col]);
+            })
+            .sort(function(a, b) {
+                var aValue = a.measure_unit,
+                    bValue = b.measure_unit,
+                    leftSort = aValue < bValue,
+                    rightSort = aValue > bValue,
+                    aID = a[_this.config.id_col],
+                    bID = b[_this.config.id_col],
+                    aTime = a[_this.config.time_col],
+                    bTime = b[_this.config.time_col];
 
-            var sort = void 0;
-            if (_this.config.measures && _this.config.measures.length) {
-                var aPos = _this.config.measures.indexOf(aValue),
-                    bPos = _this.config.measures.indexOf(bValue),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+                var sort = void 0;
+                if (_this.config.measures && _this.config.measures.length) {
+                    var aPos = _this.config.measures.indexOf(aValue),
+                        bPos = _this.config.measures.indexOf(bValue),
+                        diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-                sort = diff
-                    ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-            } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+                    sort = diff
+                        ? diff
+                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                } else sort = leftSort ? -1 : rightSort ? 1 : 0;
 
-            if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+                if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
 
-            return sort;
+                return sort;
+            });
+
+        sortedData.forEach(function(d) {
+            d.brushed = false;
         });
+
+        if (data.length !== sortedData.length)
+            console.warn(
+                data.length -
+                    sortedData.length +
+                    ' records without numeric results have been removed from the data.'
+            );
 
         //Capture unique measures.
         this.config.allMeasures = d3$1
@@ -784,27 +800,27 @@
             sides = [top, right, bottom, left];
 
         //Determine which lines fall inside the brush.
-        chart.parent.selectedIDs = lines
-            .filter(function(d, i) {
-                var intersection = false;
-                d.lines.forEach(function(line, j) {
-                    sides.forEach(function(side, k) {
-                        if (!intersection) {
-                            intersection = doLineSegmentsIntersect(
-                                { x: line.x0, y: line.y0 },
-                                { x: line.x1, y: line.y1 },
-                                { x: side.x0, y: side.y0 },
-                                { x: side.x1, y: side.y1 }
-                            );
-                        }
-                    });
+        var brushedLines = lines.filter(function(d, i) {
+            var intersection = false;
+            d.lines.forEach(function(line, j) {
+                sides.forEach(function(side, k) {
+                    if (!intersection) {
+                        intersection = doLineSegmentsIntersect(
+                            { x: line.x0, y: line.y0 },
+                            { x: line.x1, y: line.y1 },
+                            { x: side.x0, y: side.y0 },
+                            { x: side.x1, y: side.y1 }
+                        );
+                    }
                 });
-                return intersection;
-            })
-            .data()
-            .map(function(d) {
-                return d.id;
             });
+            return intersection;
+        });
+
+        //Attached brushed IDs to chart parent object.
+        chart.parent.selectedIDs = brushedLines.data().map(function(d) {
+            return d.id;
+        });
 
         //Highlight brushed lines.
         chart.parent.wrap
@@ -814,7 +830,7 @@
                 return chart.parent.selectedIDs.indexOf(d.id) > -1;
             })
             .classed('brushed', true)
-            .each(function() {
+            .each(function(d) {
                 d3$1.select(this.parentNode).moveToFront();
             });
 
@@ -829,6 +845,9 @@
             chart.parent.listing.draw(chart.parent.brushedData);
             d3$1.select('#Listing-nav').classed('brushed', true);
         } else {
+            chart.parent.data.forEach(function(d) {
+                d.brushed = false;
+            });
             chart.parent.brushedData = [];
             chart.parent.listing.draw(
                 chart.parent.data.filter(function(d, i) {
@@ -848,6 +867,8 @@
         var lines = this.svg.selectAll('.line-supergroup g.line path');
         lines.each(function(d, i) {
             d.id = d.values[0].values.raw[0][chart.config.id_col];
+            d.lln = d.values[0].values.raw[0][chart.config.lln_col];
+            d.uln = d.values[0].values.raw[0][chart.config.uln_col];
             d.lines = d.values.map(function(di, i) {
                 var line;
                 if (i) {
@@ -909,6 +930,22 @@
 
     function onResize() {
         var chart = this;
+
+        //Draw normal range.
+        this.svg.select('.normal-range').remove();
+        this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
+            x: this.x(this.x_dom[0]) - 1,
+            y: this.y(this.filtered_data[0][this.config.uln_col]),
+            width: this.plot_width + 2,
+            height:
+                this.y(this.filtered_data[0][this.config.lln_col]) -
+                this.y(this.filtered_data[0][this.config.uln_col]),
+            fill: 'green',
+            'fill-opacity': 0.05,
+            stroke: 'green',
+            'stroke-opacity': 1,
+            'clip-path': 'url(#' + this.id + ')'
+        });
 
         //Capture each multiple's scale.
         this.package = {

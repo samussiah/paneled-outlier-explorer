@@ -4,14 +4,6 @@ import brushMarks from './brushMarks';
 export default function brush() {
     const chart = this;
 
-    //points
-    const points = this.svg.selectAll('.point-supergroup g.point circle');
-    points.each((d, i) => {
-        d.id = d.values.raw[0][chart.config.id_col];
-        d.time = d.values.raw[0][chart.config.time_col];
-        d.key1 = d.id + '|' + d.time;
-    });
-
     //lines
     const lines = this.svg.selectAll('.line-supergroup g.line path');
     lines.each(function(d, i) {
@@ -32,23 +24,10 @@ export default function brush() {
     });
 
     //Highlight previously brushed points.
-    const multiplesContainer = select(this.wrap.node().parentNode);
-    if (multiplesContainer.datum()) {
-        points
-            .filter(d => multiplesContainer.datum().points.indexOf(d.key1) > -1)
-            .classed('brushed', true)
-            .each(function() {
-                select(this.parentNode).moveToFront();
-            });
+    if (this.parent.selectedIDs.length) {
         lines
-            .filter(d => multiplesContainer.datum().lines.indexOf(d.id) > -1)
+            .filter(d => this.parent.selectedIDs.indexOf(d[this.config.id_col]) > -1)
             .classed('brushed', true)
-            .each(function() {
-                select(this.parentNode).moveToFront();
-            });
-        points
-            .filter(d => multiplesContainer.datum().lines.indexOf(d.id) > -1)
-            .classed('selected', true)
             .each(function() {
                 select(this.parentNode).moveToFront();
             });
@@ -58,13 +37,13 @@ export default function brush() {
     this.package.brush
         .on('brushstart', function() {})
         .on('brush', function() {
-            select(chart.div).selectAll('.wc-chart').each(d => {
+            chart.parent.wrap.selectAll('.wc-chart').each(d => {
                 if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
             });
             chart.config.extent = chart.package.brush.extent();
 
             //brush marks
-            brushMarks(chart, points, lines);
+            brushMarks(chart, lines);
         })
         .on('brushend', function() {});
 
@@ -77,10 +56,10 @@ export default function brush() {
             this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
             this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
             this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
-        this.currentMeasure === select(chart.wrap.node().parentNode).datum().measure
+        this.currentMeasure === chart.parent.brushedMeasure
     ) {
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
-        brushMarks(chart, points, lines);
+        brushMarks(chart, lines);
     }
 }

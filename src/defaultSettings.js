@@ -26,28 +26,30 @@ export default {
             type: 'line',
             per: null, // sync to [ id_col ] and [ measure_col ]
             attributes: {
-                'stroke-width': 0.5,
-                'stroke-opacity': 0.5,
-                stroke: '#999'
-            }
-        },
-        {
-            type: 'circle',
-            per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
-            radius: 2,
-            attributes: {
-                'stroke-width': 0.5,
-                'stroke-opacity': 0.5,
-                'fill-opacity': 1
+                'stroke-width': 1,
+                'stroke-opacity': 0.2,
+                stroke: 'black'
             }
         }
+        //{
+        //    type: 'circle',
+        //    per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
+        //    radius: 2,
+        //    attributes: {
+        //        'stroke-width': 0.5,
+        //        'stroke-opacity': 0.5,
+        //        'fill-opacity': 1
+        //    }
+        //}
     ],
     resizable: false,
-    width: 600,
-    height: 300,
+    scale_text: false,
+    width: 400,
+    height: 200,
     margin: {
-        left: 50
-    }
+        left: 40
+    },
+    gridlines: 'xy'
 };
 
 export function syncSettings(settings) {
@@ -55,12 +57,12 @@ export function syncSettings(settings) {
     syncedSettings.x.column = settings.time_col;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
-    syncedSettings.marks[1].per = [
-        settings.id_col,
-        settings.measure_col,
-        settings.time_col,
-        settings.value_col
-    ];
+    //syncedSettings.marks[1].per = [
+    //    settings.id_col,
+    //    settings.measure_col,
+    //    settings.time_col,
+    //    settings.value_col
+    //];
 
     return syncedSettings;
 }

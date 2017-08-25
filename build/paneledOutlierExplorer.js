@@ -426,13 +426,22 @@
     function init(data) {
         var _this = this;
 
+        //Define new variables.
+        data.forEach(function(d) {
+            d.brushed = false;
+            if (d[_this.config.unit_col])
+                d.measure_unit =
+                    d[_this.config.measure_col] + ' (' + d[_this.config.unit_col] + ')';
+            else d.measure_unit = d[_this.config.measure_col];
+        });
+
         var sortedData = data
             .filter(function(d) {
                 return /^[0-9\.]+$/.test(d[_this.config.value_col]);
             })
             .sort(function(a, b) {
-                var aValue = a[_this.config.measure_col],
-                    bValue = b[_this.config.measure_col],
+                var aValue = a.measure_unit,
+                    bValue = b.measure_unit,
                     leftSort = aValue < bValue,
                     rightSort = aValue > bValue,
                     aID = a[_this.config.id_col],
@@ -471,7 +480,7 @@
         this.config.allMeasures = d3$1
             .set(
                 sortedData.map(function(d) {
-                    return d[_this.config.measure_col];
+                    return d.measure_unit;
                 })
             )
             .values()
@@ -502,7 +511,7 @@
 
         //Charts
         this.wrap.attr('id', 'Charts');
-        webcharts.multiply(this, this.data, this.config.measure_col);
+        webcharts.multiply(this, this.data, 'measure_unit');
 
         //Listing
         this.listing.wrap.attr('id', 'Listing');
@@ -553,7 +562,7 @@
             chart.draw();
 
             //Sort expanded chart first.
-            d3$1.select(chart.div).selectAll('.wc-chart').sort(function(a, b) {
+            chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
                 return a.measure === chart.currentMeasure
                     ? -1
                     : b.measure === chart.currentMeasure
@@ -572,7 +581,7 @@
             minimize(chart);
 
             //Revert to default sort.
-            d3$1.select(chart.div).selectAll('.wc-chart').sort(function(a, b) {
+            chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
                 return (
                     chart.config.measures.indexOf(a.measure) -
                     chart.config.measures.indexOf(b.measure)
@@ -634,7 +643,7 @@
         //Set the y-domain individually for each measure.
         this.config.y.domain = d3$1.extent(
             this.raw_data.filter(function(d) {
-                return d[_this.config.measure_col] === _this.currentMeasure;
+                return d.measure_unit === _this.currentMeasure;
             }),
             function(d) {
                 return +d[_this.config.value_col];
@@ -904,6 +913,7 @@
         //Initialize brush on brush overlay.
         this.package.overlay.call(this.package.brush);
 
+        //Maintain brush on redraw.
         if (!this.config.extent) this.config.extent = this.package.brush.extent();
         if (
             (this.config.extent[0][0] !== this.package.brush.extent()[0][0] ||
@@ -993,7 +1003,7 @@
     function onDatatransform$1() {
         //Hide system variables.
         this.config.cols = this.config.cols.filter(function(col) {
-            return ['brushed'].indexOf(col) === -1;
+            return ['brushed', 'measure_unit'].indexOf(col) === -1;
         });
     }
 

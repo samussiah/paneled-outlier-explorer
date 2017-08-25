@@ -4,9 +4,17 @@ import layout from './init/layout';
 import './util/object-assign';
 
 export default function init(data) {
+    //Define new variables.
+    data.forEach(d => {
+        d.brushed = false;
+        if (d[this.config.unit_col])
+            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
+        else d.measure_unit = d[this.config.measure_col];
+    });
+
     const sortedData = data.sort((a, b) => {
-        const aValue = a[this.config.measure_col],
-            bValue = b[this.config.measure_col],
+        const aValue = a.measure_unit,
+            bValue = b.measure_unit,
             leftSort = aValue < bValue,
             rightSort = aValue > bValue,
             aID = a[this.config.id_col],
@@ -27,27 +35,20 @@ export default function init(data) {
 
         return sort;
     });
-    sortedData.forEach(d => {
-        d.brushed = false;
-    });
 
     //Capture unique measures.
-    this.config.allMeasures = set(sortedData.map(d => d[this.config.measure_col]))
-        .values()
-        .sort((a, b) => {
-            const leftSort = a < b,
-                rightSort = a > b;
+    this.config.allMeasures = set(sortedData.map(d => d.measure_unit)).values().sort((a, b) => {
+        const leftSort = a < b,
+            rightSort = a > b;
 
-            if (this.config.measures && this.config.measures.length) {
-                const aPos = this.config.measures.indexOf(a),
-                    bPos = this.config.measures.indexOf(b),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+        if (this.config.measures && this.config.measures.length) {
+            const aPos = this.config.measures.indexOf(a),
+                bPos = this.config.measures.indexOf(b),
+                diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-                return diff
-                    ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-            } else return leftSort ? -1 : rightSort ? 1 : 0;
-        });
+            return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+        } else return leftSort ? -1 : rightSort ? 1 : 0;
+    });
     this.config.measures =
         this.config.measures && this.config.measures.length
             ? this.config.measures
@@ -61,7 +62,7 @@ export default function init(data) {
 
     //Charts
     this.wrap.attr('id', 'Charts');
-    multiply(this, this.data, this.config.measure_col);
+    multiply(this, this.data, 'measure_unit');
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');

@@ -26,7 +26,7 @@ export default function brush() {
     //Highlight previously brushed points.
     if (this.parent.selectedIDs.length) {
         lines
-            .filter(d => this.parent.selectedIDs.indexOf(d[this.config.id_col]) > -1)
+            .filter(d => this.parent.selectedIDs.indexOf(d.id) > -1)
             .classed('brushed', true)
             .each(function() {
                 select(this.parentNode).moveToFront();
@@ -50,6 +50,7 @@ export default function brush() {
     //Initialize brush on brush overlay.
     this.package.overlay.call(this.package.brush);
 
+    //Maintain brush on redraw.
     if (!this.config.extent) this.config.extent = this.package.brush.extent();
     if (
         (this.config.extent[0][0] !== this.package.brush.extent()[0][0] ||

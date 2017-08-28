@@ -57,7 +57,9 @@ export default function init(data) {
                     bPos = this.config.measures.indexOf(b),
                     diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-                return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                return diff
+                    ? diff
+                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
             } else return leftSort ? -1 : rightSort ? 1 : 0;
         });
     this.config.measures =

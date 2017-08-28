@@ -14,9 +14,15 @@ export default function brush() {
             var line;
             if (i) {
                 line = {
-                    x0: d.values[i - 1].values.x,
+                    x0:
+                        chart.config.x.type === 'linear'
+                            ? d.values[i - 1].values.x
+                            : chart.x(d.values[i - 1].values.x) + chart.x.rangeBand() / 2,
                     y0: d.values[i - 1].values.y,
-                    x1: di.values.x,
+                    x1:
+                        chart.config.x.type === 'linear'
+                            ? di.values.x
+                            : chart.x(di.values.x) + chart.x.rangeBand() / 2,
                     y1: di.values.y
                 };
             }

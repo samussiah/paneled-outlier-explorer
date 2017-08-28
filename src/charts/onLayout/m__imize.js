@@ -1,4 +1,3 @@
-import { select } from 'd3';
 import minimize from './minimize';
 
 export default function m__imize(chart) {
@@ -22,7 +21,7 @@ export default function m__imize(chart) {
         chart.draw();
 
         //Sort expanded chart first.
-        select(chart.div).selectAll('.wc-chart').sort(function(a, b) {
+        chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
             return a.measure === chart.currentMeasure
                 ? -1
                 : b.measure === chart.currentMeasure
@@ -41,7 +40,7 @@ export default function m__imize(chart) {
         minimize(chart);
 
         //Revert to default sort.
-        select(chart.div).selectAll('.wc-chart').sort(function(a, b) {
+        chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
             return (
                 chart.config.measures.indexOf(a.measure) - chart.config.measures.indexOf(b.measure)
             );

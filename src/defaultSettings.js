@@ -6,8 +6,8 @@ export default {
     value_col: 'STRESN',
     id_col: 'USUBJID',
     unit_col: 'STRESU',
-    normal_col_low: 'STNRLO',
-    normal_col_high: 'STNRHI',
+    lln_col: 'STNRLO',
+    uln_col: 'STNRHI',
     measures: null,
     filters: null,
 

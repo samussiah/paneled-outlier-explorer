@@ -21,20 +21,21 @@ export default function brushMarks(chart, lines) {
             let intersection = false;
             d.lines.forEach((line, j) => {
                 sides.forEach((side, k) => {
-                    if (!intersection) {
+                    if (!intersection)
                         intersection = doLineSegmentsIntersect(
                             { x: line.x0, y: line.y0 },
                             { x: line.x1, y: line.y1 },
                             { x: side.x0, y: side.y0 },
                             { x: side.x1, y: side.y1 }
                         );
-                    }
                 });
             });
-            return intersection;
-        })
-        .data()
-        .map(d => d.id);
+
+        return intersection;
+    });
+
+    //Attached brushed IDs to chart parent object.
+    chart.parent.selectedIDs = brushedLines.data().map(d => d.id);
 
     //Highlight brushed lines.
     chart.parent.wrap
@@ -42,7 +43,7 @@ export default function brushMarks(chart, lines) {
         .classed('brushed', false)
         .filter(d => chart.parent.data.selectedIDs.indexOf(d.id) > -1)
         .classed('brushed', true)
-        .each(function() {
+        .each(function(d) {
             select(this.parentNode).moveToFront();
         });
 

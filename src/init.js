@@ -37,6 +37,9 @@ export default function init(data) {
     };
     this.data.sorted.forEach(d => {
         d.brushed = false;
+        if (d[this.config.unit_col])
+            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
+        else d.measure_unit = d[this.config.measure_col];
     });
     this.data.filtered = this.data.sorted;
     this.data.brushed = [];
@@ -54,9 +57,7 @@ export default function init(data) {
                     bPos = this.config.measures.indexOf(b),
                     diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-                return diff
-                    ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
             } else return leftSort ? -1 : rightSort ? 1 : 0;
         });
     this.config.measures =

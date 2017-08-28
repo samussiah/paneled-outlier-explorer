@@ -11,7 +11,7 @@ export default function updatePagination() {
     this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
     this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
     this.draw(
-        this.parent.data.filter(
+        this.parent.data.filtered.filter(
             (d, i) => this.pagination.startItem <= i && i < this.pagination.endItem
         )
     );

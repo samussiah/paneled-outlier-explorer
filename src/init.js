@@ -1,22 +1,17 @@
-import { set } from 'd3';
+import { set, selectAll, select } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
-import './util/object-assign';
+import applyFilters from './init/applyFilters';
 
 export default function init(data) {
-    //Define new variables.
-    data.forEach(d => {
-        d.brushed = false;
-        if (d[this.config.unit_col])
-            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
-        else d.measure_unit = d[this.config.measure_col];
-    });
+    const chart = this;
 
-    const sortedData = data
-        .filter(d => /^[0-9\.]+$/.test(d[this.config.value_col]))
-        .sort((a, b) => {
-            const aValue = a.measure_unit,
-                bValue = b.measure_unit,
+    //Attach data arrays to central chart object.
+    this.data = {
+        raw: data,
+        sorted: data.sort((a, b) => {
+            const aValue = a[this.config.measure_col],
+                bValue = b[this.config.measure_col],
                 leftSort = aValue < bValue,
                 rightSort = aValue > bValue,
                 aID = a[this.config.id_col],
@@ -38,49 +33,58 @@ export default function init(data) {
             if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
 
             return sort;
-        });
-
-    sortedData.forEach(d => {
+        })
+    };
+    this.data.sorted.forEach(d => {
         d.brushed = false;
+        if (d[this.config.unit_col])
+            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
+        else d.measure_unit = d[this.config.measure_col];
     });
-
-    if (data.length !== sortedData.length)
-        console.warn(
-            `${data.length -
-                sortedData.length} records without numeric results have been removed from the data.`
-        );
+    this.data.filtered = this.data.sorted;
+    this.data.brushed = [];
+    this.data.selectedIDs = [];
 
     //Capture unique measures.
-    this.config.allMeasures = set(sortedData.map(d => d.measure_unit)).values().sort((a, b) => {
-        const leftSort = a < b,
-            rightSort = a > b;
+    this.config.allMeasures = set(this.data.sorted.map(d => d[this.config.measure_col]))
+        .values()
+        .sort((a, b) => {
+            const leftSort = a < b,
+                rightSort = a > b;
 
-        if (this.config.measures && this.config.measures.length) {
-            const aPos = this.config.measures.indexOf(a),
-                bPos = this.config.measures.indexOf(b),
-                diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+            if (this.config.measures && this.config.measures.length) {
+                const aPos = this.config.measures.indexOf(a),
+                    bPos = this.config.measures.indexOf(b),
+                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-            return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-        } else return leftSort ? -1 : rightSort ? 1 : 0;
-    });
+                return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+            } else return leftSort ? -1 : rightSort ? 1 : 0;
+        });
     this.config.measures =
         this.config.measures && this.config.measures.length
             ? this.config.measures
             : this.config.allMeasures;
 
-    this.data = sortedData;
-    this.selectedIDs = [];
-    this.brushedData = [];
-
     layout.call(this);
 
     //Charts
     this.wrap.attr('id', 'Charts');
-    multiply(this, this.data, 'measure_unit');
+    multiply(this, this.data.sorted, this.config.measure_col);
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');
     this.listing.parent = this;
-    this.listing.init(this.data.filter((d, i) => i < 25));
+    this.listing.init(this.data.sorted.filter((d, i) => i < 25));
     this.listing.wrap.classed('hidden', true);
+
+    //Define custom event listener for filters.
+    selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+        d.value = select(this)
+            .selectAll('option')
+            .filter(function() {
+                return this.selected;
+            })
+            .text();
+        applyFilters.call(chart);
+    });
 }

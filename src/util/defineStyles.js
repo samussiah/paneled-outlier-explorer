@@ -1,24 +1,61 @@
 export default function defineStyles() {
     const styles = [
-            '.hidden {' + '    display: none !important;' + '}',
+            /***--------------------------------------------------------------------------------------\
+          Controls
+        \--------------------------------------------------------------------------------------***/
 
-            '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}',
-            '#measure-list-header {' +
+            '#controls-header {' +
+                '    margin: 0;' +
+                '    overflow: hidden;' +
+                '    background-color: #333;' +
+                '    width: 19%;' +
+                '    float: left;' +
+                '    font-size: 150%;' +
+                '    display: block;' +
+                '    color: white;' +
+                '    text-align: right;' +
+                '    padding: 14px 16px;' +
+                '    box-sizing: border-box;' +
+                '}',
+            '#left-side {' + '    width: 19%;' + '    float: left;' + '}',
+            '#left-side > * {' + '    clear: both;' + '}',
+            '#left-side .wc-controls {' + '    padding-top: 10px;' + '}',
+            '#left-side .wc-controls .control-group {' +
+                '    float: right;' +
+                '    clear: both;' +
+                '    margin: 0 0 2px 0;' +
+                '}',
+            '#left-side .wc-controls .control-group > * {' +
+                '    display: inline-block;' +
+                '    margin-left: 3px;' +
+                '}',
+            '#left-side #measure-list-container #measure-list-header {' +
                 '    font-size: 150%;' +
                 '    border-bottom: 1px solid lightgray;' +
                 '    font-weight: lighter;' +
                 '    padding: 14px 0;' +
                 '    text-align: right;' +
                 '}',
-            '#measure-list-checkbox {' + '    margin-left: 5px;' + '}',
-            '#measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}',
-            '.measure-item {' + '}',
-            '.measure-item-container {' + '    text-align: right;' + '}',
-            '.measure-checkbox {' +
+            '#left-side #measure-list-container #measure-list-checkbox {' +
+                '    margin-left: 5px;' +
+                '}',
+            '#left-side #measure-list-container #measure-list {' +
+                '    list-style-type: none;' +
+                '    font-weight: lighter;' +
+                '}',
+            '#left-side #measure-list-container .measure-item {' + '}',
+            '#left-side #measure-list-container .measure-item-container {' +
+                '    text-align: right;' +
+                '}',
+            '#left-side #measure-list-container .measure-checkbox {' +
                 '    margin-left: 5px;' +
                 '    margin-top: 5px;' +
                 '    float: right;' +
                 '}',
+
+            /***--------------------------------------------------------------------------------------\
+          Navigation
+        \--------------------------------------------------------------------------------------***/
 
             'ul#navigation-bar {' +
                 '    list-style-type: none;' +
@@ -27,7 +64,6 @@ export default function defineStyles() {
                 '    overflow: hidden;' +
                 '    background-color: #333;' +
                 '    width: 80%;' +
-                '    border-left: 2px solid lightgray;' +
                 '    float: right;' +
                 '}',
             'ul#navigation-bar li.navigation {' +
@@ -44,22 +80,26 @@ export default function defineStyles() {
             'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}',
             'ul#navigation-bar li.navigation#Listing-nav.brushed {' + '    color: orange;' + '}',
 
-            'div.wc-layout.wc-small-multiples#Charts,' +
-                'div.wc-chart#Listing {' +
+            /***--------------------------------------------------------------------------------------\
+          Charts
+        \--------------------------------------------------------------------------------------***/
+
+            'div.wc-layout.wc-small-multiples#Charts {' +
                 '    width: 80%;' +
                 '    float: right;' +
-                '    border-left: 2px solid lightgray;' +
                 '    padding-top: 10px;' +
                 '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart {' + '    padding-right: 1em;' + '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart.expanded {' +
+            'div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
+                '    padding-right: 1em;' +
+                '}',
+            'div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
                 '    width: 100%;' +
                 ' }',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .wc-chart-title {' +
+            'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
                 '    text-align: left;' +
                 '    padding-left: 10px;' +
                 '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button {' +
+            'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                 '    float: right;' +
                 '    cursor: pointer;' +
                 '    border: 1px solid black;' +
@@ -68,11 +108,20 @@ export default function defineStyles() {
                 '    font-size: 75%;' +
                 '    margin-left: 5px;' +
                 '}',
-            'div.wc-layout.wc-small-multiples > div.wc-chart .chart-button:hover {' +
+            'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                 '    background: black;' +
                 '    color: white;' +
                 '}',
 
+            /***--------------------------------------------------------------------------------------\
+          Listing
+        \--------------------------------------------------------------------------------------***/
+
+            'div.wc-chart#Listing {' +
+                '    width: 80%;' +
+                '    float: right;' +
+                '    padding-top: 10px;' +
+                '}',
             'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
             'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}',
             'div.wc-chart#Listing .pagination-container a {' +
@@ -87,6 +136,11 @@ export default function defineStyles() {
                 '    border-radius: 4px;' +
                 '}',
 
+            /***--------------------------------------------------------------------------------------\
+          General styles
+        \--------------------------------------------------------------------------------------***/
+
+            '.hidden {' + '    display: none !important;' + '}',
             'circle.brushed {' +
                 '    stroke: orange;' +
                 '    stroke-width: 2px;' +

@@ -26,9 +26,9 @@ export default function brush() {
     });
 
     //Highlight previously brushed points.
-    if (this.parent.selectedIDs.length) {
+    if (this.parent.data.selectedIDs.length) {
         lines
-            .filter(d => this.parent.selectedIDs.indexOf(d.id) > -1)
+            .filter(d => this.parent.data.selectedIDs.indexOf(d.id) > -1)
             .classed('brushed', true)
             .each(function() {
                 select(this.parentNode).moveToFront();

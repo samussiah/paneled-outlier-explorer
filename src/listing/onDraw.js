@@ -2,7 +2,7 @@ import addPagination from './onDraw/addPagination';
 
 export default function onDraw() {
     //Add pagination functionality.
-    if (this.parent.brushedData.length === 0) {
+    if (this.parent.data.brushed.length === 0) {
         this.pagination.wrap.classed('hidden', false);
         addPagination.call(this);
     } else this.pagination.wrap.classed('hidden', true);

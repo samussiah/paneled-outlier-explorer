@@ -31,16 +31,6 @@ export default {
                 stroke: 'black'
             }
         }
-        //{
-        //    type: 'circle',
-        //    per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
-        //    radius: 2,
-        //    attributes: {
-        //        'stroke-width': 0.5,
-        //        'stroke-opacity': 0.5,
-        //        'fill-opacity': 1
-        //    }
-        //}
     ],
     resizable: false,
     scale_text: false,
@@ -57,29 +47,23 @@ export function syncSettings(settings) {
     syncedSettings.x.column = settings.time_col;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
-    //syncedSettings.marks[1].per = [
-    //    settings.id_col,
-    //    settings.measure_col,
-    //    settings.time_col,
-    //    settings.value_col
-    //];
 
     return syncedSettings;
 }
 
-export const controlInputs = [
-    {
-        type: 'subsetter',
-        value_col: null,
-        label: 'Measures',
-        multiple: true
-    }
-];
+export const controlInputs = [];
 
 export function syncControlInputs(controlInputs, settings) {
     const syncedControlInputs = clone(controlInputs);
-    syncedControlInputs.filter(controlInput => controlInput.label === 'Measures')[0].value_col =
-        settings.measure_col;
+    if (settings.filters)
+        settings.filters.forEach(filter => {
+            syncedControlInputs.push({
+                type: 'subsetter',
+                value_col: filter.value_col || filter,
+                label: filter.label || filter.value_col || filter,
+                multiple: false
+            });
+        });
 
     return syncedControlInputs;
 }

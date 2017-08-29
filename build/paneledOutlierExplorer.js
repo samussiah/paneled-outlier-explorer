@@ -111,6 +111,7 @@
                     '    padding: 0px 3px 1px 3px;' +
                     '    font-size: 75%;' +
                     '    margin-left: 5px;' +
+                    '    visibility:hidden;' +
                     '}',
                 'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                     '    background: black;' +
@@ -712,10 +713,10 @@
         //Add ability to remove charts in the chart title.
         this.wrap
             .on('mouseover', function() {
-                _this.wrap.select('.wc-chart-title span').style('visibility', 'visible');
+                _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'visible');
             })
             .on('mouseout', function() {
-                _this.wrap.select('.wc-chart-title span').style('visibility', 'hidden');
+                _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'hidden');
             })
             .select('.wc-chart-title')
             .append('span')

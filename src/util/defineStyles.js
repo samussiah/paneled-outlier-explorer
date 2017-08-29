@@ -100,6 +100,7 @@ export default function defineStyles() {
                 '    padding: 0px 3px 1px 3px;' +
                 '    font-size: 75%;' +
                 '    margin-left: 5px;' +
+                '    visibility:hidden;' +
                 '}',
             'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                 '    background: black;' +

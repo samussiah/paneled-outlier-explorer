@@ -321,6 +321,7 @@
         syncedSettings.x.type = settings.time_cols[0].type;
         syncedSettings.x.column = settings.time_cols[0].value_col;
         syncedSettings.x.label = settings.time_cols[0].label;
+        syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
@@ -781,10 +782,11 @@
             time_col = this.config.time_cols.filter(function(time_col) {
                 return time_col.label === _this.config.x.label;
             })[0];
-        console.log(time_col);
+
         this.config.x.column = time_col.value_col;
         this.config.x.type = time_col.type;
         this.config.x.label = time_col.label;
+        this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
     }
 
     function onDatatransform() {}
@@ -1079,7 +1081,6 @@
         if (nchar) {
             ticks
                 .filter(function(d) {
-                    console.log(d);
                     var dText = '' + d;
                     return dText.length > nchar;
                 })
@@ -1142,7 +1143,7 @@
         brush.call(this);
 
         // rotate ticks
-        if (this.config.rotate_x_tick_labels) {
+        if (this.config.x.rotate_tick_labels) {
             adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
         }
     }

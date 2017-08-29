@@ -12,7 +12,6 @@ export default function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
     if (nchar) {
         ticks
             .filter(function(d) {
-                console.log(d);
                 var dText = '' + d;
                 return dText.length > nchar;
             })

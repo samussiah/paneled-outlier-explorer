@@ -14,8 +14,9 @@ export default function onPreprocess() {
         time_col = this.config.time_cols.filter(
             time_col => time_col.label === this.config.x.label
         )[0];
-    console.log(time_col);
+
     this.config.x.column = time_col.value_col;
     this.config.x.type = time_col.type;
     this.config.x.label = time_col.label;
+    this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
 }

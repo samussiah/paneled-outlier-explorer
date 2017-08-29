@@ -70,6 +70,7 @@ export function syncSettings(settings) {
     syncedSettings.x.type = settings.time_cols[0].type;
     syncedSettings.x.column = settings.time_cols[0].value_col;
     syncedSettings.x.label = settings.time_cols[0].label;
+    syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 

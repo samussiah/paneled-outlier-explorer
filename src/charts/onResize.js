@@ -52,7 +52,7 @@ export default function onResize() {
     brush.call(this);
 
     // rotate ticks
-    if (this.config.rotate_x_tick_labels) {
+    if (this.config.x.rotate_tick_labels) {
         adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
     }
 }

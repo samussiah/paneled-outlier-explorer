@@ -8,10 +8,10 @@ export default function onLayout() {
     //Add ability to remove charts in the chart title.
     this.wrap
         .on('mouseover', () => {
-            this.wrap.select('.wc-chart-title span').style('visibility', 'visible');
+            this.wrap.selectAll('.wc-chart-title span').style('visibility', 'visible');
         })
         .on('mouseout', () => {
-            this.wrap.select('.wc-chart-title span').style('visibility', 'hidden');
+            this.wrap.selectAll('.wc-chart-title span').style('visibility', 'hidden');
         })
         .select('.wc-chart-title')
         .append('span')

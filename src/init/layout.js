@@ -27,7 +27,7 @@ export default function layout() {
                 }
             }),
         //Create controls header.
-        controlsHeader = select(this.div)
+        controlsTab = select(this.div)
             .insert('div', ':first-child')
             .attr('id', 'controls-header')
             .text('Controls'),

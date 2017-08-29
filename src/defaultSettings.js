@@ -56,7 +56,7 @@ export default {
     ],
     resizable: false,
     scale_text: false,
-    width: 390,
+    width: 365,
     height: 200,
     margin: {
         left: 40
@@ -97,6 +97,7 @@ export function syncControlInputs(controlInputs, settings) {
                 type: 'subsetter',
                 value_col: filter.value_col || filter,
                 label: filter.label || filter.value_col || filter,
+                description: 'filter',
                 multiple: false
             });
         });

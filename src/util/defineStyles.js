@@ -8,21 +8,20 @@ export default function defineStyles() {
                 '    margin: 0;' +
                 '    overflow: hidden;' +
                 '    background-color: #333;' +
-                '    width: 19%;' +
+                '    width: 24%;' +
                 '    float: left;' +
                 '    font-size: 150%;' +
                 '    display: block;' +
                 '    color: white;' +
-                //'    text-align: right;' +
                 '    padding: 14px 16px;' +
                 '    box-sizing: border-box;' +
                 '}',
-            '#left-side {' + '    width: 19%;' + '    float: left;' + '}',
-            '#left-side > * {' + '    clear: both;' + '}',
-            '#left-side .wc-controls {' + '    padding-top: 10px;' + '}',
+            '#left-side {' + '    width: 24%;' + '    float: left;' + '}',
+            '#left-side > * {' + '    width: 100%;' + '    display: inline-block;' + '}',
+            '#left-side .wc-controls {' + '    padding: 10px 0;' + '}',
             '#left-side .wc-controls .control-group {' +
-                //  '    float: right;' +
-                '    clear: both;' +
+                '    float: left;' +
+                '    clear: left;' +
                 '    margin: 0 0 2px 0;' +
                 '}',
             '#left-side .wc-controls .control-group > * {' +
@@ -32,24 +31,20 @@ export default function defineStyles() {
             '#left-side #measure-list-container {' + '   padding:0' + '}',
             '#left-side #measure-list-container #measure-list-header {' +
                 '    font-size: 150%;' +
-                '    border-bottom: 1px solid lightgray;' +
+                '    border-top: 1px solid lightgray;' +
                 '    font-weight: lighter;' +
                 '    padding: 14px 0;' +
                 '}',
             '#left-side #measure-list-container #measure-list-checkbox {' +
-                '    margin-left: 5px;' +
+                '    margin: 5px;' +
                 '}',
             '#left-side #measure-list-container #measure-list {' +
                 '    list-style-type: none;' +
                 '    font-weight: lighter;' +
-                '    padding-left:1em;' +
                 '}',
             '#left-side #measure-list-container .measure-item {' + '}',
             '#left-side #measure-list-container .measure-item-container {' + '}',
-            '#left-side #measure-list-container .measure-checkbox {' +
-                '    margin-left: 5px;' +
-                '    margin-top: 5px;' +
-                '}',
+            '#left-side #measure-list-container .measure-checkbox {' + '    margin: 5px;' + '}',
 
             /***--------------------------------------------------------------------------------------\
           Navigation
@@ -61,7 +56,7 @@ export default function defineStyles() {
                 '    padding: 0;' +
                 '    overflow: hidden;' +
                 '    background-color: #333;' +
-                '    width: 80%;' +
+                '    width: 75%;' +
                 '    float: right;' +
                 '}',
             'ul#navigation-bar li.navigation {' +
@@ -83,7 +78,7 @@ export default function defineStyles() {
         \--------------------------------------------------------------------------------------***/
 
             'div.wc-layout.wc-small-multiples#Charts {' +
-                '    width: 80%;' +
+                '    width: 75%;' +
                 '    float: right;' +
                 '    padding-top: 10px;' +
                 '}',
@@ -116,7 +111,7 @@ export default function defineStyles() {
         \--------------------------------------------------------------------------------------***/
 
             'div.wc-chart#Listing {' +
-                '    width: 80%;' +
+                '    width: 75%;' +
                 '    float: right;' +
                 '    padding-top: 10px;' +
                 '}',

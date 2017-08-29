@@ -280,6 +280,7 @@
         uln_col: 'STNRHI',
         measures: null,
         filters: null,
+        rotate_x_tick_labels: true,
 
         x: {
             type: null, // sync to [ time_cols[0].type ]
@@ -1059,6 +1060,35 @@
         }
     }
 
+    function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
+        if (!axis) return;
+        var ticks = this.svg
+            .selectAll('.' + axis + '.axis .tick text')
+            .attr({
+                transform: 'rotate(' + rotation + ')',
+                dx: dx,
+                dy: dy
+            })
+            .style('text-anchor', anchor || 'start');
+
+        if (nchar) {
+            ticks
+                .filter(function(d) {
+                    console.log(d);
+                    var dText = '' + d;
+                    return dText.length > nchar;
+                })
+                .text(function(d) {
+                    return d.slice(0, nchar - 3) + '...';
+                })
+                .style('cursor', 'pointer')
+                .append('title')
+                .text(function(d) {
+                    return d;
+                });
+        }
+    }
+
     function onResize() {
         var chart = this;
 
@@ -1105,6 +1135,11 @@
 
         //Add brush functionality.
         brush.call(this);
+
+        // rotate ticks
+        if (this.config.rotate_x_tick_labels) {
+            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+        }
     }
 
     function onDestroy() {}

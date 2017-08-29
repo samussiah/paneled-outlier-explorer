@@ -32,6 +32,7 @@ export default {
     uln_col: 'STNRHI',
     measures: null,
     filters: null,
+    rotate_x_tick_labels: true,
 
     x: {
         type: null, // sync to [ time_cols[0].type ]

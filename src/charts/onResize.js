@@ -2,6 +2,7 @@ import clone from '../util/clone';
 import { svg, select } from 'd3';
 import '../util/moveToFront';
 import brush from './onResize/brush';
+import adjustTicks from './onResize/adjustTicks';
 
 export default function onResize() {
     const chart = this;
@@ -49,4 +50,9 @@ export default function onResize() {
 
     //Add brush functionality.
     brush.call(this);
+
+    // rotate ticks
+    if (this.config.rotate_x_tick_labels) {
+        adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+    }
 }

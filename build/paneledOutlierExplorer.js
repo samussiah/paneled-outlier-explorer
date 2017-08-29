@@ -590,7 +590,7 @@
         this.config.allMeasures = d3$1
             .set(
                 this.data.sorted.map(function(d) {
-                    return d[_this.config.measure_col];
+                    return d.measure_unit;
                 })
             )
             .values()
@@ -617,7 +617,7 @@
 
         //Charts
         this.wrap.attr('id', 'Charts');
-        webcharts.multiply(this, this.data.sorted, this.config.measure_col);
+        webcharts.multiply(this, this.data.sorted, 'measure_unit');
 
         //Listing
         this.listing.wrap.attr('id', 'Listing');
@@ -928,7 +928,7 @@
             sides = [top, right, bottom, left];
 
         //Determine which lines fall inside the brush.
-        chart.parent.data.selectedIDs = lines.filter(function(d, i) {
+        var brushedLines = lines.filter(function(d, i) {
             var intersection = false;
             d.lines.forEach(function(line, j) {
                 sides.forEach(function(side, k) {
@@ -946,7 +946,7 @@
         });
 
         //Attached brushed IDs to chart parent object.
-        chart.parent.selectedIDs = brushedLines.data().map(function(d) {
+        chart.parent.data.selectedIDs = brushedLines.data().map(function(d) {
             return d.id;
         });
 

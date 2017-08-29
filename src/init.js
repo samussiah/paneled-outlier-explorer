@@ -46,7 +46,7 @@ export default function init(data) {
     this.data.selectedIDs = [];
 
     //Capture unique measures.
-    this.config.allMeasures = set(this.data.sorted.map(d => d[this.config.measure_col]))
+    this.config.allMeasures = set(this.data.sorted.map(d => d.measure_unit))
         .values()
         .sort((a, b) => {
             const leftSort = a < b,
@@ -71,7 +71,7 @@ export default function init(data) {
 
     //Charts
     this.wrap.attr('id', 'Charts');
-    multiply(this, this.data.sorted, this.config.measure_col);
+    multiply(this, this.data.sorted, 'measure_unit');
 
     //Listing
     this.listing.wrap.attr('id', 'Listing');

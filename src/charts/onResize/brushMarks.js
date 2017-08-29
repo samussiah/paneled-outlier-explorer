@@ -16,7 +16,7 @@ export default function brushMarks(chart, lines) {
         sides = [top, right, bottom, left];
 
     //Determine which lines fall inside the brush.
-    chart.parent.data.selectedIDs = lines.filter((d, i) => {
+    const brushedLines = lines.filter((d, i) => {
         let intersection = false;
         d.lines.forEach((line, j) => {
             sides.forEach((side, k) => {
@@ -34,7 +34,7 @@ export default function brushMarks(chart, lines) {
     });
 
     //Attached brushed IDs to chart parent object.
-    chart.parent.selectedIDs = brushedLines.data().map(d => d.id);
+    chart.parent.data.selectedIDs = brushedLines.data().map(d => d.id);
 
     //Highlight brushed lines.
     chart.parent.wrap

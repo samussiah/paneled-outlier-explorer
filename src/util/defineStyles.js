@@ -112,6 +112,9 @@ export default function defineStyles() {
                 '    background: black;' +
                 '    color: white;' +
                 '}',
+            'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+                'display:none;' +
+                '}',
 
             /***--------------------------------------------------------------------------------------\
           Listing

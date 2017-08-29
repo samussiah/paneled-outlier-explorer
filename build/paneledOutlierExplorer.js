@@ -123,6 +123,9 @@
                     '    background: black;' +
                     '    color: white;' +
                     '}',
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+                    'display:none;' +
+                    '}',
 
                 /***--------------------------------------------------------------------------------------\
     Listing
@@ -328,7 +331,7 @@
         {
             type: 'dropdown',
             label: 'X-axis',
-            option: 'x.column',
+            option: 'x.label',
             require: true
         }
     ];
@@ -339,7 +342,7 @@
         syncedControlInputs.filter(function(controlInput) {
             return controlInput.label === 'X-axis';
         })[0].values = settings.time_cols.map(function(d) {
-            return d.value_col || d;
+            return d.label || d;
         });
 
         if (settings.filters)
@@ -776,8 +779,10 @@
                 return input.label === 'X-axis';
             })[0],
             time_col = this.config.time_cols.filter(function(time_col) {
-                return time_col.value_col === _this.config.x.column;
+                return time_col.label === _this.config.x.label;
             })[0];
+        console.log(time_col);
+        this.config.x.column = time_col.value_col;
         this.config.x.type = time_col.type;
         this.config.x.label = time_col.label;
     }

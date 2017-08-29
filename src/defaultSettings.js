@@ -80,7 +80,7 @@ export const controlInputs = [
     {
         type: 'dropdown',
         label: 'X-axis',
-        option: 'x.column',
+        option: 'x.label',
         require: true
     }
 ];
@@ -90,7 +90,7 @@ export function syncControlInputs(controlInputs, settings) {
 
     syncedControlInputs.filter(
         controlInput => controlInput.label === 'X-axis'
-    )[0].values = settings.time_cols.map(d => d.value_col || d);
+    )[0].values = settings.time_cols.map(d => d.label || d);
 
     if (settings.filters)
         settings.filters.forEach(filter => {

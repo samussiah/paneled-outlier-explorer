@@ -22,7 +22,7 @@
                     '    font-size: 150%;' +
                     '    display: block;' +
                     '    color: white;' +
-                    '    text-align: right;' +
+                    //'    text-align: right;' +
                     '    padding: 14px 16px;' +
                     '    box-sizing: border-box;' +
                     '}',
@@ -30,7 +30,7 @@
                 '#left-side > * {' + '    clear: both;' + '}',
                 '#left-side .wc-controls {' + '    padding-top: 10px;' + '}',
                 '#left-side .wc-controls .control-group {' +
-                    '    float: right;' +
+                    //  '    float: right;' +
                     '    clear: both;' +
                     '    margin: 0 0 2px 0;' +
                     '}',
@@ -38,12 +38,12 @@
                     '    display: inline-block;' +
                     '    margin-left: 3px;' +
                     '}',
+                '#left-side #measure-list-container {' + '   padding:0' + '}',
                 '#left-side #measure-list-container #measure-list-header {' +
                     '    font-size: 150%;' +
                     '    border-bottom: 1px solid lightgray;' +
                     '    font-weight: lighter;' +
                     '    padding: 14px 0;' +
-                    '    text-align: right;' +
                     '}',
                 '#left-side #measure-list-container #measure-list-checkbox {' +
                     '    margin-left: 5px;' +
@@ -51,15 +51,13 @@
                 '#left-side #measure-list-container #measure-list {' +
                     '    list-style-type: none;' +
                     '    font-weight: lighter;' +
+                    '    padding-left:1em;' +
                     '}',
                 '#left-side #measure-list-container .measure-item {' + '}',
-                '#left-side #measure-list-container .measure-item-container {' +
-                    '    text-align: right;' +
-                    '}',
+                '#left-side #measure-list-container .measure-item-container {' + '}',
                 '#left-side #measure-list-container .measure-checkbox {' +
                     '    margin-left: 5px;' +
                     '    margin-top: 5px;' +
-                    '    float: right;' +
                     '}',
 
                 /***--------------------------------------------------------------------------------------\
@@ -453,8 +451,7 @@
                 .attr('id', 'measure-list-container'),
             measureListHeader = measureListContainer
                 .append('div')
-                .attr('id', 'measure-list-header')
-                .text('Measures'),
+                .attr('id', 'measure-list-header'),
             measureListCheckbox = measureListHeader
                 .append('input')
                 .attr({
@@ -468,39 +465,42 @@
                 .property('checked', this.config.measures.length === this.config.allMeasures.length)
                 .on('click', function() {
                     toggleCharts(chart, this);
-                }),
-            //Define individual chart toggles.
-            measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
-            measureItems = measureList
-                .selectAll('li.measure-item')
-                .data(this.config.allMeasures)
-                .enter()
-                .append('li')
-                .attr('class', function(d) {
-                    return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
-                })
-                .each(function(d) {
-                    //Append div inside list item.
-                    var measureItemContainer = d3$1
-                            .select(this)
-                            .append('div')
-                            .classed('measure-item-container', true)
-                            .text(d),
-                        //Check whether measure should by displayed initially.
-                        checked = chart.config.measures.indexOf(d) > -1,
-                        //Append checkbox inside div.
-                        measureItemCheckbox = measureItemContainer
-                            .append('input')
-                            .classed('measure-checkbox', true)
-                            .attr({
-                                type: 'checkbox',
-                                title: checked ? 'Remove chart' : 'Display chart'
-                            })
-                            .property('checked', checked);
-                })
-                .on('change', function(d) {
-                    toggleChart(chart, this);
                 });
+        measureListHeader.append('span').text('Measures');
+        var measureList = measureListContainer //Define individual chart toggles.
+            .append('ul')
+            .attr('id', 'measure-list');
+        var measureItems = measureList
+            .selectAll('li.measure-item')
+            .data(this.config.allMeasures)
+            .enter()
+            .append('li')
+            .attr('class', function(d) {
+                return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
+            })
+            .each(function(d) {
+                //Append div inside list item.
+                var measureItemContainer = d3$1
+                    .select(this)
+                    .append('div')
+                    .classed('measure-item-container', true);
+                //Check whether measure should by displayed initially.
+                var checked = chart.config.measures.indexOf(d) > -1; //Append checkbox inside div.
+                var measureItemCheckbox = measureItemContainer
+                    .append('input')
+                    .classed('measure-checkbox', true)
+                    .attr({
+                        type: 'checkbox',
+                        title: checked ? 'Remove chart' : 'Display chart'
+                    })
+                    .property('checked', checked);
+                var measureItemLabel = measureItemContainer.append('span').text(function(d) {
+                    return d;
+                });
+            })
+            .on('change', function(d) {
+                toggleChart(chart, this);
+            });
     }
 
     function applyFilters() {

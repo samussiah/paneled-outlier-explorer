@@ -13,7 +13,7 @@ export default function defineStyles() {
                 '    font-size: 150%;' +
                 '    display: block;' +
                 '    color: white;' +
-                '    text-align: right;' +
+                //'    text-align: right;' +
                 '    padding: 14px 16px;' +
                 '    box-sizing: border-box;' +
                 '}',
@@ -21,7 +21,7 @@ export default function defineStyles() {
             '#left-side > * {' + '    clear: both;' + '}',
             '#left-side .wc-controls {' + '    padding-top: 10px;' + '}',
             '#left-side .wc-controls .control-group {' +
-                '    float: right;' +
+                //  '    float: right;' +
                 '    clear: both;' +
                 '    margin: 0 0 2px 0;' +
                 '}',
@@ -29,12 +29,12 @@ export default function defineStyles() {
                 '    display: inline-block;' +
                 '    margin-left: 3px;' +
                 '}',
+            '#left-side #measure-list-container {' + '   padding:0' + '}',
             '#left-side #measure-list-container #measure-list-header {' +
                 '    font-size: 150%;' +
                 '    border-bottom: 1px solid lightgray;' +
                 '    font-weight: lighter;' +
                 '    padding: 14px 0;' +
-                '    text-align: right;' +
                 '}',
             '#left-side #measure-list-container #measure-list-checkbox {' +
                 '    margin-left: 5px;' +
@@ -42,15 +42,13 @@ export default function defineStyles() {
             '#left-side #measure-list-container #measure-list {' +
                 '    list-style-type: none;' +
                 '    font-weight: lighter;' +
+                '    padding-left:1em;' +
                 '}',
             '#left-side #measure-list-container .measure-item {' + '}',
-            '#left-side #measure-list-container .measure-item-container {' +
-                '    text-align: right;' +
-                '}',
+            '#left-side #measure-list-container .measure-item-container {' + '}',
             '#left-side #measure-list-container .measure-checkbox {' +
                 '    margin-left: 5px;' +
                 '    margin-top: 5px;' +
-                '    float: right;' +
                 '}',
 
             /***--------------------------------------------------------------------------------------\

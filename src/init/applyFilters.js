@@ -1,6 +1,6 @@
 import { select } from 'd3';
 
-export default function applyFilters() {
+export default function applyFilters(d) {
     this.data.brushed = [];
     this.data.selectedIDs = [];
 
@@ -17,17 +17,30 @@ export default function applyFilters() {
     select('#Listing-nav').classed('brushed', false);
 
     //Define filtered data.
-    this.data.filtered = this.data.sorted.filter(d => {
-        let filtered = false;
+    if (d.type === 'subsetter') {
+        this.data.filtered = this.data.sorted.filter(d => {
+            let filtered = false;
 
-        this.controls.config.inputs.forEach(filter => {
-            if (!filtered && filter.value && filter.value !== 'All')
-                filtered = d[filter.value_col] !== filter.value;
+            this.controls.config.inputs.filter(d => d.type === 'subsetter').forEach(filter => {
+                if (!filtered && filter.value && filter.value !== 'All')
+                    filtered = d[filter.value_col] !== filter.value;
+            });
+
+            return !filtered;
         });
 
-        return !filtered;
-    });
+        //Reset listing pagination.
+        this.listing.pagination.activeLink = 0;
+        this.listing.pagination.startItem =
+            this.listing.pagination.activeLink * this.listing.pagination.rowsShown;
+        this.listing.pagination.endItem =
+            this.listing.pagination.startItem + this.listing.pagination.rowsShown;
+    }
 
     //Redraw listing.
-    this.listing.draw(this.data.filtered.filter((d, i) => i < 25));
+    this.listing.draw(
+        this.data.filtered.filter(
+            (d, i) => this.listing.pagination.startItem <= i && i < this.listing.pagination.endItem
+        )
+    );
 }

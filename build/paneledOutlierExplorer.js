@@ -499,7 +499,7 @@
             });
     }
 
-    function applyFilters() {
+    function applyFilters(d) {
         var _this = this;
 
         this.data.brushed = [];
@@ -518,21 +518,36 @@
         d3$1.select('#Listing-nav').classed('brushed', false);
 
         //Define filtered data.
-        this.data.filtered = this.data.sorted.filter(function(d) {
-            var filtered = false;
+        if (d.type === 'subsetter') {
+            this.data.filtered = this.data.sorted.filter(function(d) {
+                var filtered = false;
 
-            _this.controls.config.inputs.forEach(function(filter) {
-                if (!filtered && filter.value && filter.value !== 'All')
-                    filtered = d[filter.value_col] !== filter.value;
+                _this.controls.config.inputs
+                    .filter(function(d) {
+                        return d.type === 'subsetter';
+                    })
+                    .forEach(function(filter) {
+                        if (!filtered && filter.value && filter.value !== 'All')
+                            filtered = d[filter.value_col] !== filter.value;
+                    });
+
+                return !filtered;
             });
 
-            return !filtered;
-        });
+            //Reset listing pagination.
+            this.listing.pagination.activeLink = 0;
+            this.listing.pagination.startItem =
+                this.listing.pagination.activeLink * this.listing.pagination.rowsShown;
+            this.listing.pagination.endItem =
+                this.listing.pagination.startItem + this.listing.pagination.rowsShown;
+        }
 
         //Redraw listing.
         this.listing.draw(
             this.data.filtered.filter(function(d, i) {
-                return i < 25;
+                return (
+                    _this.listing.pagination.startItem <= i && i < _this.listing.pagination.endItem
+                );
             })
         );
     }
@@ -545,32 +560,45 @@
         //Attach data arrays to central chart object.
         this.data = {
             raw: data,
-            sorted: data.sort(function(a, b) {
-                var aValue = a[_this.config.measure_col],
-                    bValue = b[_this.config.measure_col],
-                    leftSort = aValue < bValue,
-                    rightSort = aValue > bValue,
-                    aID = a[_this.config.id_col],
-                    bID = b[_this.config.id_col],
-                    aTime = a[_this.config.time_col],
-                    bTime = b[_this.config.time_col];
+            sorted: data
+                .filter(function(d) {
+                    return (
+                        /^[0-9.]+$/.test(d[_this.config.value_col]) &&
+                        !/^\s*$/.test(d[_this.config.measure_col])
+                    );
+                })
+                .sort(function(a, b) {
+                    var aValue = a[_this.config.measure_col],
+                        bValue = b[_this.config.measure_col],
+                        leftSort = aValue < bValue,
+                        rightSort = aValue > bValue,
+                        aID = a[_this.config.id_col],
+                        bID = b[_this.config.id_col],
+                        aTime = a[_this.config.time_col],
+                        bTime = b[_this.config.time_col];
 
-                var sort = void 0;
-                if (_this.config.measures && _this.config.measures.length) {
-                    var aPos = _this.config.measures.indexOf(aValue),
-                        bPos = _this.config.measures.indexOf(bValue),
-                        diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+                    var sort = void 0;
+                    if (_this.config.measures && _this.config.measures.length) {
+                        var aPos = _this.config.measures.indexOf(aValue),
+                            bPos = _this.config.measures.indexOf(bValue),
+                            diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
 
-                    sort = diff
-                        ? diff
-                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-                } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+                        sort = diff
+                            ? diff
+                            : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                    } else sort = leftSort ? -1 : rightSort ? 1 : 0;
 
-                if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+                    if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
 
-                return sort;
-            })
+                    return sort;
+                })
         };
+        if (this.data.raw.length !== this.data.sorted.length)
+            console.warn(
+                this.data.raw.length -
+                    this.data.sorted.length +
+                    ' non-numeric observations have been removed from the data.'
+            );
         this.data.sorted.forEach(function(d) {
             d.brushed = false;
             if (d[_this.config.unit_col])
@@ -634,7 +662,7 @@
                     return this.selected;
                 })
                 .text();
-            applyFilters.call(chart);
+            applyFilters.call(chart, d);
         });
     }
 
@@ -966,10 +994,16 @@
             chart.parent.data.brushed = chart.parent.data.filtered.filter(function(d) {
                 return d.brushed;
             });
-            chart.parent.listing.draw(chart.parent.data.brushed);
+            chart.parent.listing.pagination.activeLink = 0;
+            chart.parent.listing.draw(
+                chart.parent.data.brushed.filter(function(d, i) {
+                    return i < 25;
+                })
+            );
             d3$1.select('#Listing-nav').classed('brushed', true);
         } else {
             chart.parent.data.brushed = [];
+            chart.parent.listing.pagination.activeLink = 0;
             chart.parent.listing.draw(
                 chart.parent.data.filtered.filter(function(d, i) {
                     return i < 25;
@@ -1061,9 +1095,9 @@
         //Draw normal range.
         this.svg.select('.normal-range').remove();
         this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
-            x: this.x(this.x_dom[0]) - 1,
+            x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
             y: this.y(this.filtered_data[0][this.config.uln_col]),
-            width: this.plot_width + 2,
+            width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
             height:
                 this.y(this.filtered_data[0][this.config.lln_col]) -
                 this.y(this.filtered_data[0][this.config.uln_col]),
@@ -1123,6 +1157,8 @@
         this.pagination.wrap = this.wrap.append('div').classed('pagination-container', true);
         this.pagination.rowsShown = 25;
         this.pagination.activeLink = 0;
+        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
+        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
     }
 
     function onPreprocess$1() {}
@@ -1132,6 +1168,14 @@
         this.config.cols = this.config.cols.filter(function(col) {
             return ['brushed', 'measure_unit'].indexOf(col) === -1;
         });
+
+        //Use brushed data if available, filtered data otherwise.
+        this.data = this.parent.data.brushed.length
+            ? this.parent.data.brushed
+            : this.parent.data.filtered;
+
+        //Reset pagination.
+        this.pagination.wrap.selectAll('*').remove();
     }
 
     function updatePagination() {
@@ -1151,7 +1195,7 @@
         this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
         this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
         this.draw(
-            this.parent.data.filtered.filter(function(d, i) {
+            this.data.filter(function(d, i) {
                 return _this.pagination.startItem <= i && i < _this.pagination.endItem;
             })
         );
@@ -1161,7 +1205,7 @@
         var _this = this;
 
         //Count rows.
-        this.pagination.rowsTotal = this.parent.data.filtered.length;
+        this.pagination.rowsTotal = this.data.length;
 
         //Calculate number of pages needed and create a link for each page.
         this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
@@ -1291,10 +1335,7 @@
 
     function onDraw$1() {
         //Add pagination functionality.
-        if (this.parent.data.brushed.length === 0) {
-            this.pagination.wrap.classed('hidden', false);
-            addPagination.call(this);
-        } else this.pagination.wrap.classed('hidden', true);
+        addPagination.call(this);
 
         //Highlight selected rows.
         this.table.selectAll('tbody tr').classed('brushed', function(d) {

@@ -117,6 +117,9 @@
                     '    background: black;' +
                     '    color: white;' +
                     '}',
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+                    'display:none;' +
+                    '}',
 
                 /***--------------------------------------------------------------------------------------\
     Listing
@@ -274,6 +277,7 @@
         uln_col: 'STNRHI',
         measures: null,
         filters: null,
+        rotate_x_tick_labels: true,
 
         x: {
             type: null, // sync to [ time_cols[0].type ]
@@ -311,6 +315,7 @@
         syncedSettings.x.type = settings.time_cols[0].type;
         syncedSettings.x.column = settings.time_cols[0].value_col;
         syncedSettings.x.label = settings.time_cols[0].label;
+        syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
@@ -321,7 +326,7 @@
         {
             type: 'dropdown',
             label: 'X-axis',
-            option: 'x.column',
+            option: 'x.label',
             require: true
         }
     ];
@@ -332,7 +337,7 @@
         syncedControlInputs.filter(function(controlInput) {
             return controlInput.label === 'X-axis';
         })[0].values = settings.time_cols.map(function(d) {
-            return d.value_col || d;
+            return d.label || d;
         });
 
         if (settings.filters)
@@ -772,10 +777,13 @@
                 return input.label === 'X-axis';
             })[0],
             time_col = this.config.time_cols.filter(function(time_col) {
-                return time_col.value_col === _this.config.x.column;
+                return time_col.label === _this.config.x.label;
             })[0];
+
+        this.config.x.column = time_col.value_col;
         this.config.x.type = time_col.type;
         this.config.x.label = time_col.label;
+        this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
     }
 
     function onDatatransform() {}
@@ -1056,6 +1064,34 @@
         }
     }
 
+    function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
+        if (!axis) return;
+        var ticks = this.svg
+            .selectAll('.' + axis + '.axis .tick text')
+            .attr({
+                transform: 'rotate(' + rotation + ')',
+                dx: dx,
+                dy: dy
+            })
+            .style('text-anchor', anchor || 'start');
+
+        if (nchar) {
+            ticks
+                .filter(function(d) {
+                    var dText = '' + d;
+                    return dText.length > nchar;
+                })
+                .text(function(d) {
+                    return d.slice(0, nchar - 3) + '...';
+                })
+                .style('cursor', 'pointer')
+                .append('title')
+                .text(function(d) {
+                    return d;
+                });
+        }
+    }
+
     function onResize() {
         var chart = this;
 
@@ -1102,6 +1138,11 @@
 
         //Add brush functionality.
         brush.call(this);
+
+        // rotate ticks
+        if (this.config.x.rotate_tick_labels) {
+            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+        }
     }
 
     function onDestroy() {}

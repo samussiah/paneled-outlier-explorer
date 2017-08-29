@@ -32,6 +32,7 @@ export default {
     uln_col: 'STNRHI',
     measures: null,
     filters: null,
+    rotate_x_tick_labels: true,
 
     x: {
         type: null, // sync to [ time_cols[0].type ]
@@ -69,6 +70,7 @@ export function syncSettings(settings) {
     syncedSettings.x.type = settings.time_cols[0].type;
     syncedSettings.x.column = settings.time_cols[0].value_col;
     syncedSettings.x.label = settings.time_cols[0].label;
+    syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
@@ -79,7 +81,7 @@ export const controlInputs = [
     {
         type: 'dropdown',
         label: 'X-axis',
-        option: 'x.column',
+        option: 'x.label',
         require: true
     }
 ];
@@ -89,7 +91,7 @@ export function syncControlInputs(controlInputs, settings) {
 
     syncedControlInputs.filter(
         controlInput => controlInput.label === 'X-axis'
-    )[0].values = settings.time_cols.map(d => d.value_col || d);
+    )[0].values = settings.time_cols.map(d => d.label || d);
 
     if (settings.filters)
         settings.filters.forEach(filter => {

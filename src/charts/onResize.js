@@ -1,13 +1,29 @@
 import clone from '../util/clone';
-import { svg } from 'd3';
+import { svg, select } from 'd3';
 import '../util/moveToFront';
 import brush from './onResize/brush';
+import adjustTicks from './onResize/adjustTicks';
 
 export default function onResize() {
     const chart = this;
 
+    //Draw normal range.
+    this.svg.select('.normal-range').remove();
+    this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
+        x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+        y: this.y(this.filtered_data[0][this.config.uln_col]),
+        width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+        height:
+            this.y(this.filtered_data[0][this.config.lln_col]) -
+            this.y(this.filtered_data[0][this.config.uln_col]),
+        fill: 'green',
+        'fill-opacity': 0.05,
+        stroke: 'green',
+        'stroke-opacity': 1,
+        'clip-path': `url(#${this.id})`
+    });
+
     //Capture each multiple's scale.
-    var bbox = this.svg.node().getBBox();
     this.package = {
         measure: this.currentMeasure,
         container: this.wrap,
@@ -34,4 +50,9 @@ export default function onResize() {
 
     //Add brush functionality.
     brush.call(this);
+
+    // rotate ticks
+    if (this.config.x.rotate_tick_labels) {
+        adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+    }
 }

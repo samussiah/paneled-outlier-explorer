@@ -4,52 +4,151 @@
         : typeof define === 'function' && define.amd
           ? define(['webcharts', 'd3'], factory)
           : (global.paneledOutlierExplorer = factory(global.webCharts, global.d3));
-})(this, function(webcharts, d3) {
+})(this, function(webcharts, d3$1) {
     'use strict';
 
     function defineStyles() {
         var styles = [
-                '.hidden {' + '    display: none !important;' + '}',
-                '#measure-list-container {' + '    width: 19%;' + '    float: left;' + '}',
-                '#measure-list-header {' +
+                /***--------------------------------------------------------------------------------------\
+    Controls
+    \--------------------------------------------------------------------------------------***/
+
+                '#controls-header {' +
+                    '    margin: 0;' +
+                    '    overflow: hidden;' +
+                    '    background-color: #333;' +
+                    '    width: 24%;' +
+                    '    float: left;' +
                     '    font-size: 150%;' +
-                    '    border-bottom: 1px solid lightgray;' +
-                    '    font-weight: lighter;' +
-                    '    padding-bottom: 1%;' +
-                    '    margin-bottom: 1%;' +
-                    '    text-align: right;' +
+                    '    display: block;' +
+                    '    color: white;' +
+                    '    padding: 14px 16px;' +
+                    '    box-sizing: border-box;' +
                     '}',
-                '#measure-list-checkbox {' + '    margin-left: 5px;' + '}',
-                '#measure-list {' +
+                '#left-side {' + '    width: 24%;' + '    float: left;' + '}',
+                '#left-side > * {' + '    width: 100%;' + '    display: inline-block;' + '}',
+                '#left-side .wc-controls {' + '    padding: 10px 0;' + '}',
+                '#left-side .wc-controls .control-group {' +
+                    '    float: left;' +
+                    '    clear: left;' +
+                    '    margin: 0 0 2px 0;' +
+                    '}',
+                '#left-side .wc-controls .control-group > * {' +
+                    '    display: inline-block;' +
+                    '    margin-left: 3px;' +
+                    '}',
+                '#left-side #measure-list-container {' + '   padding:0' + '}',
+                '#left-side #measure-list-container #measure-list-header {' +
+                    '    font-size: 150%;' +
+                    '    border-top: 1px solid lightgray;' +
+                    '    font-weight: lighter;' +
+                    '    padding: 14px 0;' +
+                    '}',
+                '#left-side #measure-list-container #measure-list-checkbox {' +
+                    '    margin: 5px;' +
+                    '}',
+                '#left-side #measure-list-container #measure-list {' +
                     '    list-style-type: none;' +
                     '    font-weight: lighter;' +
                     '}',
-                '.measure-item {' + '}',
-                '.measure-item-container {' + '    text-align: right;' + '}',
-                '.measure-checkbox {' +
-                    '    margin-left: 5px;' +
-                    '    margin-top: 5px;' +
+                '#left-side #measure-list-container .measure-item {' + '}',
+                '#left-side #measure-list-container .measure-item-container {' + '}',
+                '#left-side #measure-list-container .measure-checkbox {' + '    margin: 5px;' + '}',
+
+                /***--------------------------------------------------------------------------------------\
+    Navigation
+    \--------------------------------------------------------------------------------------***/
+
+                'ul#navigation-bar {' +
+                    '    list-style-type: none;' +
+                    '    margin: 0;' +
+                    '    padding: 0;' +
+                    '    overflow: hidden;' +
+                    '    background-color: #333;' +
+                    '    width: 75%;' +
                     '    float: right;' +
                     '}',
-                'div.wc-layout.wc-small-multiples {' +
-                    '    width: 80%;' +
-                    '    float: right;' +
-                    '    border-left: 1px solid lightgray;' +
+                'ul#navigation-bar li.navigation {' +
+                    '    float: left;' +
+                    '    cursor: pointer;' +
+                    '    font-size: 150%;' +
+                    '    display: block;' +
+                    '    color: white;' +
+                    '    text-align: center;' +
+                    '    padding: 14px 16px;' +
+                    '    text-decoration: none;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart {' +
+                'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}',
+                'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}',
+                'ul#navigation-bar li.navigation#Listing-nav.brushed {' +
+                    '    color: orange;' +
+                    '}',
+
+                /***--------------------------------------------------------------------------------------\
+    Charts
+    \--------------------------------------------------------------------------------------***/
+
+                'div.wc-layout.wc-small-multiples#Charts {' +
+                    '    width: 75%;' +
+                    '    float: right;' +
+                    '    padding-top: 10px;' +
+                    '}',
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
                     '    padding-right: 1em;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart .delete-chart {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
+                    '    width: 100%;' +
+                    ' }',
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
+                    '    text-align: left;' +
+                    '    padding-left: 10px;' +
+                    '}',
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                     '    float: right;' +
                     '    cursor: pointer;' +
                     '    border: 1px solid black;' +
                     '    border-radius: 3px;' +
-                    '    padding: 0px 4px 1px 3px;' +
+                    '    padding: 0px 3px 1px 3px;' +
+                    '    font-size: 75%;' +
+                    '    margin-left: 5px;' +
+                    '    visibility:hidden;' +
                     '}',
-                'div.wc-layout.wc-small-multiples > div.wc-chart .delete-chart:hover {' +
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                     '    background: black;' +
                     '    color: white;' +
                     '}',
+                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+                    'display:none;' +
+                    '}',
+
+                /***--------------------------------------------------------------------------------------\
+    Listing
+    \--------------------------------------------------------------------------------------***/
+
+                'div.wc-chart#Listing {' +
+                    '    width: 75%;' +
+                    '    float: right;' +
+                    '    padding-top: 10px;' +
+                    '}',
+                'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
+                'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}',
+                'div.wc-chart#Listing .pagination-container a {' +
+                    '    text-decoration: none;' +
+                    '    padding: 5px 10px;' +
+                    '}',
+                'div.wc-chart#Listing .pagination-container a:first-child {' +
+                    '    margin-left: 5px;' +
+                    '}',
+                'div.wc-chart#Listing .pagination-container a.active {' +
+                    '    border: 2px solid gray;' +
+                    '    border-radius: 4px;' +
+                    '}',
+
+                /***--------------------------------------------------------------------------------------\
+    General styles
+    \--------------------------------------------------------------------------------------***/
+
+                '.hidden {' + '    display: none !important;' + '}',
                 'circle.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 2px;' +
@@ -61,7 +160,9 @@
                     '    stroke-width: 3px;' +
                     '    stroke-opacity: 1;' +
                     '}',
-                'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}'
+                'path.hover {' + '    stroke: orange;' + '    stroke-opacity: 1;' + '}',
+                'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
+                'tr.brushed {' + '    background: orange;' + '}'
             ],
             style = document.createElement('style');
         style.type = 'text/css';
@@ -146,19 +247,42 @@
 
     var defaultSettings = {
         measure_col: 'TEST',
-        time_col: 'DY',
+        time_cols: [
+            {
+                value_col: 'DY',
+                type: 'linear',
+                label: 'Study Day',
+                rotate_tick_labels: false,
+                vertical_space: 0
+            },
+            {
+                value_col: 'VISITN',
+                type: 'ordinal',
+                label: 'Visit Number',
+                rotate_tick_labels: false,
+                vertical_space: 0
+            },
+            {
+                value_col: 'VISIT',
+                type: 'ordinal',
+                label: 'Visit',
+                rotate_tick_labels: true,
+                vertical_space: 100
+            }
+        ],
         value_col: 'STRESN',
         id_col: 'USUBJID',
         unit_col: 'STRESU',
-        normal_col_low: 'STNRLO',
-        normal_col_high: 'STNRHI',
+        lln_col: 'STNRLO',
+        uln_col: 'STNRHI',
         measures: null,
         filters: null,
+        rotate_x_tick_labels: true,
 
         x: {
-            type: 'linear',
-            column: null, // sync to [ time_col ]
-            label: 'Study Day'
+            type: null, // sync to [ time_cols[0].type ]
+            column: null, // sync to [ time_cols[0].value_col ]
+            label: null // sync to [ time_cols[0].label ]
         },
         y: {
             type: 'linear',
@@ -170,125 +294,333 @@
                 type: 'line',
                 per: null, // sync to [ id_col ] and [ measure_col ]
                 attributes: {
-                    'stroke-width': 0.5,
-                    'stroke-opacity': 0.5,
-                    stroke: '#999'
-                }
-            },
-            {
-                type: 'circle',
-                per: null, // sync to [ id_col ], [ measure_col ], [ time_col ], and [ value_col ]
-                radius: 2,
-                attributes: {
-                    'stroke-width': 0.5,
-                    'stroke-opacity': 0.5,
-                    'fill-opacity': 1
+                    'stroke-width': 1,
+                    'stroke-opacity': 0.2,
+                    stroke: 'black'
                 }
             }
         ],
         resizable: false,
-        width: 600,
-        height: 300,
+        scale_text: false,
+        width: 365,
+        height: 200,
         margin: {
-            left: 50
-        }
+            left: 40
+        },
+        gridlines: 'xy'
     };
 
     function syncSettings(settings) {
         var syncedSettings = clone(settings);
-        syncedSettings.x.column = settings.time_col;
+        syncedSettings.x.type = settings.time_cols[0].type;
+        syncedSettings.x.column = settings.time_cols[0].value_col;
+        syncedSettings.x.label = settings.time_cols[0].label;
+        syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
-        syncedSettings.marks[1].per = [
-            settings.id_col,
-            settings.measure_col,
-            settings.time_col,
-            settings.value_col
-        ];
 
         return syncedSettings;
     }
 
     var controlInputs = [
         {
-            type: 'subsetter',
-            value_col: null,
-            label: 'Measures',
-            multiple: true
+            type: 'dropdown',
+            label: 'X-axis',
+            option: 'x.label',
+            require: true
         }
     ];
 
     function syncControlInputs(controlInputs, settings) {
         var syncedControlInputs = clone(controlInputs);
+
         syncedControlInputs.filter(function(controlInput) {
-            return controlInput.label === 'Measures';
-        })[0].value_col =
-            settings.measure_col;
+            return controlInput.label === 'X-axis';
+        })[0].values = settings.time_cols.map(function(d) {
+            return d.label || d;
+        });
+
+        if (settings.filters)
+            settings.filters.forEach(function(filter) {
+                syncedControlInputs.push({
+                    type: 'subsetter',
+                    value_col: filter.value_col || filter,
+                    label: filter.label || filter.value_col || filter,
+                    description: 'filter',
+                    multiple: false
+                });
+            });
 
         return syncedControlInputs;
+    }
+
+    function toggleCharts(chart) {
+        var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+        var measureListCheckbox = d3$1.select('#measure-list-checkbox'),
+            checked = measureListCheckbox.property('checked'),
+            measureItems = d3$1.selectAll('li.measure-item'),
+            anyUnchecked = measureItems[0].some(function(measureItem) {
+                return !measureItem.getElementsByTagName('input')[0].checked;
+            });
+
+        //Handle overall toggle.
+        if (toggle) {
+            measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
+            measureItems.each(function(d) {
+                d3.select(this).select('input').property('checked', checked);
+                toggleChart(chart, this, d);
+            });
+            measureListCheckbox.property('checked', checked);
+        } else {
+            //Handle individual toggles.
+            measureListCheckbox.attr(
+                'title',
+                anyUnchecked ? 'Display all charts' : 'Remove all charts'
+            );
+            measureListCheckbox.property('checked', !anyUnchecked);
+        }
+    }
+
+    function toggleChart(chart, li) {
+        //Determine state of checkbox.
+        var checkbox = d3$1.select(li).select('input'),
+            checked = checkbox.property('checked');
+        checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
+        d3$1
+            .select(chart.div)
+            .selectAll('.wc-chart')
+            .filter(function(di) {
+                return di.measure === d3$1.select(li).datum();
+            })
+            .classed('hidden', !checked);
+
+        //If any checkbox is unchecked, uncheck measureListCheckbox.
+        toggleCharts(chart, false);
+    }
+
+    function layout() {
+        var chart = this,
+            //Create navigation bar.
+            navigationBar = d3$1
+                .select(this.div)
+                .insert('ul', ':first-child')
+                .attr('id', 'navigation-bar'),
+            navigationButtons = navigationBar
+                .selectAll('li.navigation')
+                .data(['Charts', 'Listing'])
+                .enter()
+                .append('li')
+                .classed('navigation', true)
+                .classed('active', function(d) {
+                    return d === 'Charts';
+                })
+                .attr('id', function(d) {
+                    return d + '-nav';
+                })
+                .text(function(d) {
+                    return d;
+                })
+                .on('click', function(d) {
+                    navigationButtons
+                        .filter(function(di) {
+                            return di === d;
+                        })
+                        .classed('active', true);
+                    navigationButtons
+                        .filter(function(di) {
+                            return di !== d;
+                        })
+                        .classed('active', false);
+                    if (d === 'Charts') {
+                        d3$1.select('#Listing').classed('hidden', true);
+                        d3$1.select('#Charts').classed('hidden', false);
+                    } else {
+                        d3$1.select('#Charts').classed('hidden', true);
+                        d3$1.select('#Listing').classed('hidden', false);
+                    }
+                }),
+            //Create controls header.
+            controlsTab = d3$1
+                .select(this.div)
+                .insert('div', ':first-child')
+                .attr('id', 'controls-header')
+                .text('Controls'),
+            //Define all-chart toggle.
+            measureListContainer = d3$1
+                .select(this.element + ' #left-side')
+                .append('ul')
+                .attr('id', 'measure-list-container'),
+            measureListHeader = measureListContainer
+                .append('div')
+                .attr('id', 'measure-list-header'),
+            measureListCheckbox = measureListHeader
+                .append('input')
+                .attr({
+                    id: 'measure-list-checkbox',
+                    type: 'checkbox',
+                    title:
+                        this.config.measures.length === this.config.allMeasures.length
+                            ? 'Remove all charts'
+                            : 'Display all charts'
+                })
+                .property('checked', this.config.measures.length === this.config.allMeasures.length)
+                .on('click', function() {
+                    toggleCharts(chart, this);
+                });
+        measureListHeader.append('span').text('Measures');
+        var measureList = measureListContainer //Define individual chart toggles.
+            .append('ul')
+            .attr('id', 'measure-list');
+        var measureItems = measureList
+            .selectAll('li.measure-item')
+            .data(this.config.allMeasures)
+            .enter()
+            .append('li')
+            .attr('class', function(d) {
+                return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
+            })
+            .each(function(d) {
+                //Append div inside list item.
+                var measureItemContainer = d3$1
+                    .select(this)
+                    .append('div')
+                    .classed('measure-item-container', true);
+                //Check whether measure should by displayed initially.
+                var checked = chart.config.measures.indexOf(d) > -1; //Append checkbox inside div.
+                var measureItemCheckbox = measureItemContainer
+                    .append('input')
+                    .classed('measure-checkbox', true)
+                    .attr({
+                        type: 'checkbox',
+                        title: checked ? 'Remove chart' : 'Display chart'
+                    })
+                    .property('checked', checked);
+                var measureItemLabel = measureItemContainer.append('span').text(function(d) {
+                    return d;
+                });
+            })
+            .on('change', function(d) {
+                toggleChart(chart, this);
+            });
+    }
+
+    function applyFilters(d) {
+        var _this = this;
+
+        this.data.brushed = [];
+        this.data.selectedIDs = [];
+
+        //Reset brush.
+        this.multiples.forEach(function(multiple) {
+            multiple.package.overlay.call(multiple.package.brush.clear());
+            multiple.config.extent = multiple.package.brush.extent();
+        });
+
+        //De-highlight brushed lines.
+        this.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false);
+
+        //De-highlight listing.
+        d3$1.select('#Listing-nav').classed('brushed', false);
+
+        //Define filtered data.
+        if (d.type === 'subsetter') {
+            this.data.filtered = this.data.sorted.filter(function(d) {
+                var filtered = false;
+
+                _this.controls.config.inputs
+                    .filter(function(d) {
+                        return d.type === 'subsetter';
+                    })
+                    .forEach(function(filter) {
+                        if (!filtered && filter.value && filter.value !== 'All')
+                            filtered = d[filter.value_col] !== filter.value;
+                    });
+
+                return !filtered;
+            });
+
+            //Reset listing pagination.
+            this.listing.pagination.activeLink = 0;
+            this.listing.pagination.startItem =
+                this.listing.pagination.activeLink * this.listing.pagination.rowsShown;
+            this.listing.pagination.endItem =
+                this.listing.pagination.startItem + this.listing.pagination.rowsShown;
+        }
+
+        //Redraw listing.
+        this.listing.draw(
+            this.data.filtered.filter(function(d, i) {
+                return (
+                    _this.listing.pagination.startItem <= i && i < _this.listing.pagination.endItem
+                );
+            })
+        );
     }
 
     function init(data) {
         var _this = this;
 
-        var sortedData = data.sort(function(a, b) {
-            var aValue = a[_this.config.measure_col],
-                bValue = b[_this.config.measure_col],
-                leftSort = aValue < bValue,
-                rightSort = aValue > bValue;
+        var chart = this;
 
-            if (_this.config.measures && _this.config.measures.length) {
-                var aPos = _this.config.measures.indexOf(aValue),
-                    bPos = _this.config.measures.indexOf(bValue),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+        //Attach data arrays to central chart object.
+        this.data = {
+            raw: data,
+            sorted: data
+                .filter(function(d) {
+                    return (
+                        /^[0-9.]+$/.test(d[_this.config.value_col]) &&
+                        !/^\s*$/.test(d[_this.config.measure_col])
+                    );
+                })
+                .sort(function(a, b) {
+                    var aValue = a[_this.config.measure_col],
+                        bValue = b[_this.config.measure_col],
+                        leftSort = aValue < bValue,
+                        rightSort = aValue > bValue,
+                        aID = a[_this.config.id_col],
+                        bID = b[_this.config.id_col],
+                        aTime = a[_this.config.time_col],
+                        bTime = b[_this.config.time_col];
 
-                return diff
-                    ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-            } else return leftSort ? -1 : rightSort ? 1 : 0;
+                    var sort = void 0;
+                    if (_this.config.measures && _this.config.measures.length) {
+                        var aPos = _this.config.measures.indexOf(aValue),
+                            bPos = _this.config.measures.indexOf(bValue),
+                            diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+
+                        sort = diff
+                            ? diff
+                            : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                    } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+
+                    if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
+
+                    return sort;
+                })
+        };
+        if (this.data.raw.length !== this.data.sorted.length)
+            console.warn(
+                this.data.raw.length -
+                    this.data.sorted.length +
+                    ' non-numeric observations have been removed from the data.'
+            );
+        this.data.sorted.forEach(function(d) {
+            d.brushed = false;
+            if (d[_this.config.unit_col])
+                d.measure_unit =
+                    d[_this.config.measure_col] + ' (' + d[_this.config.unit_col] + ')';
+            else d.measure_unit = d[_this.config.measure_col];
         });
-        webcharts.multiply(this, sortedData, this.config.measure_col);
-    }
-
-    function onInit() {
-        var _this = this;
-
-        this.currentMeasure = this.filters[0].val;
-
-        //Sort data by key variables.
-        this.raw_data = this.raw_data.sort(function(a, b) {
-            //sort first by panel
-            var sort =
-                a[_this.config.panel_col] < b[_this.config.panel_col]
-                    ? -1
-                    : a[_this.config.panel_col] > b[_this.config.panel_col] ? 1 : 0;
-
-            //then sort by key variables
-            if (sort === 0) {
-                [_this.config.id_col, _this.config.time_col].forEach(function(key) {
-                    if (sort === 0) sort = a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0;
-                });
-            }
-
-            return sort;
-        });
-
-        //Define unique identifier.
-        var key = void 0;
-        this.raw_data.forEach(function(d, i) {
-            var previousMeasure = i > 0 ? _this.raw_data[i - 1][_this.config.panel_col] : null;
-
-            if (d[_this.config.panel_col] !== previousMeasure) key = 0;
-            key++;
-
-            d.key = key;
-        });
+        this.data.filtered = this.data.sorted;
+        this.data.brushed = [];
+        this.data.selectedIDs = [];
 
         //Capture unique measures.
-        this.config.allMeasures = d3
+        this.config.allMeasures = d3$1
             .set(
-                this.raw_data.map(function(d) {
-                    return d[_this.config.measure_col];
+                this.data.sorted.map(function(d) {
+                    return d.measure_unit;
                 })
             )
             .values()
@@ -310,6 +642,100 @@
             this.config.measures && this.config.measures.length
                 ? this.config.measures
                 : this.config.allMeasures;
+
+        layout.call(this);
+
+        //Charts
+        this.wrap.attr('id', 'Charts');
+        webcharts.multiply(this, this.data.sorted, 'measure_unit');
+
+        //Listing
+        this.listing.wrap.attr('id', 'Listing');
+        this.listing.parent = this;
+        this.listing.init(
+            this.data.sorted.filter(function(d, i) {
+                return i < 25;
+            })
+        );
+        this.listing.wrap.classed('hidden', true);
+
+        //Define custom event listener for filters.
+        d3$1.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+            d.value = d3$1
+                .select(this)
+                .selectAll('option')
+                .filter(function() {
+                    return this.selected;
+                })
+                .text();
+            applyFilters.call(chart, d);
+        });
+    }
+
+    function onInit() {
+        this.currentMeasure = this.filters[0].val;
+    }
+
+    function minimize(chart) {
+        //Modify chart config and redraw.
+        chart.wrap.select('.m__imize-chart').html('&plus;').attr('title', 'Maximize chart');
+        chart.wrap.classed('expanded', false);
+
+        chart.config.width = chart.config.initialSettings.width;
+        chart.config.max_width = null;
+        chart.config.height = chart.config.initialSettings.height;
+        chart.config.aspect = null;
+
+        chart.draw();
+    }
+
+    function m__imize(chart) {
+        //Maximize chart.
+        if (!chart.wrap.classed('expanded')) {
+            //Clear previously expanded chart.
+            if (chart.parent.expandedChart) minimize(chart.parent.expandedChart);
+
+            //Attach expanded chart to parent.
+            chart.parent.expandedChart = chart;
+
+            //Modify chart configuation and redraw.
+            chart.wrap.select('.m__imize-chart').html('&minus;').attr('title', 'Minimize chart');
+            chart.wrap.classed('expanded', true);
+
+            chart.config.width = null;
+            chart.config.max_width = 9999;
+            chart.config.height = null;
+            chart.config.aspect = 2.5;
+
+            chart.draw();
+
+            //Sort expanded chart first.
+            chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
+                return a.measure === chart.currentMeasure
+                    ? -1
+                    : b.measure === chart.currentMeasure
+                      ? 1
+                      : chart.config.measures.indexOf(a.measure) -
+                        chart.config.measures.indexOf(b.measure);
+            });
+
+            //Scroll window to expanded chart.
+            var bodyRect = document.body.getBoundingClientRect(),
+                elemRect = chart.wrap.node().getBoundingClientRect(),
+                offset = elemRect.top - bodyRect.top;
+            window.scrollTo(0, offset);
+        } else {
+            //Minimize chart
+            minimize(chart);
+
+            //Revert to default sort.
+            chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
+                return (
+                    chart.config.measures.indexOf(a.measure) -
+                    chart.config.measures.indexOf(b.measure)
+                );
+            });
+        }
     }
 
     function onLayout() {
@@ -317,133 +743,55 @@
 
         var chart = this;
 
-        //Define chart display toggles.
-        if (d3.select('#measure-list-container').size() === 0) {
-            var measureListContainer = d3
-                    .select(this.config.element)
-                    .insert('div', ':first-child')
-                    .attr('id', 'measure-list-container'),
-                measureListHeader = measureListContainer
-                    .append('div')
-                    .attr('id', 'measure-list-header')
-                    .text('Measures'),
-                measureListCheckbox = measureListHeader
-                    .append('input')
-                    .attr({
-                        id: 'measure-list-checkbox',
-                        type: 'checkbox',
-                        title:
-                            this.config.measures.length === this.config.allMeasures.length
-                                ? 'Remove all charts'
-                                : 'Display all charts'
-                    })
-                    .property(
-                        'checked',
-                        this.config.measures.length === this.config.allMeasures.length
-                    )
-                    .on('click', function() {
-                        var checkbox = d3.select(this),
-                            checked = checkbox.property('checked');
-                        checkbox.attr(
-                            'title',
-                            checked ? 'Remove all charts' : 'Display all charts'
-                        );
-                        d3
-                            .select(chart.config.element)
-                            .selectAll('.wc-chart')
-                            .classed('hidden', !checked);
-                        d3.selectAll('.measure-checkbox').property('checked', checked);
-                    }),
-                measureList = measureListContainer.append('ul').attr('id', 'measure-list'),
-                measureItems = measureList
-                    .selectAll('li.measure')
-                    .data(this.config.allMeasures)
-                    .enter()
-                    .append('li')
-                    .classed('measure-item', true)
-                    .each(function(d) {
-                        //Append div inside list item.
-                        var measureItemContainer = d3
-                                .select(this)
-                                .append('div')
-                                .classed('measure-item-container', true)
-                                .text(d),
-                            //Check whether measure should by displayed initially.
-                            checked = chart.config.measures.indexOf(d) > -1,
-                            //Append checkbox inside div.
-                            measureItemCheckbox = measureItemContainer
-                                .append('input')
-                                .classed('measure-checkbox', true)
-                                .attr({
-                                    type: 'checkbox',
-                                    title: checked ? 'Remove chart' : 'Display chart'
-                                })
-                                .property('checked', checked);
-                    });
-            measureItems.on('change', function(d) {
-                //Determine state of checkbox.
-                var checkbox = d3.select(this).select('input'),
-                    checked = checkbox.property('checked');
-                checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-                d3
-                    .select(chart.config.element)
-                    .selectAll('.wc-chart')
-                    .filter(function(di) {
-                        return di.measure === d;
-                    })
-                    .classed('hidden', !checked);
-                //If any checkbox is unchecked, uncheck measureListCheckbox.
-                if (
-                    measureItems[0].some(function(measureItem) {
-                        return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
-                    })
-                )
-                    measureListCheckbox
-                        .attr('title', 'Display all charts')
-                        .property('checked', false);
-            });
-        }
-
         //Add ability to remove charts in the chart title.
         this.wrap
+            .on('mouseover', function() {
+                _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'visible');
+            })
+            .on('mouseout', function() {
+                _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'hidden');
+            })
             .select('.wc-chart-title')
             .append('span')
-            .classed('delete-chart', true)
+            .classed('remove-chart chart-button', true)
             .html('&#10006;')
             .attr('title', 'Remove chart')
+            .style('visibility', 'hidden')
             .on('click', function() {
-                _this.wrap.classed('hidden', true);
-                //Sync measureItems.
-                var measureItems = d3.selectAll('.measure-item');
-                measureItems
-                    .filter(function(d) {
-                        return d === _this.currentMeasure;
-                    })
-                    .select('input')
-                    .property('checked', false);
-                //If any checkbox is unchecked, uncheck measureListCheckbox.
-                if (
-                    measureItems[0].some(function(measureItem) {
-                        return measureItem.getElementsByClassName('measure-checkbox')[0].checked;
-                    })
-                )
-                    d3
-                        .select('#measure-list-checkbox')
-                        .attr('title', 'Display all charts')
-                        .property('checked', false);
+                //Minimize chart.
+                if (_this.wrap.classed('full-screen')) m__imize(_this);
+
+                var li = d3.select(
+                    'li.measure-item.' + _this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
+                );
+                li.select('input').property('checked', false);
+                toggleChart(_this, li.node());
             });
 
+        //Add ability to maximize charts in the chart title.
+        var m__imizeButton = this.wrap
+            .select('.wc-chart-title')
+            .append('span')
+            .classed('m__imize-chart chart-button', true)
+            .html('&plus;')
+            .attr('title', 'Maximize chart');
+        m__imizeButton.on('click', function() {
+            m__imize(_this);
+        });
+
         //Hide measures not listed in [ settings.measures ].
-        this.wrap.classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+        this.wrap
+            .classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true)
+            .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
     }
 
     function onPreprocess() {
         var _this = this;
 
         //Set the y-domain individually for each measure.
-        this.config.y.domain = d3.extent(
+        this.config.y.domain = d3$1.extent(
             this.raw_data.filter(function(d) {
-                return d[_this.config.measure_col] === _this.currentMeasure;
+                return d.measure_unit === _this.currentMeasure;
             }),
             function(d) {
                 return +d[_this.config.value_col];
@@ -451,13 +799,28 @@
         );
         var range = this.config.y.domain[1] - this.config.y.domain[0];
         this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
+
+        //Sync config with X-axis selection.
+        var xInput = this.controls.config.inputs.filter(function(input) {
+                return input.label === 'X-axis';
+            })[0],
+            time_col = this.config.time_cols.filter(function(time_col) {
+                return time_col.label === _this.config.x.label;
+            })[0];
+
+        this.config.x.column = time_col.value_col;
+        this.config.x.type = time_col.type;
+        this.config.x.label = time_col.label;
+        this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
     }
 
     function onDatatransform() {}
 
-    function onDraw() {}
+    function onDraw() {
+        if (this.package) this.package.overlay.call(this.package.brush.clear());
+    }
 
-    d3.selection.prototype.moveToFront = function() {
+    d3$1.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
@@ -579,27 +942,110 @@
         return true;
     }
 
-    function brush() {
-        var chart = this;
+    function brushMarks(chart, lines) {
+        chart.parent.brushedMeasure = chart.currentMeasure;
 
-        //points
-        var points = this.svg.selectAll('.point-supergroup g.point circle');
-        points.each(function(d) {
-            d.key1 = d.values.raw[0].key;
-            d.id = d.values.raw[0][chart.config.id_col];
+        var extent$$1 = chart.config.extent,
+            x0 = extent$$1[0][0],
+            // top left x-coordinate
+            y0 = extent$$1[1][1],
+            // top left y-coordinate
+            x1 = extent$$1[1][0],
+            // bottom right x-coordinate
+            y1 = extent$$1[0][1],
+            // bottom right y-coordinate
+            top = { x0: x1, y0: y0, x1: x0, y1: y0 },
+            right = { x0: x1, y0: y1, x1: x1, y1: y0 },
+            bottom = { x0: x0, y0: y1, x1: x1, y1: y1 },
+            left = { x0: x0, y0: y0, x1: x0, y1: y1 },
+            sides = [top, right, bottom, left];
+
+        //Determine which lines fall inside the brush.
+        var brushedLines = lines.filter(function(d, i) {
+            var intersection = false;
+            d.lines.forEach(function(line, j) {
+                sides.forEach(function(side, k) {
+                    if (!intersection)
+                        intersection = doLineSegmentsIntersect(
+                            { x: line.x0, y: line.y0 },
+                            { x: line.x1, y: line.y1 },
+                            { x: side.x0, y: side.y0 },
+                            { x: side.x1, y: side.y1 }
+                        );
+                });
+            });
+
+            return intersection;
         });
+
+        //Attached brushed IDs to chart parent object.
+        chart.parent.data.selectedIDs = brushedLines.data().map(function(d) {
+            return d.id;
+        });
+
+        //Highlight brushed lines.
+        chart.parent.wrap
+            .selectAll('.line-supergroup g.line path')
+            .classed('brushed', false)
+            .filter(function(d) {
+                return chart.parent.data.selectedIDs.indexOf(d.id) > -1;
+            })
+            .classed('brushed', true)
+            .each(function(d) {
+                d3$1.select(this.parentNode).moveToFront();
+            });
+
+        //Draw listing displaying brushed IDs first.
+        if (chart.parent.data.selectedIDs.length) {
+            chart.parent.data.filtered.forEach(function(d) {
+                d.brushed = chart.parent.data.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
+            });
+            chart.parent.data.brushed = chart.parent.data.filtered.filter(function(d) {
+                return d.brushed;
+            });
+            chart.parent.listing.pagination.activeLink = 0;
+            chart.parent.listing.draw(
+                chart.parent.data.brushed.filter(function(d, i) {
+                    return i < 25;
+                })
+            );
+            d3$1.select('#Listing-nav').classed('brushed', true);
+        } else {
+            chart.parent.data.brushed = [];
+            chart.parent.listing.pagination.activeLink = 0;
+            chart.parent.listing.draw(
+                chart.parent.data.filtered.filter(function(d, i) {
+                    return i < 25;
+                })
+            );
+            d3$1.select('#Listing-nav').classed('brushed', false);
+        }
+    }
+
+    function brush() {
+        var _this = this;
+
+        var chart = this;
 
         //lines
         var lines = this.svg.selectAll('.line-supergroup g.line path');
         lines.each(function(d, i) {
             d.id = d.values[0].values.raw[0][chart.config.id_col];
+            d.lln = d.values[0].values.raw[0][chart.config.lln_col];
+            d.uln = d.values[0].values.raw[0][chart.config.uln_col];
             d.lines = d.values.map(function(di, i) {
                 var line;
                 if (i) {
                     line = {
-                        x0: d.values[i - 1].values.x,
+                        x0:
+                            chart.config.x.type === 'linear'
+                                ? d.values[i - 1].values.x
+                                : chart.x(d.values[i - 1].values.x) + chart.x.rangeBand() / 2,
                         y0: d.values[i - 1].values.y,
-                        x1: di.values.x,
+                        x1:
+                            chart.config.x.type === 'linear'
+                                ? di.values.x
+                                : chart.x(di.values.x) + chart.x.rangeBand() / 2,
                         y1: di.values.y
                     };
                 }
@@ -608,112 +1054,98 @@
             d.lines.shift();
         });
 
+        //Highlight previously brushed points.
+        if (this.parent.data.selectedIDs.length) {
+            lines
+                .filter(function(d) {
+                    return _this.parent.data.selectedIDs.indexOf(d.id) > -1;
+                })
+                .classed('brushed', true)
+                .each(function() {
+                    d3$1.select(this.parentNode).moveToFront();
+                });
+        }
+
         //Apply brush.
         this.package.brush
             .on('brushstart', function() {})
             .on('brush', function() {
-                var measure = d3.select(this).datum().measure;
-                d3.selectAll(chart.config.element).selectAll('.wc-chart').each(function(d) {
-                    if (d.measure !== measure) d.overlay.call(d.brush.clear());
+                chart.parent.wrap.selectAll('.wc-chart').each(function(d) {
+                    if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
                 });
+                chart.config.extent = chart.package.brush.extent();
 
-                //brush
-                var extent$$1 = chart.package.brush.extent(),
-                    x0 = extent$$1[0][0],
-                    // top left x-coordinate
-                    y0 = extent$$1[1][1],
-                    // top left y-coordinate
-                    x1 = extent$$1[1][0],
-                    // bottom right x-coordinate
-                    y1 = extent$$1[0][1],
-                    // bottom right y-coordinate
-                    top = { x0: x1, y0: y0, x1: x0, y1: y0 },
-                    right = { x0: x1, y0: y1, x1: x1, y1: y0 },
-                    bottom = { x0: x0, y0: y1, x1: x1, y1: y1 },
-                    left = { x0: x0, y0: y0, x1: x0, y1: y1 },
-                    sides = [top, right, bottom, left];
-
-                //brushed points
-                var brushedPoints = points
-                        .filter(function(d) {
-                            return (
-                                x0 <= d.values.x &&
-                                y0 >= d.values.y &&
-                                x1 >= d.values.x &&
-                                y1 <= d.values.y
-                            );
-                        })
-                        .data()
-                        .map(function(d) {
-                            return d.key1;
-                        }),
-                    allPoints = d3
-                        .select(chart.config.element)
-                        .selectAll('.point-supergroup g.point circle')
-                        .classed('brushed selected', false);
-                allPoints
-                    .filter(function(d) {
-                        return brushedPoints.indexOf(d.key1) > -1;
-                    })
-                    .classed('brushed', true)
-                    .each(function() {
-                        d3.select(this.parentNode).moveToFront();
-                    });
-
-                //brushed lines
-                var brushedLines = lines
-                        .filter(function(d, i) {
-                            var intersection = false;
-                            d.lines.forEach(function(line, j) {
-                                sides.forEach(function(side, k) {
-                                    if (!intersection) {
-                                        intersection = doLineSegmentsIntersect(
-                                            { x: line.x0, y: line.y0 },
-                                            { x: line.x1, y: line.y1 },
-                                            { x: side.x0, y: side.y0 },
-                                            { x: side.x1, y: side.y1 }
-                                        );
-                                    }
-                                });
-                            });
-                            return intersection;
-                        })
-                        .data()
-                        .map(function(d) {
-                            return d.id;
-                        }),
-                    allLines = d3
-                        .select(chart.config.element)
-                        .selectAll('.line-supergroup g.line path')
-                        .classed('brushed', false);
-                allLines
-                    .filter(function(d) {
-                        return brushedLines.indexOf(d.id) > -1;
-                    })
-                    .classed('brushed', true)
-                    .each(function() {
-                        d3.select(this.parentNode).moveToFront();
-                    });
-                allPoints
-                    .filter(function(d) {
-                        return brushedLines.indexOf(d.id) > -1;
-                    })
-                    .classed('selected', true)
-                    .each(function() {
-                        d3.select(this.parentNode).moveToFront();
-                    });
+                //brush marks
+                brushMarks(chart, lines);
             })
             .on('brushend', function() {});
 
         //Initialize brush on brush overlay.
         this.package.overlay.call(this.package.brush);
+
+        //Maintain brush on redraw.
+        if (!this.config.extent) this.config.extent = this.package.brush.extent();
+        if (
+            (this.config.extent[0][0] !== this.package.brush.extent()[0][0] ||
+                this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
+                this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
+                this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
+            this.currentMeasure === chart.parent.brushedMeasure
+        ) {
+            this.package.brush.extent(this.config.extent);
+            this.package.overlay.call(this.package.brush);
+            brushMarks(chart, lines);
+        }
+    }
+
+    function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
+        if (!axis) return;
+        var ticks = this.svg
+            .selectAll('.' + axis + '.axis .tick text')
+            .attr({
+                transform: 'rotate(' + rotation + ')',
+                dx: dx,
+                dy: dy
+            })
+            .style('text-anchor', anchor || 'start');
+
+        if (nchar) {
+            ticks
+                .filter(function(d) {
+                    var dText = '' + d;
+                    return dText.length > nchar;
+                })
+                .text(function(d) {
+                    return d.slice(0, nchar - 3) + '...';
+                })
+                .style('cursor', 'pointer')
+                .append('title')
+                .text(function(d) {
+                    return d;
+                });
+        }
     }
 
     function onResize() {
         var chart = this;
 
+        //Draw normal range.
+        this.svg.select('.normal-range').remove();
+        this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
+            x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+            y: this.y(this.filtered_data[0][this.config.uln_col]),
+            width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+            height:
+                this.y(this.filtered_data[0][this.config.lln_col]) -
+                this.y(this.filtered_data[0][this.config.uln_col]),
+            fill: 'green',
+            'fill-opacity': 0.05,
+            stroke: 'green',
+            'stroke-opacity': 1,
+            'clip-path': 'url(#' + this.id + ')'
+        });
+
         //Capture each multiple's scale.
-        var bbox = this.svg.node().getBBox();
         this.package = {
             measure: this.currentMeasure,
             container: this.wrap,
@@ -722,7 +1154,7 @@
             domain: clone(this.config.y.domain),
             xScale: clone(this.x),
             yScale: clone(this.y),
-            brush: d3.svg.brush().x(this.x).y(this.y)
+            brush: d3$1.svg.brush().x(this.x).y(this.y)
         };
         this.wrap.datum(this.package);
 
@@ -740,11 +1172,16 @@
 
         //Add brush functionality.
         brush.call(this);
+
+        // rotate ticks
+        if (this.config.x.rotate_tick_labels) {
+            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+        }
     }
 
     function onDestroy() {}
 
-    var callbacks = {
+    var chartCallbacks = {
         onInit: onInit,
         onLayout: onLayout,
         onPreprocess: onPreprocess,
@@ -754,25 +1191,244 @@
         onDestroy: onDestroy
     };
 
+    function onInit$1() {}
+
+    function onLayout$1() {
+        //pagination config
+        this.pagination = {};
+        this.pagination.wrap = this.wrap.append('div').classed('pagination-container', true);
+        this.pagination.rowsShown = 25;
+        this.pagination.activeLink = 0;
+        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
+        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
+    }
+
+    function onPreprocess$1() {}
+
+    function onDatatransform$1() {
+        //Hide system variables.
+        this.config.cols = this.config.cols.filter(function(col) {
+            return ['brushed', 'measure_unit'].indexOf(col) === -1;
+        });
+
+        //Use brushed data if available, filtered data otherwise.
+        this.data = this.parent.data.brushed.length
+            ? this.parent.data.brushed
+            : this.parent.data.filtered;
+
+        //Reset pagination.
+        this.pagination.wrap.selectAll('*').remove();
+    }
+
+    function updatePagination() {
+        var _this = this;
+
+        //Reset pagination.
+        this.pagination.links.classed('active', false);
+
+        //Set to active the selected page link.
+        var activeLink = this.pagination.links
+            .filter(function(link) {
+                return +link.rel === +_this.pagination.activeLink;
+            })
+            .classed('active', true);
+
+        //Define and draw selected page.
+        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
+        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
+        this.draw(
+            this.data.filter(function(d, i) {
+                return _this.pagination.startItem <= i && i < _this.pagination.endItem;
+            })
+        );
+    }
+
+    function addLinks() {
+        var _this = this;
+
+        //Count rows.
+        this.pagination.rowsTotal = this.data.length;
+
+        //Calculate number of pages needed and create a link for each page.
+        this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
+        this.pagination.wrap.selectAll('a,span').remove();
+
+        for (var i = 0; i < this.pagination.numPages; i++) {
+            this.pagination.wrap
+                .append('a')
+                .datum({ rel: i })
+                .attr({
+                    href: '#',
+                    rel: i
+                })
+                .text(i + 1)
+                .classed('page-link', true)
+                .classed('active', function(d) {
+                    return d.rel == _this.pagination.activeLink;
+                })
+                .classed(
+                    'hidden',
+                    this.pagination.activeLink <= 4
+                        ? i > 4
+                        : this.pagination.activeLink >= this.pagination.numPages - 5
+                          ? i < this.pagination.numPages - 5
+                          : i < this.pagination.activeLink - 2 || this.pagination.activeLink + 2 < i
+                );
+        }
+
+        this.pagination.links = this.pagination.wrap.selectAll('a.page-link');
+    }
+
+    function addArrows() {
+        var prev = this.pagination.activeLink - 1,
+            next = this.pagination.activeLink + 1;
+        if (prev < 0) prev = 0; // nothing before the first page
+        if (next >= this.pagination.numPages) next = this.pagination.numPages - 1; // nothing after the last page
+
+        this.pagination.wrap
+            .insert('span', ':first-child')
+            .text('...')
+            .classed('hidden', this.pagination.activeLink <= 4);
+
+        this.pagination.prev = this.pagination.wrap
+            .insert('a', ':first-child')
+            .classed('left arrow-link', true)
+            .attr({
+                href: '#',
+                rel: prev
+            })
+            .text('<');
+
+        this.pagination.doublePrev = this.pagination.wrap
+            .insert('a', ':first-child')
+            .classed('left double-arrow-link', true)
+            .attr({
+                href: '#',
+                rel: 0
+            })
+            .text('<<');
+
+        this.pagination.wrap
+            .append('span')
+            .text('...')
+            .classed('hidden', this.pagination.activeLink >= this.pagination.numPages - 5);
+
+        this.pagination.next = this.pagination.wrap
+            .append('a')
+            .classed('right arrow-link', true)
+            .attr({
+                href: '#',
+                rel: next
+            })
+            .text('>');
+
+        this.pagination.doubleNext = this.pagination.wrap
+            .append('a')
+            .classed('right double-arrow-link', true)
+            .attr({
+                href: '#',
+                rel: this.pagination.numPages - 1
+            })
+            .text('>>');
+
+        this.pagination.arrows = this.pagination.wrap.selectAll('a.arrow-link');
+        this.pagination.doubleArrows = this.pagination.wrap.selectAll('a.double-arrow-link');
+    }
+
+    function addPagination() {
+        var listing = this;
+
+        //Render page links.
+        addLinks.call(this);
+
+        //Render a different page on click.
+        this.pagination.links.on('click', function() {
+            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
+            updatePagination.call(listing);
+        });
+
+        //Render arrow links.
+        addArrows.call(this);
+
+        //Render a different page on click.
+        this.pagination.arrows.on('click', function() {
+            if (listing.pagination.activeLink !== +d3$1.select(this).attr('rel')) {
+                listing.pagination.activeLink = +d3$1.select(this).attr('rel');
+                listing.pagination.prev.attr(
+                    'rel',
+                    listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0
+                );
+                listing.pagination.next.attr(
+                    'rel',
+                    listing.pagination.activeLink < listing.pagination.numPages
+                        ? listing.pagination.activeLink + 1
+                        : listing.pagination.numPages - 1
+                );
+                updatePagination.call(listing);
+            }
+        });
+
+        //Render a different page on click.
+        this.pagination.doubleArrows.on('click', function() {
+            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
+            updatePagination.call(listing);
+        });
+    }
+
+    function onDraw$1() {
+        //Add pagination functionality.
+        addPagination.call(this);
+
+        //Highlight selected rows.
+        this.table.selectAll('tbody tr').classed('brushed', function(d) {
+            return d.raw.brushed;
+        });
+    }
+
+    function onResize$1() {}
+
+    function onDestroy$1() {}
+
+    var listingCallbacks = {
+        onInit: onInit$1,
+        onLayout: onLayout$1,
+        onPreprocess: onPreprocess$1,
+        onDatatransform: onDatatransform$1,
+        onDraw: onDraw$1,
+        onResize: onResize$1,
+        onDestroy: onDestroy$1
+    };
+
     function paneledOutlierExplorer(element, settings) {
         //Define .css styles to avoid requiring a separate .css file.
         defineStyles();
+
+        //Create container for controls.
+        d3$1.select(element).append('div').attr('id', 'left-side');
 
         //Clone, merge, and sync settings and define chart.
         var initialSettings = clone(settings),
             mergedSettings = Object.assign({}, defaultSettings, initialSettings),
             syncedSettings = syncSettings(mergedSettings),
             syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-            //controls = createControls(element, {location: 'top', inputs: syncedControlInputs}),
-            chart = webcharts.createChart(element, syncedSettings); //, controls);
+            controls = webcharts.createControls(element + ' div#left-side', {
+                location: 'top',
+                inputs: syncedControlInputs
+            }),
+            chart = webcharts.createChart(element, syncedSettings, controls),
+            listing = webcharts.createTable(element, {}, controls);
+        chart.element = element;
+        chart.config.initialSettings = clone(syncedSettings);
+        chart.listing = listing;
+        listing.chart = chart;
 
         //Define chart callbacks.
-        for (var callback in callbacks) {
-            chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
-        } //Attach element to chart.
-        chart.config.element = element;
-
-        //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer.init().
+        for (var callback in chartCallbacks) {
+            chart.on(callback.substring(2).toLowerCase(), chartCallbacks[callback]);
+        } //Define listing callbacks.
+        for (var _callback in listingCallbacks) {
+            listing.on(_callback.substring(2).toLowerCase(), listingCallbacks[_callback]);
+        } //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
         Object.defineProperty(chart, 'init', {
             enumerable: false,
             configurable: true,

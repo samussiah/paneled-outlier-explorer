@@ -1,4 +1,4 @@
-# ![#FF8C00](https://placehold.it/15x50/FF8C00/000000?text=+) Paneled Outlier Explorer
+# ![#FF9900](https://placehold.it/15x50/FF9900/000000?text=+) Paneled Outlier Explorer
 
 
 ![alt tag](https://im2.ezgif.com/tmp/ezgif-2-c045d98543.png)

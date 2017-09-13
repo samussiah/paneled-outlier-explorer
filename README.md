@@ -3,7 +3,7 @@
 
 
 
-![alt tag](https://im2.ezgif.com/tmp/ezgif-2-b98c0ba3f5.png)![#FF9900](https://placehold.it/25x300/FF9900/000000?text=+)    jd;gd![alt tag](https://im2.ezgif.com/tmp/ezgif-2-a60b495e85.gif)
+![alt tag](https://im2.ezgif.com/tmp/ezgif-2-b98c0ba3f5.png)![#FF9900](https://placehold.it/25x300/FF9900/000000?text=+)    '    '![alt tag](https://im2.ezgif.com/tmp/ezgif-2-a60b495e85.gif)
 
 The Paneled Outlier Explorer is a javascript library that provides paneled line charts of data points over time with point and line brushing. The Paneled Outlier Explorer includes interactive features such as real-time brushing and requires minimal user configuration. Click here for a live demo. When the page loads, the user sees multiple paneled charts providing a lab data summary for each measure over time:
 

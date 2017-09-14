@@ -27,7 +27,7 @@ Initialize the chart like so:
 ```javascript
 paneledOutlierExplorer('body', {}).init(data)
 ```
-### Our [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) offers custom configuratons settings: 
+### Our [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) also offers custom configuratons settings: 
 | Param | Type | Description |
 | --- | --- | --- |
 | element | `string` | CSS selector identifying the element in which to create the chart |

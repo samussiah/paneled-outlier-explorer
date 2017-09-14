@@ -8,10 +8,10 @@
 ### The Paneled Outlier Explorer is a javascript library that provides paneled line charts of data points over time with point and line brushing. 
 
 The Paneled Outlier Explorer includes interactive features such as real-time brushing and requires minimal user configuration.
- [Click here for a live demo](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html). When the page loads, the user sees multiple paneled charts providing a lab data summary for each measure over time.
+[Click here for a live demo](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html). 
  
- ### Background
+The paneled outlier explorer is closely related to the (non-paneled) [safety outlier explorer](https://github.com/RhoInc/safety-outlier-explorer) library, and can be used to monitor key safety signals in clinical trials in conjunction with other charts in the [safety explorer suite](https://github.com/RhoInc/safety-explorer-suite).When the page loads, the user sees multiple paneled charts providing a lab data summary for each measure over time.
+ 
 
-The paneled outlier explorer is closely related to the (non-paneled) [safety outlier explorer](https://github.com/RhoInc/safety-outlier-explorer) library, and can be used to monitor key safety signals in clinical trials in conjunction with other charts in the [safety explorer suite](https://github.com/RhoInc/safety-explorer-suite).
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![alt tag](https://user-images.githubusercontent.com/31038805/30434209-a96d443e-9934-11e7-95a9-d2525491bad7.gif)

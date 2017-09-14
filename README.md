@@ -21,5 +21,8 @@ The Paneled Outlier Explorer includes interactive features such as real-time bru
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![#FF9900](https://placehold.it/15x375/FF9900/000000?text=+)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![alt tag](https://user-images.githubusercontent.com/31038805/30434209-a96d443e-9934-11e7-95a9-d2525491bad7.gif)
 
 
-### Typical Usage
-Generally speaking, minimal configuration is needed to create a Paneled Outlier Explorer. Just [load a json data set](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines) and the tool will automatically create a user interface (measures, etc.) based on the data set loaded. Initialize the chart like so: 
+Generally speaking, minimal configuration is needed to create a Paneled Outlier Explorer. 
+
+### Just [load a json data set](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines) and the tool will automatically create a user interface (measures, etc.) based on the data set loaded. 
+
+Initialize the chart like so: 

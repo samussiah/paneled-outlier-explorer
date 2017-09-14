@@ -26,3 +26,9 @@ Generally speaking, minimal configuration is needed to create a Paneled Outlier 
 ### Just [load a json data set](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines) and the tool will automatically create a user interface (measures, etc.) based on the data set loaded. 
 
 Initialize the chart like so: 
+```javascript
+paneledOutlierExplorer('body', {}).init(data)
+```
+
+See the [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) and [configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) pages for more details about custom configurations. 
+

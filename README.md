@@ -31,3 +31,5 @@ paneledOutlierExplorer('body', {}).init(data)
 See the [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) and [configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) pages for more details about custom configurations. 
 
 ### See this example: [Paneled Outlier Explorer](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html)
+
+For even more infomration se out [Technical Documentation](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Technical-Documentation) and [Data Guidelines](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines). 

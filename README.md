@@ -34,5 +34,6 @@ See the [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) and [
 
 For even more infomration see:
 
-[Technical Documentation](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Technical-Documentation) 
-[Data Guidelines](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines). 
+- [Technical Documentation](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Technical-Documentation) 
+&nbsp;
+- [Data Guidelines](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines). 

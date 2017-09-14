@@ -1,4 +1,4 @@
-# ![#FF9900](https://placehold.it/25x50/FF9900/000000?text=+) Paneled Outlier Explorer
+# ![#FF9900](https://placehold.it/20x50/FF9900/000000?text=+) Paneled Outlier Explorer
 
 
 

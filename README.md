@@ -7,5 +7,6 @@
 
 ### The Paneled Outlier Explorer is a javascript library that provides paneled line charts of data points over time with point and line brushing. 
 
-The Paneled Outlier Explorer includes interactive features such as real-time brushing and requires minimal user configuration. Click here for a live demo. When the page loads, the user sees multiple paneled charts providing a lab data summary for each measure over time:
+The Paneled Outlier Explorer includes interactive features such as real-time brushing and requires minimal user configuration.
+ [Click here for a live demo](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html). When the page loads, the user sees multiple paneled charts providing a lab data summary for each measure over time:
 

@@ -27,11 +27,12 @@ Initialize the chart like so:
 ```javascript
 paneledOutlierExplorer('body', {}).init(data)
 ```
-### Our [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) also offers custom configuratons settings: 
+### Our [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) also offers custom [configuratons](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) settings: 
 | Param | Type | Description |
 | --- | --- | --- |
 | element | `string` | CSS selector identifying the element in which to create the chart |
 | settings| `object` | settings object specifying chart appearance and behavior; options defined here overwrite defaults; see [Configuration](Configuration) |
+
 
 ### See this example: [Paneled Outlier Explorer](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html)
 

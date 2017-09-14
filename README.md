@@ -1,4 +1,4 @@
-# ![#FF9900](https://placehold.it/20x50/FF9900/000000?text=+) Paneled Outlier Explorer - ![alt tag](https://user-images.githubusercontent.com/31038805/30436867-39d6d818-993b-11e7-8289-57c9510f54b4.PNG)
+# ![#FF9900](https://placehold.it/20x50/FF9900/000000?text=+) Paneled Outlier Explorer - ![alt tag](https://user-images.githubusercontent.com/31038805/30436966-72dafb62-993b-11e7-9e71-8afde83d5bb0.PNG)
 
 
 

@@ -1,6 +1,6 @@
 # ![#FF9900](https://placehold.it/25x50/FF9900/000000?text=+) Paneled Outlier Explorer
 
-#  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![#000000](https://placehold.it/15x50/000000/000000?text=+)&nbsp;&nbsp;Overview
+#  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![#000000](https://placehold.it/15x50/000000/000000?text=+)&nbsp;Overview
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![alt tag](https://user-images.githubusercontent.com/31038805/30431689-649b02c6-992d-11e7-8497-b4091829652b.gif)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![#FF9900](https://placehold.it/15x300/FF9900/000000?text=+)

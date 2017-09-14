@@ -1,5 +1,4 @@
-# ![#FF9900](https://placehold.it/20x50/FF9900/000000?text=+) Paneled Outlier Explorer - ![alt tag](https://user-images.githubusercontent.com/31038805/30436966-72dafb62-993b-11e7-9e71-8afde83d5bb0.PNG)
-
+# ![#FF9900](https://placehold.it/20x50/FF9900/000000?text=+) Paneled Outlier Explorer - ### Brushable Plots
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![alt tag](https://user-images.githubusercontent.com/31038805/30431689-649b02c6-992d-11e7-8497-b4091829652b.gif)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![#FF9900](https://placehold.it/15x300/FF9900/000000?text=+)

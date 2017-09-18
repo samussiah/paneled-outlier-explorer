@@ -46,4 +46,4 @@ More information is available in the project's [wiki](https://github.com/RhoInc/
 - [Configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) 
 - [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration)
 - [Technical Documentation](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Technical-Documentation) 
-- [Data Guidelines](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines). 
+- [Data Guidelines](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines)

@@ -1,4 +1,4 @@
-# Paneled Outlier Explorer - Brushable Plots
+# Paneled Outlier Explorer
 
 ![alt tag](https://user-images.githubusercontent.com/31038805/30431689-649b02c6-992d-11e7-8497-b4091829652b.gif)
 
@@ -11,8 +11,7 @@ The paneled outlier explorer is closely related to the (non-paneled) [safety out
 The Paneled Outlier Explorer includes interactive features such as real-time brushing and requires minimal user configuration.
 [Click here for a live demo](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html). When the page loads, the user sees multiple paneled charts providing a lab data summary for each measure over time.
 
-[alt tag](https://user-images.githubusercontent.com/31038805/30434209-a96d443e-9934-11e7-95a9-d2525491bad7.gif)
-
+![alt tag](https://user-images.githubusercontent.com/31038805/30434209-a96d443e-9934-11e7-95a9-d2525491bad7.gif)
 
 ## Usage
 
@@ -23,12 +22,21 @@ Initialize the chart like so:
 paneledOutlierExplorer('body', {}).init(data)
 ```
 
-Our [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/API) also offers custom [configuraton](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) settings: 
-| Param | Type | Description |
-| --- | --- | --- |
-| element | `string` | CSS selector identifying the element in which to create the chart |
-| settings| `object` | settings object specifying chart appearance and behavior; options defined here overwrite defaults; see [Configuration](Configuration) |
+Creating a chart with a basic [custom configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration)would look like this: 
 
+```javascript
+var settings = {
+  "id_col":"custom_id_variable",
+  "filters":[
+    {
+      "value_col":"GENDER",
+      "label":"Gender"
+    }
+  ]
+}
+
+paneledOutlierExplorer('body', settings).init(data)
+```
 
 ### Links 
 
@@ -36,5 +44,6 @@ More information is available in the project's [wiki](https://github.com/RhoInc/
 
 - [Interactive Example](https://rhoinc.github.io/viz-library/examples/0019-paneled-outlier-explorer/example.html)
 - [Configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) 
+- [API](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration)
 - [Technical Documentation](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Technical-Documentation) 
 - [Data Guidelines](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Data-Guidelines). 

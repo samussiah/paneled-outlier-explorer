@@ -22,7 +22,7 @@ Initialize the chart like so:
 paneledOutlierExplorer('body', {}).init(data)
 ```
 
-Creating a chart with a basic [custom configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration)would look like this: 
+Creating a chart with a basic [custom configuration](https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration) would look like this: 
 
 ```javascript
 var settings = {

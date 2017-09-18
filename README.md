@@ -38,7 +38,7 @@ var settings = {
 paneledOutlierExplorer('body', settings).init(data)
 ```
 
-### Links 
+## Links 
 
 More information is available in the project's [wiki](https://github.com/RhoInc/paneled-outlier-explorer/wiki/): 
 

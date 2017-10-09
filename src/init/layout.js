@@ -5,7 +5,7 @@ import toggleCharts from './toggleCharts';
 export default function layout() {
     const chart = this,
         //Create navigation bar.
-        navigationBar = select(this.div).insert('ul', ':first-child').attr('id', 'navigation-bar'),
+        navigationBar = this.container.insert('ul', ':first-child').attr('id', 'navigation-bar'),
         navigationButtons = navigationBar
             .selectAll('li.navigation')
             .data(['Charts', 'Listing'])
@@ -27,12 +27,13 @@ export default function layout() {
                 }
             }),
         //Create controls header.
-        controlsTab = select(this.div)
+        controlsTab = this.container
             .insert('div', ':first-child')
             .attr('id', 'controls-header')
             .text('Controls'),
         //Define all-chart toggle.
-        measureListContainer = select(this.element + ' #left-side')
+        measureListContainer = this.container
+            .select('#left-side')
             .append('ul')
             .attr('id', 'measure-list-container'),
         measureListHeader = measureListContainer.append('div').attr('id', 'measure-list-header'),

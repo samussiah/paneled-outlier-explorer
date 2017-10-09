@@ -8,27 +8,35 @@ import chartCallbacks from './charts/index';
 import listingCallbacks from './listing/index';
 import { select } from 'd3';
 
-export default function paneledOutlierExplorer(element, settings) {
+export default function paneledOutlierExplorer(element = 'body', settings) {
+    //Define unique div within passed element argument.
+    const container = select(element).append('div').attr('id', 'paneled-outlier-explorer'),
+        containerElement = container.node(),
+        controlsContainer = container.append('div').attr('id', 'left-side'),
+        controlsContainerElement = controlsContainer.node();
+
     //Define .css styles to avoid requiring a separate .css file.
     defineStyles();
-
-    //Create container for controls.
-    select(element).append('div').attr('id', 'left-side');
 
     //Clone, merge, and sync settings and define chart.
     const initialSettings = clone(settings),
         mergedSettings = Object.assign({}, defaultSettings, initialSettings),
         syncedSettings = syncSettings(mergedSettings),
         syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-        controls = createControls(element + ' div#left-side', {
+        controls = createControls(controlsContainerElement, {
             location: 'top',
             inputs: syncedControlInputs
         }),
-        chart = createChart(element, syncedSettings, controls),
-        listing = createTable(element, {}, controls);
-    chart.element = element;
+        chart = createChart(containerElement, syncedSettings, controls),
+        listing = createTable(containerElement, {}, controls);
+
+    //Attach stuff to chart.
+    chart.container = container;
     chart.config.initialSettings = clone(syncedSettings);
     chart.listing = listing;
+
+    //Attach stuff to listing.
+    listing.container = container;
     listing.chart = chart;
 
     //Define chart callbacks.

@@ -13,7 +13,7 @@
     Controls
     \--------------------------------------------------------------------------------------***/
 
-                '#safety-outlier-explorer #controls-header {' +
+                '#paneled-outlier-explorer #controls-header {' +
                     '    margin: 0;' +
                     '    overflow: hidden;' +
                     '    background-color: #333;' +
@@ -25,44 +25,47 @@
                     '    padding: 14px 16px;' +
                     '    box-sizing: border-box;' +
                     '}',
-                '#safety-outlier-explorer #left-side {' +
+                '#paneled-outlier-explorer #left-side {' +
                     '    width: 24%;' +
                     '    float: left;' +
                     '}',
-                '#safety-outlier-explorer #left-side > * {' +
+                '#paneled-outlier-explorer #left-side > * {' +
                     '    width: 100%;' +
                     '    display: inline-block;' +
                     '}',
-                '#safety-outlier-explorer #left-side .wc-controls {' + '    padding: 10px 0;' + '}',
-                '#safety-outlier-explorer #left-side .wc-controls .control-group {' +
+                '#paneled-outlier-explorer #left-side .wc-controls {' +
+                    '    padding: 10px 0;' +
+                    '}',
+                '#paneled-outlier-explorer #left-side .wc-controls .control-group {' +
                     '    float: left;' +
                     '    clear: left;' +
                     '    margin: 0 0 2px 0;' +
                     '}',
-                '#safety-outlier-explorer #left-side .wc-controls .control-group > * {' +
+                '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
                     '    display: inline-block;' +
                     '    margin-left: 3px;' +
                     '}',
-                '#safety-outlier-explorer #left-side #measure-list-container {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container {' +
                     '   padding:0' +
                     '}',
-                '#safety-outlier-explorer #left-side #measure-list-container #measure-list-header {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-header {' +
                     '    font-size: 150%;' +
                     '    border-top: 1px solid lightgray;' +
                     '    font-weight: lighter;' +
                     '    padding: 14px 0;' +
                     '}',
-                '#safety-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' +
                     '    margin: 5px;' +
                     '}',
-                '#safety-outlier-explorer #left-side #measure-list-container #measure-list {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container #measure-list {' +
                     '    list-style-type: none;' +
                     '    font-weight: lighter;' +
                     '}',
-                '#safety-outlier-explorer #left-side #measure-list-container .measure-item {' + '}',
-                '#safety-outlier-explorer #left-side #measure-list-container .measure-item-container {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container .measure-item {' +
                     '}',
-                '#safety-outlier-explorer #left-side #measure-list-container .measure-checkbox {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container .measure-item-container {' +
+                    '}',
+                '#paneled-outlier-explorer #left-side #measure-list-container .measure-checkbox {' +
                     '    margin: 5px;' +
                     '}',
 
@@ -70,7 +73,7 @@
     Navigation
     \--------------------------------------------------------------------------------------***/
 
-                '#safety-outlier-explorer ul#navigation-bar {' +
+                '#paneled-outlier-explorer ul#navigation-bar {' +
                     '    list-style-type: none;' +
                     '    margin: 0;' +
                     '    padding: 0;' +
@@ -79,7 +82,7 @@
                     '    width: 75%;' +
                     '    float: right;' +
                     '}',
-                '#safety-outlier-explorer ul#navigation-bar li.navigation {' +
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
                     '    float: left;' +
                     '    cursor: pointer;' +
                     '    font-size: 150%;' +
@@ -89,13 +92,13 @@
                     '    padding: 14px 16px;' +
                     '    text-decoration: none;' +
                     '}',
-                '#safety-outlier-explorer ul#navigation-bar li.navigation.active {' +
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +
                     '    background-color: #111;' +
                     '}',
-                '#safety-outlier-explorer ul#navigation-bar li.navigation:hover {' +
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation:hover {' +
                     '    background-color: #111;' +
                     '}',
-                '#safety-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' +
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' +
                     '    color: orange;' +
                     '}',
 
@@ -103,22 +106,22 @@
     Charts
     \--------------------------------------------------------------------------------------***/
 
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
                     '    width: 75%;' +
                     '    float: right;' +
                     '    padding-top: 10px;' +
                     '}',
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
                     '    padding-right: 1em;' +
                     '}',
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
                     '    width: 100%;' +
                     ' }',
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
                     '    text-align: left;' +
                     '    padding-left: 10px;' +
                     '}',
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                     '    float: right;' +
                     '    cursor: pointer;' +
                     '    border: 1px solid black;' +
@@ -128,11 +131,11 @@
                     '    margin-left: 5px;' +
                     '    visibility:hidden;' +
                     '}',
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                     '    background: black;' +
                     '    color: white;' +
                     '}',
-                '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
                     'display:none;' +
                     '}',
 
@@ -140,12 +143,12 @@
     Listing
     \--------------------------------------------------------------------------------------***/
 
-                '#safety-outlier-explorer div.wc-chart#Listing {' +
+                '#paneled-outlier-explorer div.wc-chart#Listing {' +
                     '    width: 75%;' +
                     '    float: right;' +
                     '    padding-top: 10px;' +
                     '}',
-                '#safety-outlier-explorer div.wc-chart#Listing table {' +
+                '#paneled-outlier-explorer div.wc-chart#Listing table {' +
                     '    padding-left: 10px;' +
                     '}',
 
@@ -153,27 +156,29 @@
     General styles
     \--------------------------------------------------------------------------------------***/
 
-                '#safety-outlier-explorer .hidden {' + '    display: none !important;' + '}',
-                '#safety-outlier-explorer circle.brushed {' +
+                '#paneled-outlier-explorer .hidden {' + '    display: none !important;' + '}',
+                '#paneled-outlier-explorer circle.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 2px;' +
                     '    fill: black;' +
                     '    r: 4px;' +
                     '}',
-                '#safety-outlier-explorer path.brushed {' +
+                '#paneled-outlier-explorer path.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 3px;' +
                     '    stroke-opacity: 1;' +
                     '}',
-                '#safety-outlier-explorer path.hover {' +
+                '#paneled-outlier-explorer path.hover {' +
                     '    stroke: orange;' +
                     '    stroke-opacity: 1;' +
                     '}',
-                '#safety-outlier-explorer circle.selected {' +
+                '#paneled-outlier-explorer circle.selected {' +
                     '    stroke: orange;' +
                     '    fill: black;' +
                     '}',
-                '#safety-outlier-explorer tr.brushed {' + '    background: orange !important;' + '}'
+                '#paneled-outlier-explorer tr.brushed {' +
+                    '    background: orange !important;' +
+                    '}'
             ],
             style = document.createElement('style');
         style.type = 'text/css';
@@ -413,8 +418,7 @@
     function layout() {
         var chart = this,
             //Create navigation bar.
-            navigationBar = d3$1
-                .select(this.div)
+            navigationBar = this.container
                 .insert('ul', ':first-child')
                 .attr('id', 'navigation-bar'),
             navigationButtons = navigationBar
@@ -452,14 +456,13 @@
                     }
                 }),
             //Create controls header.
-            controlsTab = d3$1
-                .select(this.div)
+            controlsTab = this.container
                 .insert('div', ':first-child')
                 .attr('id', 'controls-header')
                 .text('Controls'),
             //Define all-chart toggle.
-            measureListContainer = d3$1
-                .select(this.element + ' #left-side')
+            measureListContainer = this.container
+                .select('#left-side')
                 .append('ul')
                 .attr('id', 'measure-list-container'),
             measureListHeader = measureListContainer
@@ -654,7 +657,7 @@
         this.listing.wrap.classed('hidden', true);
 
         //Define custom event listener for filters.
-        d3$1.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+        this.wrap.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
             d.value = d3$1
                 .select(this)
                 .selectAll('option')
@@ -1186,11 +1189,6 @@
         this.config.cols = this.config.cols.filter(function(col) {
             return ['brushed', 'measure_unit'].indexOf(col) === -1;
         });
-
-        //Use brushed data if available, filtered data otherwise.
-        this.data = this.parent.data.brushed.length
-            ? this.parent.data.brushed
-            : this.parent.data.filtered;
     }
 
     function onDraw$1() {
@@ -1214,27 +1212,38 @@
         onDestroy: onDestroy$1
     };
 
-    function paneledOutlierExplorer(element, settings) {
+    function paneledOutlierExplorer() {
+        var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'body';
+        var settings = arguments[1];
+
+        //Define unique div within passed element argument.
+        var container = d3$1.select(element).append('div').attr('id', 'paneled-outlier-explorer'),
+            containerElement = container.node(),
+            controlsContainer = container.append('div').attr('id', 'left-side'),
+            controlsContainerElement = controlsContainer.node();
+
         //Define .css styles to avoid requiring a separate .css file.
         defineStyles();
-
-        //Create container for controls.
-        d3$1.select(element).append('div').attr('id', 'left-side');
 
         //Clone, merge, and sync settings and define chart.
         var initialSettings = clone(settings),
             mergedSettings = Object.assign({}, defaultSettings, initialSettings),
             syncedSettings = syncSettings(mergedSettings),
             syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-            controls = webcharts.createControls(element + ' div#left-side', {
+            controls = webcharts.createControls(controlsContainerElement, {
                 location: 'top',
                 inputs: syncedControlInputs
             }),
-            chart = webcharts.createChart(element, syncedSettings, controls),
-            listing = webcharts.createTable(element, {}, controls);
-        chart.element = element;
+            chart = webcharts.createChart(containerElement, syncedSettings, controls),
+            listing = webcharts.createTable(containerElement, {}, controls);
+
+        //Attach stuff to chart.
+        chart.container = container;
         chart.config.initialSettings = clone(syncedSettings);
         chart.listing = listing;
+
+        //Attach stuff to listing.
+        listing.container = container;
         listing.chart = chart;
 
         //Define chart callbacks.

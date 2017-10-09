@@ -4,7 +4,7 @@ export default function defineStyles() {
           Controls
         \--------------------------------------------------------------------------------------***/
 
-            '#safety-outlier-explorer #controls-header {' +
+            '#paneled-outlier-explorer #controls-header {' +
                 '    margin: 0;' +
                 '    overflow: hidden;' +
                 '    background-color: #333;' +
@@ -16,39 +16,39 @@ export default function defineStyles() {
                 '    padding: 14px 16px;' +
                 '    box-sizing: border-box;' +
                 '}',
-            '#safety-outlier-explorer #left-side {' + '    width: 24%;' + '    float: left;' + '}',
-            '#safety-outlier-explorer #left-side > * {' +
+            '#paneled-outlier-explorer #left-side {' + '    width: 24%;' + '    float: left;' + '}',
+            '#paneled-outlier-explorer #left-side > * {' +
                 '    width: 100%;' +
                 '    display: inline-block;' +
                 '}',
-            '#safety-outlier-explorer #left-side .wc-controls {' + '    padding: 10px 0;' + '}',
-            '#safety-outlier-explorer #left-side .wc-controls .control-group {' +
+            '#paneled-outlier-explorer #left-side .wc-controls {' + '    padding: 10px 0;' + '}',
+            '#paneled-outlier-explorer #left-side .wc-controls .control-group {' +
                 '    float: left;' +
                 '    clear: left;' +
                 '    margin: 0 0 2px 0;' +
                 '}',
-            '#safety-outlier-explorer #left-side .wc-controls .control-group > * {' +
+            '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
                 '    display: inline-block;' +
                 '    margin-left: 3px;' +
                 '}',
-            '#safety-outlier-explorer #left-side #measure-list-container {' + '   padding:0' + '}',
-            '#safety-outlier-explorer #left-side #measure-list-container #measure-list-header {' +
+            '#paneled-outlier-explorer #left-side #measure-list-container {' + '   padding:0' + '}',
+            '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-header {' +
                 '    font-size: 150%;' +
                 '    border-top: 1px solid lightgray;' +
                 '    font-weight: lighter;' +
                 '    padding: 14px 0;' +
                 '}',
-            '#safety-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' +
+            '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' +
                 '    margin: 5px;' +
                 '}',
-            '#safety-outlier-explorer #left-side #measure-list-container #measure-list {' +
+            '#paneled-outlier-explorer #left-side #measure-list-container #measure-list {' +
                 '    list-style-type: none;' +
                 '    font-weight: lighter;' +
                 '}',
-            '#safety-outlier-explorer #left-side #measure-list-container .measure-item {' + '}',
-            '#safety-outlier-explorer #left-side #measure-list-container .measure-item-container {' +
+            '#paneled-outlier-explorer #left-side #measure-list-container .measure-item {' + '}',
+            '#paneled-outlier-explorer #left-side #measure-list-container .measure-item-container {' +
                 '}',
-            '#safety-outlier-explorer #left-side #measure-list-container .measure-checkbox {' +
+            '#paneled-outlier-explorer #left-side #measure-list-container .measure-checkbox {' +
                 '    margin: 5px;' +
                 '}',
 
@@ -56,7 +56,7 @@ export default function defineStyles() {
           Navigation
         \--------------------------------------------------------------------------------------***/
 
-            '#safety-outlier-explorer ul#navigation-bar {' +
+            '#paneled-outlier-explorer ul#navigation-bar {' +
                 '    list-style-type: none;' +
                 '    margin: 0;' +
                 '    padding: 0;' +
@@ -65,7 +65,7 @@ export default function defineStyles() {
                 '    width: 75%;' +
                 '    float: right;' +
                 '}',
-            '#safety-outlier-explorer ul#navigation-bar li.navigation {' +
+            '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
                 '    float: left;' +
                 '    cursor: pointer;' +
                 '    font-size: 150%;' +
@@ -75,13 +75,13 @@ export default function defineStyles() {
                 '    padding: 14px 16px;' +
                 '    text-decoration: none;' +
                 '}',
-            '#safety-outlier-explorer ul#navigation-bar li.navigation.active {' +
+            '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +
                 '    background-color: #111;' +
                 '}',
-            '#safety-outlier-explorer ul#navigation-bar li.navigation:hover {' +
+            '#paneled-outlier-explorer ul#navigation-bar li.navigation:hover {' +
                 '    background-color: #111;' +
                 '}',
-            '#safety-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' +
+            '#paneled-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' +
                 '    color: orange;' +
                 '}',
 
@@ -89,22 +89,22 @@ export default function defineStyles() {
           Charts
         \--------------------------------------------------------------------------------------***/
 
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
                 '    width: 75%;' +
                 '    float: right;' +
                 '    padding-top: 10px;' +
                 '}',
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
                 '    padding-right: 1em;' +
                 '}',
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
                 '    width: 100%;' +
                 ' }',
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
                 '    text-align: left;' +
                 '    padding-left: 10px;' +
                 '}',
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                 '    float: right;' +
                 '    cursor: pointer;' +
                 '    border: 1px solid black;' +
@@ -114,11 +114,11 @@ export default function defineStyles() {
                 '    margin-left: 5px;' +
                 '    visibility:hidden;' +
                 '}',
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                 '    background: black;' +
                 '    color: white;' +
                 '}',
-            '#safety-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
                 'display:none;' +
                 '}',
 
@@ -126,12 +126,12 @@ export default function defineStyles() {
           Listing
         \--------------------------------------------------------------------------------------***/
 
-            '#safety-outlier-explorer div.wc-chart#Listing {' +
+            '#paneled-outlier-explorer div.wc-chart#Listing {' +
                 '    width: 75%;' +
                 '    float: right;' +
                 '    padding-top: 10px;' +
                 '}',
-            '#safety-outlier-explorer div.wc-chart#Listing table {' +
+            '#paneled-outlier-explorer div.wc-chart#Listing table {' +
                 '    padding-left: 10px;' +
                 '}',
 
@@ -139,27 +139,27 @@ export default function defineStyles() {
           General styles
         \--------------------------------------------------------------------------------------***/
 
-            '#safety-outlier-explorer .hidden {' + '    display: none !important;' + '}',
-            '#safety-outlier-explorer circle.brushed {' +
+            '#paneled-outlier-explorer .hidden {' + '    display: none !important;' + '}',
+            '#paneled-outlier-explorer circle.brushed {' +
                 '    stroke: orange;' +
                 '    stroke-width: 2px;' +
                 '    fill: black;' +
                 '    r: 4px;' +
                 '}',
-            '#safety-outlier-explorer path.brushed {' +
+            '#paneled-outlier-explorer path.brushed {' +
                 '    stroke: orange;' +
                 '    stroke-width: 3px;' +
                 '    stroke-opacity: 1;' +
                 '}',
-            '#safety-outlier-explorer path.hover {' +
+            '#paneled-outlier-explorer path.hover {' +
                 '    stroke: orange;' +
                 '    stroke-opacity: 1;' +
                 '}',
-            '#safety-outlier-explorer circle.selected {' +
+            '#paneled-outlier-explorer circle.selected {' +
                 '    stroke: orange;' +
                 '    fill: black;' +
                 '}',
-            '#safety-outlier-explorer tr.brushed {' + '    background: orange !important;' + '}'
+            '#paneled-outlier-explorer tr.brushed {' + '    background: orange !important;' + '}'
         ],
         style = document.createElement('style');
     style.type = 'text/css';

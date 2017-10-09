@@ -1,4 +1,4 @@
-import { set, selectAll, select } from 'd3';
+import { set, select } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
 import applyFilters from './init/applyFilters';
@@ -87,11 +87,11 @@ export default function init(data) {
     //Listing
     this.listing.wrap.attr('id', 'Listing');
     this.listing.parent = this;
-    this.listing.init(this.data.sorted.filter((d, i) => i < 25));
+    this.listing.init(this.data.sorted);
     this.listing.wrap.classed('hidden', true);
 
     //Define custom event listener for filters.
-    selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+    this.wrap.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
         d.value = select(this)
             .selectAll('option')
             .filter(function() {

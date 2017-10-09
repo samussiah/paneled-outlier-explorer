@@ -13,7 +13,7 @@
     Controls
     \--------------------------------------------------------------------------------------***/
 
-                '#controls-header {' +
+                '#paneled-outlier-explorer #controls-header {' +
                     '    margin: 0;' +
                     '    overflow: hidden;' +
                     '    background-color: #333;' +
@@ -25,41 +25,55 @@
                     '    padding: 14px 16px;' +
                     '    box-sizing: border-box;' +
                     '}',
-                '#left-side {' + '    width: 24%;' + '    float: left;' + '}',
-                '#left-side > * {' + '    width: 100%;' + '    display: inline-block;' + '}',
-                '#left-side .wc-controls {' + '    padding: 10px 0;' + '}',
-                '#left-side .wc-controls .control-group {' +
+                '#paneled-outlier-explorer #left-side {' +
+                    '    width: 24%;' +
+                    '    float: left;' +
+                    '}',
+                '#paneled-outlier-explorer #left-side > * {' +
+                    '    width: 100%;' +
+                    '    display: inline-block;' +
+                    '}',
+                '#paneled-outlier-explorer #left-side .wc-controls {' +
+                    '    padding: 10px 0;' +
+                    '}',
+                '#paneled-outlier-explorer #left-side .wc-controls .control-group {' +
                     '    float: left;' +
                     '    clear: left;' +
                     '    margin: 0 0 2px 0;' +
                     '}',
-                '#left-side .wc-controls .control-group > * {' +
+                '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
                     '    display: inline-block;' +
                     '    margin-left: 3px;' +
                     '}',
-                '#left-side #measure-list-container {' + '   padding:0' + '}',
-                '#left-side #measure-list-container #measure-list-header {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container {' +
+                    '   padding:0' +
+                    '}',
+                '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-header {' +
                     '    font-size: 150%;' +
                     '    border-top: 1px solid lightgray;' +
                     '    font-weight: lighter;' +
                     '    padding: 14px 0;' +
                     '}',
-                '#left-side #measure-list-container #measure-list-checkbox {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' +
                     '    margin: 5px;' +
                     '}',
-                '#left-side #measure-list-container #measure-list {' +
+                '#paneled-outlier-explorer #left-side #measure-list-container #measure-list {' +
                     '    list-style-type: none;' +
                     '    font-weight: lighter;' +
                     '}',
-                '#left-side #measure-list-container .measure-item {' + '}',
-                '#left-side #measure-list-container .measure-item-container {' + '}',
-                '#left-side #measure-list-container .measure-checkbox {' + '    margin: 5px;' + '}',
+                '#paneled-outlier-explorer #left-side #measure-list-container .measure-item {' +
+                    '}',
+                '#paneled-outlier-explorer #left-side #measure-list-container .measure-item-container {' +
+                    '}',
+                '#paneled-outlier-explorer #left-side #measure-list-container .measure-checkbox {' +
+                    '    margin: 5px;' +
+                    '}',
 
                 /***--------------------------------------------------------------------------------------\
     Navigation
     \--------------------------------------------------------------------------------------***/
 
-                'ul#navigation-bar {' +
+                '#paneled-outlier-explorer ul#navigation-bar {' +
                     '    list-style-type: none;' +
                     '    margin: 0;' +
                     '    padding: 0;' +
@@ -68,7 +82,7 @@
                     '    width: 75%;' +
                     '    float: right;' +
                     '}',
-                'ul#navigation-bar li.navigation {' +
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
                     '    float: left;' +
                     '    cursor: pointer;' +
                     '    font-size: 150%;' +
@@ -78,9 +92,13 @@
                     '    padding: 14px 16px;' +
                     '    text-decoration: none;' +
                     '}',
-                'ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}',
-                'ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}',
-                'ul#navigation-bar li.navigation#Listing-nav.brushed {' +
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +
+                    '    background-color: #111;' +
+                    '}',
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation:hover {' +
+                    '    background-color: #111;' +
+                    '}',
+                '#paneled-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' +
                     '    color: orange;' +
                     '}',
 
@@ -88,22 +106,22 @@
     Charts
     \--------------------------------------------------------------------------------------***/
 
-                'div.wc-layout.wc-small-multiples#Charts {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
                     '    width: 75%;' +
                     '    float: right;' +
                     '    padding-top: 10px;' +
                     '}',
-                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
                     '    padding-right: 1em;' +
                     '}',
-                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
                     '    width: 100%;' +
                     ' }',
-                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
                     '    text-align: left;' +
                     '    padding-left: 10px;' +
                     '}',
-                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                     '    float: right;' +
                     '    cursor: pointer;' +
                     '    border: 1px solid black;' +
@@ -113,11 +131,11 @@
                     '    margin-left: 5px;' +
                     '    visibility:hidden;' +
                     '}',
-                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                     '    background: black;' +
                     '    color: white;' +
                     '}',
-                'div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
                     'display:none;' +
                     '}',
 
@@ -125,44 +143,42 @@
     Listing
     \--------------------------------------------------------------------------------------***/
 
-                'div.wc-chart#Listing {' +
+                '#paneled-outlier-explorer div.wc-chart#Listing {' +
                     '    width: 75%;' +
                     '    float: right;' +
                     '    padding-top: 10px;' +
                     '}',
-                'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
-                'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}',
-                'div.wc-chart#Listing .pagination-container a {' +
-                    '    text-decoration: none;' +
-                    '    padding: 5px 10px;' +
-                    '}',
-                'div.wc-chart#Listing .pagination-container a:first-child {' +
-                    '    margin-left: 5px;' +
-                    '}',
-                'div.wc-chart#Listing .pagination-container a.active {' +
-                    '    border: 2px solid gray;' +
-                    '    border-radius: 4px;' +
+                '#paneled-outlier-explorer div.wc-chart#Listing table {' +
+                    '    padding-left: 10px;' +
                     '}',
 
                 /***--------------------------------------------------------------------------------------\
     General styles
     \--------------------------------------------------------------------------------------***/
 
-                '.hidden {' + '    display: none !important;' + '}',
-                'circle.brushed {' +
+                '#paneled-outlier-explorer .hidden {' + '    display: none !important;' + '}',
+                '#paneled-outlier-explorer circle.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 2px;' +
                     '    fill: black;' +
                     '    r: 4px;' +
                     '}',
-                'path.brushed {' +
+                '#paneled-outlier-explorer path.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 3px;' +
                     '    stroke-opacity: 1;' +
                     '}',
-                'path.hover {' + '    stroke: orange;' + '    stroke-opacity: 1;' + '}',
-                'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
-                'tr.brushed {' + '    background: orange;' + '}'
+                '#paneled-outlier-explorer path.hover {' +
+                    '    stroke: orange;' +
+                    '    stroke-opacity: 1;' +
+                    '}',
+                '#paneled-outlier-explorer circle.selected {' +
+                    '    stroke: orange;' +
+                    '    fill: black;' +
+                    '}',
+                '#paneled-outlier-explorer tr.brushed {' +
+                    '    background: orange !important;' +
+                    '}'
             ],
             style = document.createElement('style');
         style.type = 'text/css';
@@ -402,8 +418,7 @@
     function layout() {
         var chart = this,
             //Create navigation bar.
-            navigationBar = d3$1
-                .select(this.div)
+            navigationBar = this.container
                 .insert('ul', ':first-child')
                 .attr('id', 'navigation-bar'),
             navigationButtons = navigationBar
@@ -441,14 +456,13 @@
                     }
                 }),
             //Create controls header.
-            controlsTab = d3$1
-                .select(this.div)
+            controlsTab = this.container
                 .insert('div', ':first-child')
                 .attr('id', 'controls-header')
                 .text('Controls'),
             //Define all-chart toggle.
-            measureListContainer = d3$1
-                .select(this.element + ' #left-side')
+            measureListContainer = this.container
+                .select('#left-side')
                 .append('ul')
                 .attr('id', 'measure-list-container'),
             measureListHeader = measureListContainer
@@ -539,23 +553,10 @@
 
                 return !filtered;
             });
-
-            //Reset listing pagination.
-            this.listing.pagination.activeLink = 0;
-            this.listing.pagination.startItem =
-                this.listing.pagination.activeLink * this.listing.pagination.rowsShown;
-            this.listing.pagination.endItem =
-                this.listing.pagination.startItem + this.listing.pagination.rowsShown;
         }
 
         //Redraw listing.
-        this.listing.draw(
-            this.data.filtered.filter(function(d, i) {
-                return (
-                    _this.listing.pagination.startItem <= i && i < _this.listing.pagination.endItem
-                );
-            })
-        );
+        this.listing.draw(this.data.filtered);
     }
 
     function init(data) {
@@ -652,15 +653,11 @@
         //Listing
         this.listing.wrap.attr('id', 'Listing');
         this.listing.parent = this;
-        this.listing.init(
-            this.data.sorted.filter(function(d, i) {
-                return i < 25;
-            })
-        );
+        this.listing.init(this.data.sorted);
         this.listing.wrap.classed('hidden', true);
 
         //Define custom event listener for filters.
-        d3$1.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+        this.wrap.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
             d.value = d3$1
                 .select(this)
                 .selectAll('option')
@@ -1003,21 +1000,11 @@
             chart.parent.data.brushed = chart.parent.data.filtered.filter(function(d) {
                 return d.brushed;
             });
-            chart.parent.listing.pagination.activeLink = 0;
-            chart.parent.listing.draw(
-                chart.parent.data.brushed.filter(function(d, i) {
-                    return i < 25;
-                })
-            );
+            chart.parent.listing.draw(chart.parent.data.brushed);
             d3$1.select('#Listing-nav').classed('brushed', true);
         } else {
             chart.parent.data.brushed = [];
-            chart.parent.listing.pagination.activeLink = 0;
-            chart.parent.listing.draw(
-                chart.parent.data.filtered.filter(function(d, i) {
-                    return i < 25;
-                })
-            );
+            chart.parent.listing.draw(chart.parent.data.filtered);
             d3$1.select('#Listing-nav').classed('brushed', false);
         }
     }
@@ -1193,15 +1180,7 @@
 
     function onInit$1() {}
 
-    function onLayout$1() {
-        //pagination config
-        this.pagination = {};
-        this.pagination.wrap = this.wrap.append('div').classed('pagination-container', true);
-        this.pagination.rowsShown = 25;
-        this.pagination.activeLink = 0;
-        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
-        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
-    }
+    function onLayout$1() {}
 
     function onPreprocess$1() {}
 
@@ -1210,178 +1189,12 @@
         this.config.cols = this.config.cols.filter(function(col) {
             return ['brushed', 'measure_unit'].indexOf(col) === -1;
         });
-
-        //Use brushed data if available, filtered data otherwise.
-        this.data = this.parent.data.brushed.length
-            ? this.parent.data.brushed
-            : this.parent.data.filtered;
-
-        //Reset pagination.
-        this.pagination.wrap.selectAll('*').remove();
-    }
-
-    function updatePagination() {
-        var _this = this;
-
-        //Reset pagination.
-        this.pagination.links.classed('active', false);
-
-        //Set to active the selected page link.
-        var activeLink = this.pagination.links
-            .filter(function(link) {
-                return +link.rel === +_this.pagination.activeLink;
-            })
-            .classed('active', true);
-
-        //Define and draw selected page.
-        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
-        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
-        this.draw(
-            this.data.filter(function(d, i) {
-                return _this.pagination.startItem <= i && i < _this.pagination.endItem;
-            })
-        );
-    }
-
-    function addLinks() {
-        var _this = this;
-
-        //Count rows.
-        this.pagination.rowsTotal = this.data.length;
-
-        //Calculate number of pages needed and create a link for each page.
-        this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
-        this.pagination.wrap.selectAll('a,span').remove();
-
-        for (var i = 0; i < this.pagination.numPages; i++) {
-            this.pagination.wrap
-                .append('a')
-                .datum({ rel: i })
-                .attr({
-                    href: '#',
-                    rel: i
-                })
-                .text(i + 1)
-                .classed('page-link', true)
-                .classed('active', function(d) {
-                    return d.rel == _this.pagination.activeLink;
-                })
-                .classed(
-                    'hidden',
-                    this.pagination.activeLink <= 4
-                        ? i > 4
-                        : this.pagination.activeLink >= this.pagination.numPages - 5
-                          ? i < this.pagination.numPages - 5
-                          : i < this.pagination.activeLink - 2 || this.pagination.activeLink + 2 < i
-                );
-        }
-
-        this.pagination.links = this.pagination.wrap.selectAll('a.page-link');
-    }
-
-    function addArrows() {
-        var prev = this.pagination.activeLink - 1,
-            next = this.pagination.activeLink + 1;
-        if (prev < 0) prev = 0; // nothing before the first page
-        if (next >= this.pagination.numPages) next = this.pagination.numPages - 1; // nothing after the last page
-
-        this.pagination.wrap
-            .insert('span', ':first-child')
-            .text('...')
-            .classed('hidden', this.pagination.activeLink <= 4);
-
-        this.pagination.prev = this.pagination.wrap
-            .insert('a', ':first-child')
-            .classed('left arrow-link', true)
-            .attr({
-                href: '#',
-                rel: prev
-            })
-            .text('<');
-
-        this.pagination.doublePrev = this.pagination.wrap
-            .insert('a', ':first-child')
-            .classed('left double-arrow-link', true)
-            .attr({
-                href: '#',
-                rel: 0
-            })
-            .text('<<');
-
-        this.pagination.wrap
-            .append('span')
-            .text('...')
-            .classed('hidden', this.pagination.activeLink >= this.pagination.numPages - 5);
-
-        this.pagination.next = this.pagination.wrap
-            .append('a')
-            .classed('right arrow-link', true)
-            .attr({
-                href: '#',
-                rel: next
-            })
-            .text('>');
-
-        this.pagination.doubleNext = this.pagination.wrap
-            .append('a')
-            .classed('right double-arrow-link', true)
-            .attr({
-                href: '#',
-                rel: this.pagination.numPages - 1
-            })
-            .text('>>');
-
-        this.pagination.arrows = this.pagination.wrap.selectAll('a.arrow-link');
-        this.pagination.doubleArrows = this.pagination.wrap.selectAll('a.double-arrow-link');
-    }
-
-    function addPagination() {
-        var listing = this;
-
-        //Render page links.
-        addLinks.call(this);
-
-        //Render a different page on click.
-        this.pagination.links.on('click', function() {
-            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-            updatePagination.call(listing);
-        });
-
-        //Render arrow links.
-        addArrows.call(this);
-
-        //Render a different page on click.
-        this.pagination.arrows.on('click', function() {
-            if (listing.pagination.activeLink !== +d3$1.select(this).attr('rel')) {
-                listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-                listing.pagination.prev.attr(
-                    'rel',
-                    listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0
-                );
-                listing.pagination.next.attr(
-                    'rel',
-                    listing.pagination.activeLink < listing.pagination.numPages
-                        ? listing.pagination.activeLink + 1
-                        : listing.pagination.numPages - 1
-                );
-                updatePagination.call(listing);
-            }
-        });
-
-        //Render a different page on click.
-        this.pagination.doubleArrows.on('click', function() {
-            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-            updatePagination.call(listing);
-        });
     }
 
     function onDraw$1() {
-        //Add pagination functionality.
-        addPagination.call(this);
-
         //Highlight selected rows.
         this.table.selectAll('tbody tr').classed('brushed', function(d) {
-            return d.raw.brushed;
+            return d.brushed;
         });
     }
 
@@ -1399,27 +1212,38 @@
         onDestroy: onDestroy$1
     };
 
-    function paneledOutlierExplorer(element, settings) {
+    function paneledOutlierExplorer() {
+        var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'body';
+        var settings = arguments[1];
+
+        //Define unique div within passed element argument.
+        var container = d3$1.select(element).append('div').attr('id', 'paneled-outlier-explorer'),
+            containerElement = container.node(),
+            controlsContainer = container.append('div').attr('id', 'left-side'),
+            controlsContainerElement = controlsContainer.node();
+
         //Define .css styles to avoid requiring a separate .css file.
         defineStyles();
-
-        //Create container for controls.
-        d3$1.select(element).append('div').attr('id', 'left-side');
 
         //Clone, merge, and sync settings and define chart.
         var initialSettings = clone(settings),
             mergedSettings = Object.assign({}, defaultSettings, initialSettings),
             syncedSettings = syncSettings(mergedSettings),
             syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-            controls = webcharts.createControls(element + ' div#left-side', {
+            controls = webcharts.createControls(controlsContainerElement, {
                 location: 'top',
                 inputs: syncedControlInputs
             }),
-            chart = webcharts.createChart(element, syncedSettings, controls),
-            listing = webcharts.createTable(element, {}, controls);
-        chart.element = element;
+            chart = webcharts.createChart(containerElement, syncedSettings, controls),
+            listing = webcharts.createTable(containerElement, {}, controls);
+
+        //Attach stuff to chart.
+        chart.container = container;
         chart.config.initialSettings = clone(syncedSettings);
         chart.listing = listing;
+
+        //Attach stuff to listing.
+        listing.container = container;
         listing.chart = chart;
 
         //Define chart callbacks.

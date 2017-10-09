@@ -131,18 +131,6 @@
                     '    padding-top: 10px;' +
                     '}',
                 'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
-                'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}',
-                'div.wc-chart#Listing .pagination-container a {' +
-                    '    text-decoration: none;' +
-                    '    padding: 5px 10px;' +
-                    '}',
-                'div.wc-chart#Listing .pagination-container a:first-child {' +
-                    '    margin-left: 5px;' +
-                    '}',
-                'div.wc-chart#Listing .pagination-container a.active {' +
-                    '    border: 2px solid gray;' +
-                    '    border-radius: 4px;' +
-                    '}',
 
                 /***--------------------------------------------------------------------------------------\
     General styles
@@ -162,7 +150,7 @@
                     '}',
                 'path.hover {' + '    stroke: orange;' + '    stroke-opacity: 1;' + '}',
                 'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
-                'tr.brushed {' + '    background: orange;' + '}'
+                'tr.brushed {' + '    background: orange !important;' + '}'
             ],
             style = document.createElement('style');
         style.type = 'text/css';
@@ -539,23 +527,10 @@
 
                 return !filtered;
             });
-
-            //Reset listing pagination.
-            this.listing.pagination.activeLink = 0;
-            this.listing.pagination.startItem =
-                this.listing.pagination.activeLink * this.listing.pagination.rowsShown;
-            this.listing.pagination.endItem =
-                this.listing.pagination.startItem + this.listing.pagination.rowsShown;
         }
 
         //Redraw listing.
-        this.listing.draw(
-            this.data.filtered.filter(function(d, i) {
-                return (
-                    _this.listing.pagination.startItem <= i && i < _this.listing.pagination.endItem
-                );
-            })
-        );
+        this.listing.draw(this.data.filtered);
     }
 
     function init(data) {
@@ -652,11 +627,7 @@
         //Listing
         this.listing.wrap.attr('id', 'Listing');
         this.listing.parent = this;
-        this.listing.init(
-            this.data.sorted.filter(function(d, i) {
-                return i < 25;
-            })
-        );
+        this.listing.init(this.data.sorted);
         this.listing.wrap.classed('hidden', true);
 
         //Define custom event listener for filters.
@@ -1003,21 +974,11 @@
             chart.parent.data.brushed = chart.parent.data.filtered.filter(function(d) {
                 return d.brushed;
             });
-            chart.parent.listing.pagination.activeLink = 0;
-            chart.parent.listing.draw(
-                chart.parent.data.brushed.filter(function(d, i) {
-                    return i < 25;
-                })
-            );
+            chart.parent.listing.draw(chart.parent.data.brushed);
             d3$1.select('#Listing-nav').classed('brushed', true);
         } else {
             chart.parent.data.brushed = [];
-            chart.parent.listing.pagination.activeLink = 0;
-            chart.parent.listing.draw(
-                chart.parent.data.filtered.filter(function(d, i) {
-                    return i < 25;
-                })
-            );
+            chart.parent.listing.draw(chart.parent.data.filtered);
             d3$1.select('#Listing-nav').classed('brushed', false);
         }
     }
@@ -1193,15 +1154,7 @@
 
     function onInit$1() {}
 
-    function onLayout$1() {
-        //pagination config
-        this.pagination = {};
-        this.pagination.wrap = this.wrap.append('div').classed('pagination-container', true);
-        this.pagination.rowsShown = 25;
-        this.pagination.activeLink = 0;
-        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
-        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
-    }
+    function onLayout$1() {}
 
     function onPreprocess$1() {}
 
@@ -1215,173 +1168,12 @@
         this.data = this.parent.data.brushed.length
             ? this.parent.data.brushed
             : this.parent.data.filtered;
-
-        //Reset pagination.
-        this.pagination.wrap.selectAll('*').remove();
-    }
-
-    function updatePagination() {
-        var _this = this;
-
-        //Reset pagination.
-        this.pagination.links.classed('active', false);
-
-        //Set to active the selected page link.
-        var activeLink = this.pagination.links
-            .filter(function(link) {
-                return +link.rel === +_this.pagination.activeLink;
-            })
-            .classed('active', true);
-
-        //Define and draw selected page.
-        this.pagination.startItem = this.pagination.activeLink * this.pagination.rowsShown;
-        this.pagination.endItem = this.pagination.startItem + this.pagination.rowsShown;
-        this.draw(
-            this.data.filter(function(d, i) {
-                return _this.pagination.startItem <= i && i < _this.pagination.endItem;
-            })
-        );
-    }
-
-    function addLinks() {
-        var _this = this;
-
-        //Count rows.
-        this.pagination.rowsTotal = this.data.length;
-
-        //Calculate number of pages needed and create a link for each page.
-        this.pagination.numPages = Math.ceil(this.pagination.rowsTotal / this.pagination.rowsShown);
-        this.pagination.wrap.selectAll('a,span').remove();
-
-        for (var i = 0; i < this.pagination.numPages; i++) {
-            this.pagination.wrap
-                .append('a')
-                .datum({ rel: i })
-                .attr({
-                    href: '#',
-                    rel: i
-                })
-                .text(i + 1)
-                .classed('page-link', true)
-                .classed('active', function(d) {
-                    return d.rel == _this.pagination.activeLink;
-                })
-                .classed(
-                    'hidden',
-                    this.pagination.activeLink <= 4
-                        ? i > 4
-                        : this.pagination.activeLink >= this.pagination.numPages - 5
-                          ? i < this.pagination.numPages - 5
-                          : i < this.pagination.activeLink - 2 || this.pagination.activeLink + 2 < i
-                );
-        }
-
-        this.pagination.links = this.pagination.wrap.selectAll('a.page-link');
-    }
-
-    function addArrows() {
-        var prev = this.pagination.activeLink - 1,
-            next = this.pagination.activeLink + 1;
-        if (prev < 0) prev = 0; // nothing before the first page
-        if (next >= this.pagination.numPages) next = this.pagination.numPages - 1; // nothing after the last page
-
-        this.pagination.wrap
-            .insert('span', ':first-child')
-            .text('...')
-            .classed('hidden', this.pagination.activeLink <= 4);
-
-        this.pagination.prev = this.pagination.wrap
-            .insert('a', ':first-child')
-            .classed('left arrow-link', true)
-            .attr({
-                href: '#',
-                rel: prev
-            })
-            .text('<');
-
-        this.pagination.doublePrev = this.pagination.wrap
-            .insert('a', ':first-child')
-            .classed('left double-arrow-link', true)
-            .attr({
-                href: '#',
-                rel: 0
-            })
-            .text('<<');
-
-        this.pagination.wrap
-            .append('span')
-            .text('...')
-            .classed('hidden', this.pagination.activeLink >= this.pagination.numPages - 5);
-
-        this.pagination.next = this.pagination.wrap
-            .append('a')
-            .classed('right arrow-link', true)
-            .attr({
-                href: '#',
-                rel: next
-            })
-            .text('>');
-
-        this.pagination.doubleNext = this.pagination.wrap
-            .append('a')
-            .classed('right double-arrow-link', true)
-            .attr({
-                href: '#',
-                rel: this.pagination.numPages - 1
-            })
-            .text('>>');
-
-        this.pagination.arrows = this.pagination.wrap.selectAll('a.arrow-link');
-        this.pagination.doubleArrows = this.pagination.wrap.selectAll('a.double-arrow-link');
-    }
-
-    function addPagination() {
-        var listing = this;
-
-        //Render page links.
-        addLinks.call(this);
-
-        //Render a different page on click.
-        this.pagination.links.on('click', function() {
-            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-            updatePagination.call(listing);
-        });
-
-        //Render arrow links.
-        addArrows.call(this);
-
-        //Render a different page on click.
-        this.pagination.arrows.on('click', function() {
-            if (listing.pagination.activeLink !== +d3$1.select(this).attr('rel')) {
-                listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-                listing.pagination.prev.attr(
-                    'rel',
-                    listing.pagination.activeLink > 0 ? listing.pagination.activeLink - 1 : 0
-                );
-                listing.pagination.next.attr(
-                    'rel',
-                    listing.pagination.activeLink < listing.pagination.numPages
-                        ? listing.pagination.activeLink + 1
-                        : listing.pagination.numPages - 1
-                );
-                updatePagination.call(listing);
-            }
-        });
-
-        //Render a different page on click.
-        this.pagination.doubleArrows.on('click', function() {
-            listing.pagination.activeLink = +d3$1.select(this).attr('rel');
-            updatePagination.call(listing);
-        });
     }
 
     function onDraw$1() {
-        //Add pagination functionality.
-        addPagination.call(this);
-
         //Highlight selected rows.
         this.table.selectAll('tbody tr').classed('brushed', function(d) {
-            return d.raw.brushed;
+            return d.brushed;
         });
     }
 

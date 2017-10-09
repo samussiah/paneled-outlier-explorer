@@ -120,18 +120,6 @@ export default function defineStyles() {
                 '    padding-top: 10px;' +
                 '}',
             'div.wc-chart#Listing table {' + '    padding-left: 10px;' + '}',
-            'div.wc-chart#Listing .pagination-container {' + '    padding-top: 10px;' + '}',
-            'div.wc-chart#Listing .pagination-container a {' +
-                '    text-decoration: none;' +
-                '    padding: 5px 10px;' +
-                '}',
-            'div.wc-chart#Listing .pagination-container a:first-child {' +
-                '    margin-left: 5px;' +
-                '}',
-            'div.wc-chart#Listing .pagination-container a.active {' +
-                '    border: 2px solid gray;' +
-                '    border-radius: 4px;' +
-                '}',
 
             /***--------------------------------------------------------------------------------------\
           General styles
@@ -151,7 +139,7 @@ export default function defineStyles() {
                 '}',
             'path.hover {' + '    stroke: orange;' + '    stroke-opacity: 1;' + '}',
             'circle.selected {' + '    stroke: orange;' + '    fill: black;' + '}',
-            'tr.brushed {' + '    background: orange;' + '}'
+            'tr.brushed {' + '    background: orange !important;' + '}'
         ],
         style = document.createElement('style');
     style.type = 'text/css';

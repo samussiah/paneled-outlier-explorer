@@ -87,7 +87,7 @@ export default function init(data) {
     //Listing
     this.listing.wrap.attr('id', 'Listing');
     this.listing.parent = this;
-    this.listing.init(this.data.sorted.filter((d, i) => i < 25));
+    this.listing.init(this.data.sorted);
     this.listing.wrap.classed('hidden', true);
 
     //Define custom event listener for filters.

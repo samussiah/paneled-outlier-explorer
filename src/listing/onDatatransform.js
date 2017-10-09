@@ -8,7 +8,4 @@ export default function onDatatransform() {
     this.data = this.parent.data.brushed.length
         ? this.parent.data.brushed
         : this.parent.data.filtered;
-
-    //Reset pagination.
-    this.pagination.wrap.selectAll('*').remove();
 }

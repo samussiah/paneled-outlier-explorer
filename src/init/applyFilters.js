@@ -28,19 +28,8 @@ export default function applyFilters(d) {
 
             return !filtered;
         });
-
-        //Reset listing pagination.
-        this.listing.pagination.activeLink = 0;
-        this.listing.pagination.startItem =
-            this.listing.pagination.activeLink * this.listing.pagination.rowsShown;
-        this.listing.pagination.endItem =
-            this.listing.pagination.startItem + this.listing.pagination.rowsShown;
     }
 
     //Redraw listing.
-    this.listing.draw(
-        this.data.filtered.filter(
-            (d, i) => this.listing.pagination.startItem <= i && i < this.listing.pagination.endItem
-        )
-    );
+    this.listing.draw(this.data.filtered);
 }

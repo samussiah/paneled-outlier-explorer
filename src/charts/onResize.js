@@ -6,7 +6,6 @@ import adjustTicks from './onResize/adjustTicks';
 
 export default function onResize() {
     const chart = this;
-
     //Draw normal range.
     this.svg.select('.normal-range').remove();
     this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({

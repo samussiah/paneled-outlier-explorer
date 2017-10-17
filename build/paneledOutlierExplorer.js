@@ -267,12 +267,14 @@
             {
                 value_col: 'DY',
                 type: 'linear',
+                order: null,
                 label: 'Study Day',
                 rotate_tick_labels: false,
                 vertical_space: 0
             },
             {
                 value_col: 'VISITN',
+                order: null,
                 type: 'ordinal',
                 label: 'Visit Number',
                 rotate_tick_labels: false,
@@ -280,6 +282,7 @@
             },
             {
                 value_col: 'VISIT',
+                order: null,
                 type: 'ordinal',
                 label: 'Visit',
                 rotate_tick_labels: true,
@@ -329,6 +332,7 @@
     function syncSettings(settings) {
         var syncedSettings = clone(settings);
         syncedSettings.x.type = settings.time_cols[0].type;
+        syncedSettings.x.order = settings.time_cols[0].order;
         syncedSettings.x.column = settings.time_cols[0].value_col;
         syncedSettings.x.label = settings.time_cols[0].label;
         syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
@@ -807,6 +811,7 @@
 
         this.config.x.column = time_col.value_col;
         this.config.x.type = time_col.type;
+        this.config.x.order = time_col.order;
         this.config.x.label = time_col.label;
         this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
     }
@@ -1115,7 +1120,7 @@
 
     function onResize() {
         var chart = this;
-
+        console.log(this);
         //Draw normal range.
         this.svg.select('.normal-range').remove();
         this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({

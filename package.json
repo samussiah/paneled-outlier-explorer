@@ -1,6 +1,6 @@
 {
   "name": "paneled-outlier-explorer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Paneled line charts of data points over time with point and line brushing",
   "main": "./src/index.js",
   "scripts": {

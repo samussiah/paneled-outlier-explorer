@@ -138,6 +138,12 @@
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
                     'display:none;' +
                     '}',
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart div.no-data{' +
+                    'width:365px;' +
+                    'padding-left:10px;' +
+                    'color:red;' +
+                    'font-size:0.8em;' +
+                    '}',
 
                 /***--------------------------------------------------------------------------------------\
     Listing
@@ -267,12 +273,14 @@
             {
                 value_col: 'DY',
                 type: 'linear',
+                order: null,
                 label: 'Study Day',
                 rotate_tick_labels: false,
                 vertical_space: 0
             },
             {
                 value_col: 'VISITN',
+                order: null,
                 type: 'ordinal',
                 label: 'Visit Number',
                 rotate_tick_labels: false,
@@ -280,6 +288,7 @@
             },
             {
                 value_col: 'VISIT',
+                order: null,
                 type: 'ordinal',
                 label: 'Visit',
                 rotate_tick_labels: true,
@@ -329,6 +338,7 @@
     function syncSettings(settings) {
         var syncedSettings = clone(settings);
         syncedSettings.x.type = settings.time_cols[0].type;
+        syncedSettings.x.order = settings.time_cols[0].order;
         syncedSettings.x.column = settings.time_cols[0].value_col;
         syncedSettings.x.label = settings.time_cols[0].label;
         syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
@@ -807,6 +817,7 @@
 
         this.config.x.column = time_col.value_col;
         this.config.x.type = time_col.type;
+        this.config.x.order = time_col.order;
         this.config.x.label = time_col.label;
         this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
     }
@@ -1115,54 +1126,65 @@
 
     function onResize() {
         var chart = this;
-
         //Draw normal range.
-        this.svg.select('.normal-range').remove();
-        this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
-            x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-            y: this.y(this.filtered_data[0][this.config.uln_col]),
-            width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-            height:
-                this.y(this.filtered_data[0][this.config.lln_col]) -
-                this.y(this.filtered_data[0][this.config.uln_col]),
-            fill: 'green',
-            'fill-opacity': 0.05,
-            stroke: 'green',
-            'stroke-opacity': 1,
-            'clip-path': 'url(#' + this.id + ')'
-        });
+        if (this.filtered_data.length == 0) {
+            this.wrap.select('svg').classed('hidden', true);
+            this.wrap
+                .append('div')
+                .attr('class', 'no-data')
+                .text('No data found for current selection.');
+        } else {
+            this.wrap.select('svg').classed('hidden', false);
+            this.wrap.select('div.no-data').remove();
+            this.svg.select('.normal-range').remove();
+            this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
+                x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+                y: this.y(this.filtered_data[0][this.config.uln_col]),
+                width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+                height:
+                    this.y(this.filtered_data[0][this.config.lln_col]) -
+                    this.y(this.filtered_data[0][this.config.uln_col]),
+                fill: 'green',
+                'fill-opacity': 0.05,
+                stroke: 'green',
+                'stroke-opacity': 1,
+                'clip-path': 'url(#' + this.id + ')'
+            });
 
-        //Capture each multiple's scale.
-        this.package = {
-            measure: this.currentMeasure,
-            container: this.wrap,
-            overlay: this.svg.append('g').classed('brush', true),
-            value: this.currentMeasure,
-            domain: clone(this.config.y.domain),
-            xScale: clone(this.x),
-            yScale: clone(this.y),
-            brush: d3$1.svg.brush().x(this.x).y(this.y)
-        };
-        this.wrap.datum(this.package);
+            //Capture each multiple's scale.
+            this.package = {
+                measure: this.currentMeasure,
+                container: this.wrap,
+                overlay: this.svg.append('g').classed('brush', true),
+                value: this.currentMeasure,
+                domain: clone(this.config.y.domain),
+                xScale: clone(this.x),
+                yScale: clone(this.y),
+                brush: d3$1.svg.brush().x(this.x).y(this.y)
+            };
+            this.wrap.datum(this.package);
 
-        //Define invisible brush overlay.
-        this.package.overlay.append('rect').attr({
-            x: 0,
-            y: 0,
-            width: this.plot_width,
-            height: this.plot_height,
-            'fill-opacity': 0
-        });
+            //Define invisible brush overlay.
+            this.package.overlay.append('rect').attr({
+                x: 0,
+                y: 0,
+                width: this.plot_width,
+                height: this.plot_height,
+                'fill-opacity': 0
+            });
 
-        //Attach additional data to SVG and marks.
-        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.currentMeasure });
+            //Attach additional data to SVG and marks.
+            this.package.overlay
+                .style('cursor', 'crosshair')
+                .datum({ measure: this.currentMeasure });
 
-        //Add brush functionality.
-        brush.call(this);
+            //Add brush functionality.
+            brush.call(this);
 
-        // rotate ticks
-        if (this.config.x.rotate_tick_labels) {
-            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+            // rotate ticks
+            if (this.config.x.rotate_tick_labels) {
+                adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+            }
         }
     }
 

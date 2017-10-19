@@ -6,12 +6,14 @@ export default {
         {
             value_col: 'DY',
             type: 'linear',
+            order: null,
             label: 'Study Day',
             rotate_tick_labels: false,
             vertical_space: 0
         },
         {
             value_col: 'VISITN',
+            order: null,
             type: 'ordinal',
             label: 'Visit Number',
             rotate_tick_labels: false,
@@ -19,6 +21,7 @@ export default {
         },
         {
             value_col: 'VISIT',
+            order: null,
             type: 'ordinal',
             label: 'Visit',
             rotate_tick_labels: true,
@@ -68,6 +71,7 @@ export default {
 export function syncSettings(settings) {
     const syncedSettings = clone(settings);
     syncedSettings.x.type = settings.time_cols[0].type;
+    syncedSettings.x.order = settings.time_cols[0].order;
     syncedSettings.x.column = settings.time_cols[0].value_col;
     syncedSettings.x.label = settings.time_cols[0].label;
     syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;

@@ -17,6 +17,7 @@ export default function onPreprocess() {
 
     this.config.x.column = time_col.value_col;
     this.config.x.type = time_col.type;
+    this.config.x.order = time_col.order;
     this.config.x.label = time_col.label;
     this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
 }

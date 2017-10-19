@@ -121,6 +121,12 @@ export default function defineStyles() {
             '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
                 'display:none;' +
                 '}',
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart div.no-data{' +
+                'width:365px;' +
+                'padding-left:10px;' +
+                'color:red;' +
+                'font-size:0.8em;' +
+                '}',
 
             /***--------------------------------------------------------------------------------------\
           Listing

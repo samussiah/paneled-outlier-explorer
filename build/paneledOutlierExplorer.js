@@ -200,12 +200,128 @@
               }
             : function(obj) {
                   return obj &&
-                  typeof Symbol === 'function' &&
-                  obj.constructor === Symbol &&
-                  obj !== Symbol.prototype
+                      typeof Symbol === 'function' &&
+                      obj.constructor === Symbol &&
+                      obj !== Symbol.prototype
                       ? 'symbol'
                       : typeof obj;
               };
+
+    var asyncGenerator = (function() {
+        function AwaitValue(value) {
+            this.value = value;
+        }
+
+        function AsyncGenerator(gen) {
+            var front, back;
+
+            function send(key, arg) {
+                return new Promise(function(resolve, reject) {
+                    var request = {
+                        key: key,
+                        arg: arg,
+                        resolve: resolve,
+                        reject: reject,
+                        next: null
+                    };
+
+                    if (back) {
+                        back = back.next = request;
+                    } else {
+                        front = back = request;
+                        resume(key, arg);
+                    }
+                });
+            }
+
+            function resume(key, arg) {
+                try {
+                    var result = gen[key](arg);
+                    var value = result.value;
+
+                    if (value instanceof AwaitValue) {
+                        Promise.resolve(value.value).then(
+                            function(arg) {
+                                resume('next', arg);
+                            },
+                            function(arg) {
+                                resume('throw', arg);
+                            }
+                        );
+                    } else {
+                        settle(result.done ? 'return' : 'normal', result.value);
+                    }
+                } catch (err) {
+                    settle('throw', err);
+                }
+            }
+
+            function settle(type, value) {
+                switch (type) {
+                    case 'return':
+                        front.resolve({
+                            value: value,
+                            done: true
+                        });
+                        break;
+
+                    case 'throw':
+                        front.reject(value);
+                        break;
+
+                    default:
+                        front.resolve({
+                            value: value,
+                            done: false
+                        });
+                        break;
+                }
+
+                front = front.next;
+
+                if (front) {
+                    resume(front.key, front.arg);
+                } else {
+                    back = null;
+                }
+            }
+
+            this._invoke = send;
+
+            if (typeof gen.return !== 'function') {
+                this.return = undefined;
+            }
+        }
+
+        if (typeof Symbol === 'function' && Symbol.asyncIterator) {
+            AsyncGenerator.prototype[Symbol.asyncIterator] = function() {
+                return this;
+            };
+        }
+
+        AsyncGenerator.prototype.next = function(arg) {
+            return this._invoke('next', arg);
+        };
+
+        AsyncGenerator.prototype.throw = function(arg) {
+            return this._invoke('throw', arg);
+        };
+
+        AsyncGenerator.prototype.return = function(arg) {
+            return this._invoke('return', arg);
+        };
+
+        return {
+            wrap: function(fn) {
+                return function() {
+                    return new AsyncGenerator(fn.apply(this, arguments));
+                };
+            },
+            await: function(value) {
+                return new AwaitValue(value);
+            }
+        };
+    })();
 
     function clone(obj) {
         var copy = void 0;
@@ -394,7 +510,10 @@
         if (toggle) {
             measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
             measureItems.each(function(d) {
-                d3.select(this).select('input').property('checked', checked);
+                d3
+                    .select(this)
+                    .select('input')
+                    .property('checked', checked);
                 toggleChart(chart, this, d);
             });
             measureListCheckbox.property('checked', checked);
@@ -685,7 +804,10 @@
 
     function minimize(chart) {
         //Modify chart config and redraw.
-        chart.wrap.select('.m__imize-chart').html('&plus;').attr('title', 'Maximize chart');
+        chart.wrap
+            .select('.m__imize-chart')
+            .html('&plus;')
+            .attr('title', 'Maximize chart');
         chart.wrap.classed('expanded', false);
 
         chart.config.width = chart.config.initialSettings.width;
@@ -706,7 +828,10 @@
             chart.parent.expandedChart = chart;
 
             //Modify chart configuation and redraw.
-            chart.wrap.select('.m__imize-chart').html('&minus;').attr('title', 'Minimize chart');
+            chart.wrap
+                .select('.m__imize-chart')
+                .html('&minus;')
+                .attr('title', 'Minimize chart');
             chart.wrap.classed('expanded', true);
 
             chart.config.width = null;
@@ -748,9 +873,6 @@
     function onLayout() {
         var _this = this;
 
-        var chart = this;
-
-        //Add ability to remove charts in the chart title.
         this.wrap
             .on('mouseover', function() {
                 _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'visible');
@@ -835,24 +957,24 @@
     };
 
     /**
- * @author Peter Kelley
- * @author pgkelley4@gmail.com
- */
+     * @author Peter Kelley
+     * @author pgkelley4@gmail.com
+     */
 
     /**
- * See if two line segments intersect. This uses the 
- * vector cross product approach described below:
- * http://stackoverflow.com/a/565282/786339
- * 
- * @param {Object} p point object with x and y coordinates
- *  representing the start of the 1st line.
- * @param {Object} p2 point object with x and y coordinates
- *  representing the end of the 1st line.
- * @param {Object} q point object with x and y coordinates
- *  representing the start of the 2nd line.
- * @param {Object} q2 point object with x and y coordinates
- *  representing the end of the 2nd line.
- */
+     * See if two line segments intersect. This uses the
+     * vector cross product approach described below:
+     * http://stackoverflow.com/a/565282/786339
+     *
+     * @param {Object} p point object with x and y coordinates
+     *  representing the start of the 1st line.
+     * @param {Object} p2 point object with x and y coordinates
+     *  representing the end of the 1st line.
+     * @param {Object} q point object with x and y coordinates
+     *  representing the start of the 2nd line.
+     * @param {Object} q2 point object with x and y coordinates
+     *  representing the end of the 2nd line.
+     */
 
     function doLineSegmentsIntersect(p, p2, q, q2) {
         var r = subtractPoints(p2, p);
@@ -892,25 +1014,25 @@
     }
 
     /**
- * Calculate the cross product of the two points.
- * 
- * @param {Object} point1 point object with x and y coordinates
- * @param {Object} point2 point object with x and y coordinates
- * 
- * @return the cross product result as a float
- */
+     * Calculate the cross product of the two points.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return the cross product result as a float
+     */
     function crossProduct(point1, point2) {
         return point1.x * point2.y - point1.y * point2.x;
     }
 
     /**
- * Subtract the second point from the first.
- * 
- * @param {Object} point1 point object with x and y coordinates
- * @param {Object} point2 point object with x and y coordinates
- * 
- * @return the subtraction result as a point object
- */
+     * Subtract the second point from the first.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return the subtraction result as a point object
+     */
 
     function subtractPoints(point1, point2) {
         var result = {};
@@ -921,24 +1043,24 @@
     }
 
     /**
- * See if the points are equal.
- *
- * @param {Object} point1 point object with x and y coordinates
- * @param {Object} point2 point object with x and y coordinates
- *
- * @return if the points are equal
- */
+     * See if the points are equal.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return if the points are equal
+     */
     function equalPoints(point1, point2) {
         return point1.x == point2.x && point1.y == point2.y;
     }
 
     /**
- * See if all arguments are equal.
- *
- * @param {...} args arguments that will be compared by '=='.
- *
- * @return if all arguments are equal
- */
+     * See if all arguments are equal.
+     *
+     * @param {...} args arguments that will be compared by '=='.
+     *
+     * @return if all arguments are equal
+     */
     function allEqual(args) {
         var firstValue = arguments[0],
             i;
@@ -1125,8 +1247,6 @@
     }
 
     function onResize() {
-        var chart = this;
-        //Draw normal range.
         if (this.filtered_data.length == 0) {
             this.wrap.select('svg').classed('hidden', true);
             this.wrap
@@ -1137,19 +1257,22 @@
             this.wrap.select('svg').classed('hidden', false);
             this.wrap.select('div.no-data').remove();
             this.svg.select('.normal-range').remove();
-            this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
-                x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-                y: this.y(this.filtered_data[0][this.config.uln_col]),
-                width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-                height:
-                    this.y(this.filtered_data[0][this.config.lln_col]) -
-                    this.y(this.filtered_data[0][this.config.uln_col]),
-                fill: 'green',
-                'fill-opacity': 0.05,
-                stroke: 'green',
-                'stroke-opacity': 1,
-                'clip-path': 'url(#' + this.id + ')'
-            });
+            this.svg
+                .insert('rect', '.line-supergroup')
+                .classed('normal-range', true)
+                .attr({
+                    x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+                    y: this.y(this.filtered_data[0][this.config.uln_col]),
+                    width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+                    height:
+                        this.y(this.filtered_data[0][this.config.lln_col]) -
+                        this.y(this.filtered_data[0][this.config.uln_col]),
+                    fill: 'green',
+                    'fill-opacity': 0.05,
+                    stroke: 'green',
+                    'stroke-opacity': 1,
+                    'clip-path': 'url(#' + this.id + ')'
+                });
 
             //Capture each multiple's scale.
             this.package = {
@@ -1160,7 +1283,10 @@
                 domain: clone(this.config.y.domain),
                 xScale: clone(this.x),
                 yScale: clone(this.y),
-                brush: d3$1.svg.brush().x(this.x).y(this.y)
+                brush: d3$1.svg
+                    .brush()
+                    .x(this.x)
+                    .y(this.y)
             };
             this.wrap.datum(this.package);
 
@@ -1239,7 +1365,10 @@
         var settings = arguments[1];
 
         //Define unique div within passed element argument.
-        var container = d3$1.select(element).append('div').attr('id', 'paneled-outlier-explorer'),
+        var container = d3$1
+                .select(element)
+                .append('div')
+                .attr('id', 'paneled-outlier-explorer'),
             containerElement = container.node(),
             controlsContainer = container.append('div').attr('id', 'left-side'),
             controlsContainerElement = controlsContainer.node();

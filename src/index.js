@@ -10,7 +10,9 @@ import { select } from 'd3';
 
 export default function paneledOutlierExplorer(element = 'body', settings) {
     //Define unique div within passed element argument.
-    const container = select(element).append('div').attr('id', 'paneled-outlier-explorer'),
+    const container = select(element)
+            .append('div')
+            .attr('id', 'paneled-outlier-explorer'),
         containerElement = container.node(),
         controlsContainer = container.append('div').attr('id', 'left-side'),
         controlsContainerElement = controlsContainer.node();

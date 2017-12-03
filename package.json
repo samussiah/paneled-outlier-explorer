@@ -8,7 +8,7 @@
     "bundle": "rollup -c",
     "format": "npm run format-src && npm run format-bundle",
     "format-bundle": "prettier --single-quote --tab-width=4 --print-width=100 --write  ./build/paneledOutlierExplorer.js",
-    "format-src": "prettier --single-quote --tab-width=4 --print-width=100 --write \"./src/**/*.js\"",
+    "format-src": "prettier --single-quote --tab-width=4 --print-width=100 --write \"src/**/!(*defineStyles).js\"",
     "watch": "rollup -c -w"
   },
   "repository": {

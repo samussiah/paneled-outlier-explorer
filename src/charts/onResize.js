@@ -9,15 +9,21 @@ export default function onResize() {
 
     //Draw normal range.
     if (this.filtered_data.length == 0) {
-        this.wrap.select('svg').classed('hidden', true);
-        this.wrap.select('div.no-data').remove();
-        this.wrap
-            .append('div')
-            .attr('class', 'no-data')
+        this.svg.selectAll('*').classed('hidden', true);
+        this.svg.select('text.no-data').remove();
+        this.svg
+            .append('text')
+            .classed('no-data', true)
+            .attr({
+                x: 0,
+                dx: -this.config.margin.left,
+                y: 0,
+                dy: 10
+            })
             .text('No data selected.');
     } else {
-        this.wrap.select('svg').classed('hidden', false);
-        this.wrap.select('div.no-data').remove();
+        this.svg.selectAll('*').classed('hidden', false);
+        this.svg.select('text.no-data').remove();
         this.svg.select('.normal-range').remove();
         this.svg
             .insert('rect', '.line-supergroup')
@@ -62,9 +68,7 @@ export default function onResize() {
         });
 
         //Attach additional data to SVG and marks.
-        this.package.overlay
-            .style('cursor', 'crosshair')
-            .datum({ measure: this.currentMeasure });
+        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.currentMeasure });
 
         //Add brush functionality.
         brush.call(this);

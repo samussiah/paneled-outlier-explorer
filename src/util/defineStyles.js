@@ -128,8 +128,8 @@ export default function defineStyles() {
                 '    background: black;' +
                 '    color: white;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart div.no-data {' +
-                '    color: red;' +
+            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' +
+                '    fill: red;' +
                 '    font-size: 0.8em;' +
                 '}',
 

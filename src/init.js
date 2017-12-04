@@ -21,27 +21,28 @@ export default function init(data) {
     multiply(this, this.data.sorted, 'measure_unit');
 
     //Initialize listing.
-    this.listing.config.cols = Object.keys(data[0])
-        .filter(key => ['brushed', 'measure_unit'].indexOf(key) === -1); // remove system variables from listing
+    this.listing.config.cols = Object.keys(data[0]).filter(
+        key => ['brushed', 'measure_unit'].indexOf(key) === -1
+    ); // remove system variables from listing
     this.listing.init(this.data.sorted);
 
     //Define custom event listener for filters.
-    const
-        controls = this.controls.wrap
-            .selectAll('.control-group');
-        controls
-            .filter(control => control.label === 'X-axis')
-            .selectAll('option')
-            .property('label', d => this.config.time_cols.filter(time_col => time_col.value_col === d).pop().label);
-
+    const controls = this.controls.wrap.selectAll('.control-group');
     controls
-        .on('change', function(d) {
-            d.value = select(this)
-                .selectAll('option')
-                .filter(function() {
-                    return this.selected;
-                })
-                .text();
-            applyFilters.call(chart, d);
-        });
+        .filter(control => control.label === 'X-axis')
+        .selectAll('option')
+        .property(
+            'label',
+            d => this.config.time_cols.filter(time_col => time_col.value_col === d).pop().label
+        );
+
+    controls.on('change', function(d) {
+        d.value = select(this)
+            .selectAll('option')
+            .filter(function() {
+                return this.selected;
+            })
+            .text();
+        applyFilters.call(chart, d);
+    });
 }

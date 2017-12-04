@@ -6,9 +6,7 @@ export default function layout() {
     this.wrap.attr('id', 'Charts');
     this.listing.wrap.attr('id', 'Listing').classed('hidden', true);
 
-    const
-        chart = this,
-
+    const chart = this,
         //Create navigation bar.
         navigationBar = this.container.insert('ul', ':first-child').attr('id', 'navigation-bar'),
         navigationButtons = navigationBar
@@ -31,13 +29,11 @@ export default function layout() {
                     select('#Listing').classed('hidden', false);
                 }
             }),
-
         //Create controls header.
         controlsTab = this.container
             .insert('div', ':first-child')
             .attr('id', 'controls-header')
             .text('Controls'),
-
         //Define all-chart toggle.
         measureListContainer = this.container
             .select('#left-side')

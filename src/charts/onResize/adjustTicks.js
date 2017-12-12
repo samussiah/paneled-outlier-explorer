@@ -16,7 +16,7 @@ export default function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
                 return dText.length > nchar;
             })
             .text(d => d.slice(0, nchar - 3) + '...')
-            .style('cursor', 'pointer')
+            .style('cursor', 'help')
             .append('title')
             .text(d => d);
     }

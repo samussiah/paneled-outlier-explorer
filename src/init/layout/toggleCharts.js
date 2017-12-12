@@ -13,8 +13,7 @@ export default function toggleCharts(chart, toggle = true) {
     if (toggle) {
         measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
         measureItems.each(function(d) {
-            d3
-                .select(this)
+            select(this)
                 .select('input')
                 .property('checked', checked);
             toggleChart(chart, this, d);

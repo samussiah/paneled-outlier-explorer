@@ -1,16 +1,16 @@
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
-        ? (module.exports = factory(require('webcharts'), require('d3')))
+        ? (module.exports = factory(require('d3'), require('webcharts')))
         : typeof define === 'function' && define.amd
-          ? define(['webcharts', 'd3'], factory)
-          : (global.paneledOutlierExplorer = factory(global.webCharts, global.d3));
-})(this, function(webcharts, d3$1) {
+          ? define(['d3', 'webcharts'], factory)
+          : (global.paneledOutlierExplorer = factory(global.d3, global.webCharts));
+})(this, function(d3, webcharts) {
     'use strict';
 
     function defineStyles() {
         var styles = [
                 /***--------------------------------------------------------------------------------------\
-    Controls
+      Controls
     \--------------------------------------------------------------------------------------***/
 
                 '#paneled-outlier-explorer #controls-header {' +
@@ -70,7 +70,7 @@
                     '}',
 
                 /***--------------------------------------------------------------------------------------\
-    Navigation
+      Navigation
     \--------------------------------------------------------------------------------------***/
 
                 '#paneled-outlier-explorer ul#navigation-bar {' +
@@ -103,7 +103,7 @@
                     '}',
 
                 /***--------------------------------------------------------------------------------------\
-    Charts
+      Charts
     \--------------------------------------------------------------------------------------***/
 
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
@@ -112,14 +112,14 @@
                     '    padding-top: 10px;' +
                     '}',
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
-                    '    padding-right: 1em;' +
+                    '    padding: 0 1em 0 0;' +
                     '}',
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
                     '    width: 100%;' +
                     ' }',
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
                     '    text-align: left;' +
-                    '    padding-left: 10px;' +
+                    '    font-size: .9em;' +
                     '}',
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
                     '    float: right;' +
@@ -129,61 +129,41 @@
                     '    padding: 0px 3px 1px 3px;' +
                     '    font-size: 75%;' +
                     '    margin-left: 5px;' +
-                    '    visibility:hidden;' +
+                    '    visibility: hidden;' +
                     '}',
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
                     '    background: black;' +
                     '    color: white;' +
                     '}',
-                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .x.axis text.axis-title{' +
-                    'display:none;' +
-                    '}',
-                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart div.no-data{' +
-                    'width:365px;' +
-                    'padding-left:10px;' +
-                    'color:red;' +
-                    'font-size:0.8em;' +
+                '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' +
+                    '    fill: red;' +
+                    '    font-size: 0.8em;' +
                     '}',
 
                 /***--------------------------------------------------------------------------------------\
-    Listing
+      Listing
     \--------------------------------------------------------------------------------------***/
 
                 '#paneled-outlier-explorer div.wc-chart#Listing {' +
                     '    width: 75%;' +
                     '    float: right;' +
                     '    padding-top: 10px;' +
+                    '    overflow-x: scroll;' +
                     '}',
-                '#paneled-outlier-explorer div.wc-chart#Listing table {' +
-                    '    padding-left: 10px;' +
-                    '}',
+                '#paneled-outlier-explorer div.wc-chart#Listing table {' + '}',
 
                 /***--------------------------------------------------------------------------------------\
-    General styles
+      General styles
     \--------------------------------------------------------------------------------------***/
 
                 '#paneled-outlier-explorer .hidden {' + '    display: none !important;' + '}',
-                '#paneled-outlier-explorer circle.brushed {' +
-                    '    stroke: orange;' +
-                    '    stroke-width: 2px;' +
-                    '    fill: black;' +
-                    '    r: 4px;' +
-                    '}',
                 '#paneled-outlier-explorer path.brushed {' +
                     '    stroke: orange;' +
                     '    stroke-width: 3px;' +
                     '    stroke-opacity: 1;' +
                     '}',
-                '#paneled-outlier-explorer path.hover {' +
-                    '    stroke: orange;' +
-                    '    stroke-opacity: 1;' +
-                    '}',
-                '#paneled-outlier-explorer circle.selected {' +
-                    '    stroke: orange;' +
-                    '    fill: black;' +
-                    '}',
                 '#paneled-outlier-explorer tr.brushed {' +
-                    '    background: orange !important;' +
+                    '    border: 2px solid orange !important;' +
                     '}'
             ],
             style = document.createElement('style');
@@ -395,20 +375,20 @@
                 vertical_space: 0
             },
             {
-                value_col: 'VISITN',
-                order: null,
+                value_col: 'VISIT',
                 type: 'ordinal',
+                order: null,
+                label: 'Visit',
+                rotate_tick_labels: true,
+                vertical_space: 75
+            },
+            {
+                value_col: 'VISITN',
+                type: 'ordinal',
+                order: null,
                 label: 'Visit Number',
                 rotate_tick_labels: false,
                 vertical_space: 0
-            },
-            {
-                value_col: 'VISIT',
-                order: null,
-                type: 'ordinal',
-                label: 'Visit',
-                rotate_tick_labels: true,
-                vertical_space: 100
             }
         ],
         value_col: 'STRESN',
@@ -423,7 +403,7 @@
         x: {
             type: null, // sync to [ time_cols[0].type ]
             column: null, // sync to [ time_cols[0].value_col ]
-            label: null // sync to [ time_cols[0].label ]
+            label: '' // sync to [ time_cols[0].label ]
         },
         y: {
             type: 'linear',
@@ -443,10 +423,11 @@
         ],
         resizable: false,
         scale_text: false,
-        width: 365,
+        width: 400,
         height: 200,
         margin: {
-            left: 40
+            bottom: 0,
+            left: 50
         },
         gridlines: 'xy'
     };
@@ -456,7 +437,6 @@
         syncedSettings.x.type = settings.time_cols[0].type;
         syncedSettings.x.order = settings.time_cols[0].order;
         syncedSettings.x.column = settings.time_cols[0].value_col;
-        syncedSettings.x.label = settings.time_cols[0].label;
         syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
@@ -468,7 +448,7 @@
         {
             type: 'dropdown',
             label: 'X-axis',
-            option: 'x.label',
+            option: 'x.column',
             require: true
         }
     ];
@@ -479,7 +459,7 @@
         syncedControlInputs.filter(function(controlInput) {
             return controlInput.label === 'X-axis';
         })[0].values = settings.time_cols.map(function(d) {
-            return d.label || d;
+            return d.value_col || d;
         });
 
         if (settings.filters)
@@ -496,204 +476,9 @@
         return syncedControlInputs;
     }
 
-    function toggleCharts(chart) {
-        var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-        var measureListCheckbox = d3$1.select('#measure-list-checkbox'),
-            checked = measureListCheckbox.property('checked'),
-            measureItems = d3$1.selectAll('li.measure-item'),
-            anyUnchecked = measureItems[0].some(function(measureItem) {
-                return !measureItem.getElementsByTagName('input')[0].checked;
-            });
-
-        //Handle overall toggle.
-        if (toggle) {
-            measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
-            measureItems.each(function(d) {
-                d3
-                    .select(this)
-                    .select('input')
-                    .property('checked', checked);
-                toggleChart(chart, this, d);
-            });
-            measureListCheckbox.property('checked', checked);
-        } else {
-            //Handle individual toggles.
-            measureListCheckbox.attr(
-                'title',
-                anyUnchecked ? 'Display all charts' : 'Remove all charts'
-            );
-            measureListCheckbox.property('checked', !anyUnchecked);
-        }
-    }
-
-    function toggleChart(chart, li) {
-        //Determine state of checkbox.
-        var checkbox = d3$1.select(li).select('input'),
-            checked = checkbox.property('checked');
-        checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-        d3$1
-            .select(chart.div)
-            .selectAll('.wc-chart')
-            .filter(function(di) {
-                return di.measure === d3$1.select(li).datum();
-            })
-            .classed('hidden', !checked);
-
-        //If any checkbox is unchecked, uncheck measureListCheckbox.
-        toggleCharts(chart, false);
-    }
-
-    function layout() {
-        var chart = this,
-            //Create navigation bar.
-            navigationBar = this.container
-                .insert('ul', ':first-child')
-                .attr('id', 'navigation-bar'),
-            navigationButtons = navigationBar
-                .selectAll('li.navigation')
-                .data(['Charts', 'Listing'])
-                .enter()
-                .append('li')
-                .classed('navigation', true)
-                .classed('active', function(d) {
-                    return d === 'Charts';
-                })
-                .attr('id', function(d) {
-                    return d + '-nav';
-                })
-                .text(function(d) {
-                    return d;
-                })
-                .on('click', function(d) {
-                    navigationButtons
-                        .filter(function(di) {
-                            return di === d;
-                        })
-                        .classed('active', true);
-                    navigationButtons
-                        .filter(function(di) {
-                            return di !== d;
-                        })
-                        .classed('active', false);
-                    if (d === 'Charts') {
-                        d3$1.select('#Listing').classed('hidden', true);
-                        d3$1.select('#Charts').classed('hidden', false);
-                    } else {
-                        d3$1.select('#Charts').classed('hidden', true);
-                        d3$1.select('#Listing').classed('hidden', false);
-                    }
-                }),
-            //Create controls header.
-            controlsTab = this.container
-                .insert('div', ':first-child')
-                .attr('id', 'controls-header')
-                .text('Controls'),
-            //Define all-chart toggle.
-            measureListContainer = this.container
-                .select('#left-side')
-                .append('ul')
-                .attr('id', 'measure-list-container'),
-            measureListHeader = measureListContainer
-                .append('div')
-                .attr('id', 'measure-list-header'),
-            measureListCheckbox = measureListHeader
-                .append('input')
-                .attr({
-                    id: 'measure-list-checkbox',
-                    type: 'checkbox',
-                    title:
-                        this.config.measures.length === this.config.allMeasures.length
-                            ? 'Remove all charts'
-                            : 'Display all charts'
-                })
-                .property('checked', this.config.measures.length === this.config.allMeasures.length)
-                .on('click', function() {
-                    toggleCharts(chart, this);
-                });
-        measureListHeader.append('span').text('Measures');
-        var measureList = measureListContainer //Define individual chart toggles.
-            .append('ul')
-            .attr('id', 'measure-list');
-        var measureItems = measureList
-            .selectAll('li.measure-item')
-            .data(this.config.allMeasures)
-            .enter()
-            .append('li')
-            .attr('class', function(d) {
-                return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
-            })
-            .each(function(d) {
-                //Append div inside list item.
-                var measureItemContainer = d3$1
-                    .select(this)
-                    .append('div')
-                    .classed('measure-item-container', true);
-                //Check whether measure should by displayed initially.
-                var checked = chart.config.measures.indexOf(d) > -1; //Append checkbox inside div.
-                var measureItemCheckbox = measureItemContainer
-                    .append('input')
-                    .classed('measure-checkbox', true)
-                    .attr({
-                        type: 'checkbox',
-                        title: checked ? 'Remove chart' : 'Display chart'
-                    })
-                    .property('checked', checked);
-                var measureItemLabel = measureItemContainer.append('span').text(function(d) {
-                    return d;
-                });
-            })
-            .on('change', function(d) {
-                toggleChart(chart, this);
-            });
-    }
-
-    function applyFilters(d) {
+    function defineData(data) {
         var _this = this;
 
-        this.data.brushed = [];
-        this.data.selectedIDs = [];
-
-        //Reset brush.
-        this.multiples.forEach(function(multiple) {
-            multiple.package.overlay.call(multiple.package.brush.clear());
-            multiple.config.extent = multiple.package.brush.extent();
-        });
-
-        //De-highlight brushed lines.
-        this.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false);
-
-        //De-highlight listing.
-        d3$1.select('#Listing-nav').classed('brushed', false);
-
-        //Define filtered data.
-        if (d.type === 'subsetter') {
-            this.data.filtered = this.data.sorted.filter(function(d) {
-                var filtered = false;
-
-                _this.controls.config.inputs
-                    .filter(function(d) {
-                        return d.type === 'subsetter';
-                    })
-                    .forEach(function(filter) {
-                        if (!filtered && filter.value && filter.value !== 'All')
-                            filtered = d[filter.value_col] !== filter.value;
-                    });
-
-                return !filtered;
-            });
-        }
-
-        //Redraw listing.
-        this.listing.draw(this.data.filtered);
-    }
-
-    function init(data) {
-        var _this = this;
-
-        var chart = this;
-
-        //Attach data arrays to central chart object.
         this.data = {
             raw: data,
             sorted: data
@@ -745,9 +530,12 @@
         this.data.filtered = this.data.sorted;
         this.data.brushed = [];
         this.data.selectedIDs = [];
+    }
 
-        //Capture unique measures.
-        this.config.allMeasures = d3$1
+    function captureMeasures() {
+        var _this = this;
+
+        this.config.allMeasures = d3
             .set(
                 this.data.sorted.map(function(d) {
                     return d.measure_unit;
@@ -772,22 +560,244 @@
             this.config.measures && this.config.measures.length
                 ? this.config.measures
                 : this.config.allMeasures;
+    }
 
+    function toggleCharts(chart) {
+        var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+        var measureListCheckbox = d3.select('#measure-list-checkbox'),
+            checked = measureListCheckbox.property('checked'),
+            measureItems = d3.selectAll('li.measure-item'),
+            anyUnchecked = measureItems[0].some(function(measureItem) {
+                return !measureItem.getElementsByTagName('input')[0].checked;
+            });
+
+        //Handle overall toggle.
+        if (toggle) {
+            measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
+            measureItems.each(function(d) {
+                d3
+                    .select(this)
+                    .select('input')
+                    .property('checked', checked);
+                toggleChart(chart, this, d);
+            });
+            measureListCheckbox.property('checked', checked);
+        } else {
+            //Handle individual toggles.
+            measureListCheckbox.attr(
+                'title',
+                anyUnchecked ? 'Display all charts' : 'Remove all charts'
+            );
+            measureListCheckbox.property('checked', !anyUnchecked);
+        }
+    }
+
+    function toggleChart(chart, li) {
+        //Determine state of checkbox.
+        var checkbox = d3.select(li).select('input'),
+            checked = checkbox.property('checked');
+        checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
+        d3
+            .select(chart.div)
+            .selectAll('.wc-chart')
+            .filter(function(di) {
+                return di.measure === d3.select(li).datum();
+            })
+            .classed('hidden', !checked);
+
+        //If any checkbox is unchecked, uncheck measureListCheckbox.
+        toggleCharts(chart, false);
+    }
+
+    function layout() {
+        this.wrap.attr('id', 'Charts');
+        this.listing.wrap.attr('id', 'Listing').classed('hidden', true);
+
+        var chart = this,
+            //Create navigation bar.
+            navigationBar = this.container
+                .insert('ul', ':first-child')
+                .attr('id', 'navigation-bar'),
+            navigationButtons = navigationBar
+                .selectAll('li.navigation')
+                .data(['Charts', 'Listing'])
+                .enter()
+                .append('li')
+                .classed('navigation', true)
+                .classed('active', function(d) {
+                    return d === 'Charts';
+                })
+                .attr('id', function(d) {
+                    return d + '-nav';
+                })
+                .text(function(d) {
+                    return d;
+                })
+                .on('click', function(d) {
+                    navigationButtons
+                        .filter(function(di) {
+                            return di === d;
+                        })
+                        .classed('active', true);
+                    navigationButtons
+                        .filter(function(di) {
+                            return di !== d;
+                        })
+                        .classed('active', false);
+                    if (d === 'Charts') {
+                        d3.select('#Listing').classed('hidden', true);
+                        d3.select('#Charts').classed('hidden', false);
+                    } else {
+                        d3.select('#Charts').classed('hidden', true);
+                        d3.select('#Listing').classed('hidden', false);
+                    }
+                }),
+            //Create controls header.
+            controlsTab = this.container
+                .insert('div', ':first-child')
+                .attr('id', 'controls-header')
+                .text('Controls'),
+            //Define all-chart toggle.
+            measureListContainer = this.container
+                .select('#left-side')
+                .append('ul')
+                .attr('id', 'measure-list-container'),
+            measureListHeader = measureListContainer
+                .append('div')
+                .attr('id', 'measure-list-header'),
+            measureListCheckbox = measureListHeader
+                .append('input')
+                .attr({
+                    id: 'measure-list-checkbox',
+                    type: 'checkbox',
+                    title:
+                        this.config.measures.length === this.config.allMeasures.length
+                            ? 'Remove all charts'
+                            : 'Display all charts'
+                })
+                .property('checked', this.config.measures.length === this.config.allMeasures.length)
+                .on('click', function() {
+                    toggleCharts(chart, this);
+                });
+
+        measureListHeader.append('span').text('Measures');
+        var measureList = measureListContainer //Define individual chart toggles.
+            .append('ul')
+            .attr('id', 'measure-list');
+        var measureItems = measureList
+            .selectAll('li.measure-item')
+            .data(this.config.allMeasures)
+            .enter()
+            .append('li')
+            .attr('class', function(d) {
+                return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
+            })
+            .each(function(d) {
+                //Append div inside list item.
+                var measureItemContainer = d3
+                    .select(this)
+                    .append('div')
+                    .classed('measure-item-container', true);
+                //Check whether measure should by displayed initially.
+                var checked = chart.config.measures.indexOf(d) > -1; //Append checkbox inside div.
+                var measureItemCheckbox = measureItemContainer
+                    .append('input')
+                    .classed('measure-checkbox', true)
+                    .attr({
+                        type: 'checkbox',
+                        title: checked ? 'Remove chart' : 'Display chart'
+                    })
+                    .property('checked', checked);
+                var measureItemLabel = measureItemContainer.append('span').text(function(d) {
+                    return d;
+                });
+            })
+            .on('change', function(d) {
+                toggleChart(chart, this);
+            });
+    }
+
+    function applyFilters(d) {
+        var _this = this;
+
+        this.data.brushed = [];
+        this.data.selectedIDs = [];
+
+        //Reset brush.
+        this.multiples.forEach(function(multiple) {
+            multiple.package.overlay.call(multiple.package.brush.clear());
+            multiple.config.extent = multiple.package.brush.extent();
+        });
+
+        //De-highlight brushed lines.
+        this.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false);
+
+        //De-highlight listing.
+        d3.select('#Listing-nav').classed('brushed', false);
+
+        //Define filtered data.
+        if (d.type === 'subsetter') {
+            this.data.filtered = this.data.sorted.filter(function(d) {
+                var filtered = false;
+
+                _this.controls.config.inputs
+                    .filter(function(d) {
+                        return d.type === 'subsetter';
+                    })
+                    .forEach(function(filter) {
+                        if (!filtered && filter.value && filter.value !== 'All')
+                            filtered = d[filter.value_col] !== filter.value;
+                    });
+
+                return !filtered;
+            });
+        }
+
+        //Redraw listing.
+        this.listing.draw(this.data.filtered);
+    }
+
+    function init(data) {
+        var _this = this;
+
+        var chart = this;
+
+        //Attach data arrays to central chart object.
+        defineData.call(this, data);
+
+        //Capture unique measures in an array and define initially displayed measures.
+        captureMeasures.call(this);
+
+        //Define layout of renderer.
         layout.call(this);
 
-        //Charts
-        this.wrap.attr('id', 'Charts');
+        //Initialize charts.
         webcharts.multiply(this, this.data.sorted, 'measure_unit');
 
-        //Listing
-        this.listing.wrap.attr('id', 'Listing');
-        this.listing.parent = this;
+        //Initialize listing.
+        this.listing.config.cols = Object.keys(data[0]).filter(function(key) {
+            return ['brushed', 'measure_unit'].indexOf(key) === -1;
+        }); // remove system variables from listing
         this.listing.init(this.data.sorted);
-        this.listing.wrap.classed('hidden', true);
 
         //Define custom event listener for filters.
-        this.wrap.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
-            d.value = d3$1
+        var controls = this.controls.wrap.selectAll('.control-group');
+        controls
+            .filter(function(control) {
+                return control.label === 'X-axis';
+            })
+            .selectAll('option')
+            .property('label', function(d) {
+                return _this.config.time_cols
+                    .filter(function(time_col) {
+                        return time_col.value_col === d;
+                    })
+                    .pop().label;
+            });
+
+        controls.on('change', function(d) {
+            d.value = d3
                 .select(this)
                 .selectAll('option')
                 .filter(function() {
@@ -918,7 +928,7 @@
         var _this = this;
 
         //Set the y-domain individually for each measure.
-        this.config.y.domain = d3$1.extent(
+        this.config.y.domain = d3.extent(
             this.raw_data.filter(function(d) {
                 return d.measure_unit === _this.currentMeasure;
             }),
@@ -934,14 +944,13 @@
                 return input.label === 'X-axis';
             })[0],
             time_col = this.config.time_cols.filter(function(time_col) {
-                return time_col.label === _this.config.x.label;
+                return time_col.value_col === _this.config.x.column;
             })[0];
 
-        this.config.x.column = time_col.value_col;
         this.config.x.type = time_col.type;
         this.config.x.order = time_col.order;
-        this.config.x.label = time_col.label;
         this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
+        this.config.margin.bottom = time_col.vertical_space;
     }
 
     function onDatatransform() {}
@@ -950,7 +959,7 @@
         if (this.package) this.package.overlay.call(this.package.brush.clear());
     }
 
-    d3$1.selection.prototype.moveToFront = function() {
+    d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
@@ -1122,7 +1131,7 @@
             })
             .classed('brushed', true)
             .each(function(d) {
-                d3$1.select(this.parentNode).moveToFront();
+                d3.select(this.parentNode).moveToFront();
             });
 
         //Draw listing displaying brushed IDs first.
@@ -1134,11 +1143,11 @@
                 return d.brushed;
             });
             chart.parent.listing.draw(chart.parent.data.brushed);
-            d3$1.select('#Listing-nav').classed('brushed', true);
+            d3.select('#Listing-nav').classed('brushed', true);
         } else {
             chart.parent.data.brushed = [];
             chart.parent.listing.draw(chart.parent.data.filtered);
-            d3$1.select('#Listing-nav').classed('brushed', false);
+            d3.select('#Listing-nav').classed('brushed', false);
         }
     }
 
@@ -1182,7 +1191,7 @@
                 })
                 .classed('brushed', true)
                 .each(function() {
-                    d3$1.select(this.parentNode).moveToFront();
+                    d3.select(this.parentNode).moveToFront();
                 });
         }
 
@@ -1238,7 +1247,7 @@
                 .text(function(d) {
                     return d.slice(0, nchar - 3) + '...';
                 })
-                .style('cursor', 'pointer')
+                .style('cursor', 'help')
                 .append('title')
                 .text(function(d) {
                     return d;
@@ -1248,14 +1257,21 @@
 
     function onResize() {
         if (this.filtered_data.length == 0) {
-            this.wrap.select('svg').classed('hidden', true);
-            this.wrap
-                .append('div')
-                .attr('class', 'no-data')
-                .text('No data found for current selection.');
+            this.svg.selectAll('*').classed('hidden', true);
+            this.svg.select('text.no-data').remove();
+            this.svg
+                .append('text')
+                .classed('no-data', true)
+                .attr({
+                    x: 0,
+                    dx: -this.config.margin.left,
+                    y: 0,
+                    dy: 10
+                })
+                .text('No data selected.');
         } else {
-            this.wrap.select('svg').classed('hidden', false);
-            this.wrap.select('div.no-data').remove();
+            this.svg.selectAll('*').classed('hidden', false);
+            this.svg.select('text.no-data').remove();
             this.svg.select('.normal-range').remove();
             this.svg
                 .insert('rect', '.line-supergroup')
@@ -1283,7 +1299,7 @@
                 domain: clone(this.config.y.domain),
                 xScale: clone(this.x),
                 yScale: clone(this.y),
-                brush: d3$1.svg
+                brush: d3.svg
                     .brush()
                     .x(this.x)
                     .y(this.y)
@@ -1307,9 +1323,9 @@
             //Add brush functionality.
             brush.call(this);
 
-            // rotate ticks
+            //Rotate x-axis tick labels.
             if (this.config.x.rotate_tick_labels) {
-                adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+                adjustTicks.call(this, 'x', -10, 10, -45, 'end', 10);
             }
         }
     }
@@ -1332,17 +1348,12 @@
 
     function onPreprocess$1() {}
 
-    function onDatatransform$1() {
-        //Hide system variables.
-        this.config.cols = this.config.cols.filter(function(col) {
-            return ['brushed', 'measure_unit'].indexOf(col) === -1;
-        });
-    }
+    function onDatatransform$1() {}
 
     function onDraw$1() {
         //Highlight selected rows.
         this.table.selectAll('tbody tr').classed('brushed', function(d) {
-            return d.brushed;
+            return d ? d.brushed : false;
         });
     }
 
@@ -1365,7 +1376,7 @@
         var settings = arguments[1];
 
         //Define unique div within passed element argument.
-        var container = d3$1
+        var container = d3
                 .select(element)
                 .append('div')
                 .attr('id', 'paneled-outlier-explorer'),
@@ -1390,8 +1401,8 @@
 
         //Attach stuff to chart.
         chart.container = container;
-        chart.config.initialSettings = clone(syncedSettings);
         chart.listing = listing;
+        chart.config.initialSettings = clone(syncedSettings);
 
         //Attach stuff to listing.
         listing.container = container;

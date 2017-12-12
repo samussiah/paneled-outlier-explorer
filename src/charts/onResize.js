@@ -5,17 +5,25 @@ import brush from './onResize/brush';
 import adjustTicks from './onResize/adjustTicks';
 
 export default function onResize() {
-    const chart = this;
+    const context = this;
+
     //Draw normal range.
     if (this.filtered_data.length == 0) {
-        this.wrap.select('svg').classed('hidden', true);
-        this.wrap
-            .append('div')
-            .attr('class', 'no-data')
-            .text('No data found for current selection.');
+        this.svg.selectAll('*').classed('hidden', true);
+        this.svg.select('text.no-data').remove();
+        this.svg
+            .append('text')
+            .classed('no-data', true)
+            .attr({
+                x: 0,
+                dx: -this.config.margin.left,
+                y: 0,
+                dy: 10
+            })
+            .text('No data selected.');
     } else {
-        this.wrap.select('svg').classed('hidden', false);
-        this.wrap.select('div.no-data').remove();
+        this.svg.selectAll('*').classed('hidden', false);
+        this.svg.select('text.no-data').remove();
         this.svg.select('.normal-range').remove();
         this.svg
             .insert('rect', '.line-supergroup')
@@ -65,9 +73,9 @@ export default function onResize() {
         //Add brush functionality.
         brush.call(this);
 
-        // rotate ticks
+        //Rotate x-axis tick labels.
         if (this.config.x.rotate_tick_labels) {
-            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 10);
         }
     }
 }

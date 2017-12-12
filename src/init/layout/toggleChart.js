@@ -1,4 +1,4 @@
-import { select, selectAll } from 'd3';
+import { select } from 'd3';
 import toggleCharts from './toggleCharts';
 
 export default function toggleChart(chart, li) {

@@ -4,10 +4,10 @@
  */
 
 /**
- * See if two line segments intersect. This uses the 
+ * See if two line segments intersect. This uses the
  * vector cross product approach described below:
  * http://stackoverflow.com/a/565282/786339
- * 
+ *
  * @param {Object} p point object with x and y coordinates
  *  representing the start of the 1st line.
  * @param {Object} p2 point object with x and y coordinates
@@ -52,10 +52,10 @@ export default function doLineSegmentsIntersect(p, p2, q, q2) {
 
 /**
  * Calculate the cross product of the two points.
- * 
+ *
  * @param {Object} point1 point object with x and y coordinates
  * @param {Object} point2 point object with x and y coordinates
- * 
+ *
  * @return the cross product result as a float
  */
 export function crossProduct(point1, point2) {
@@ -64,10 +64,10 @@ export function crossProduct(point1, point2) {
 
 /**
  * Subtract the second point from the first.
- * 
+ *
  * @param {Object} point1 point object with x and y coordinates
  * @param {Object} point2 point object with x and y coordinates
- * 
+ *
  * @return the subtraction result as a point object
  */
 

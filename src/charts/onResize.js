@@ -5,31 +5,42 @@ import brush from './onResize/brush';
 import adjustTicks from './onResize/adjustTicks';
 
 export default function onResize() {
-    const chart = this;
+    const context = this;
+
     //Draw normal range.
     if (this.filtered_data.length == 0) {
-        this.wrap.select('svg').classed('hidden', true);
-        this.wrap
-            .append('div')
-            .attr('class', 'no-data')
-            .text('No data found for current selection.');
+        this.svg.selectAll('*').classed('hidden', true);
+        this.svg.select('text.no-data').remove();
+        this.svg
+            .append('text')
+            .classed('no-data', true)
+            .attr({
+                x: 0,
+                dx: -this.config.margin.left,
+                y: 0,
+                dy: 10
+            })
+            .text('No data selected.');
     } else {
-        this.wrap.select('svg').classed('hidden', false);
-        this.wrap.select('div.no-data').remove();
+        this.svg.selectAll('*').classed('hidden', false);
+        this.svg.select('text.no-data').remove();
         this.svg.select('.normal-range').remove();
-        this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
-            x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-            y: this.y(this.filtered_data[0][this.config.uln_col]),
-            width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-            height:
-                this.y(this.filtered_data[0][this.config.lln_col]) -
-                this.y(this.filtered_data[0][this.config.uln_col]),
-            fill: 'green',
-            'fill-opacity': 0.05,
-            stroke: 'green',
-            'stroke-opacity': 1,
-            'clip-path': `url(#${this.id})`
-        });
+        this.svg
+            .insert('rect', '.line-supergroup')
+            .classed('normal-range', true)
+            .attr({
+                x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+                y: this.y(this.filtered_data[0][this.config.uln_col]),
+                width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+                height:
+                    this.y(this.filtered_data[0][this.config.lln_col]) -
+                    this.y(this.filtered_data[0][this.config.uln_col]),
+                fill: 'green',
+                'fill-opacity': 0.05,
+                stroke: 'green',
+                'stroke-opacity': 1,
+                'clip-path': `url(#${this.id})`
+            });
 
         //Capture each multiple's scale.
         this.package = {
@@ -40,7 +51,10 @@ export default function onResize() {
             domain: clone(this.config.y.domain),
             xScale: clone(this.x),
             yScale: clone(this.y),
-            brush: svg.brush().x(this.x).y(this.y)
+            brush: svg
+                .brush()
+                .x(this.x)
+                .y(this.y)
         };
         this.wrap.datum(this.package);
 
@@ -59,9 +73,9 @@ export default function onResize() {
         //Add brush functionality.
         brush.call(this);
 
-        // rotate ticks
+        //Rotate x-axis tick labels.
         if (this.config.x.rotate_tick_labels) {
-            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 8);
+            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 10);
         }
     }
 }

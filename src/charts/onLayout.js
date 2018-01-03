@@ -1,5 +1,5 @@
-import { select, selectAll } from 'd3';
-import toggleChart from '../init/toggleChart';
+import { select } from 'd3';
+import toggleChart from '../init/layout/toggleChart';
 import m__imize from './onLayout/m__imize';
 
 export default function onLayout() {
@@ -23,7 +23,7 @@ export default function onLayout() {
             //Minimize chart.
             if (this.wrap.classed('full-screen')) m__imize(this);
 
-            const li = d3.select(
+            const li = select(
                 'li.measure-item.' + this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
             );
             li.select('input').property('checked', false);

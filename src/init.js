@@ -1,4 +1,6 @@
-import { set, select } from 'd3';
+import defineData from './init/defineData';
+import captureMeasures from './init/captureMeasures';
+import { select } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
 import applyFilters from './init/applyFilters';
@@ -7,91 +9,34 @@ export default function init(data) {
     const chart = this;
 
     //Attach data arrays to central chart object.
-    this.data = {
-        raw: data,
-        sorted: data
-            .filter(
-                d =>
-                    /^[0-9.]+$/.test(d[this.config.value_col]) &&
-                    !/^\s*$/.test(d[this.config.measure_col])
-            )
-            .sort((a, b) => {
-                const aValue = a[this.config.measure_col],
-                    bValue = b[this.config.measure_col],
-                    leftSort = aValue < bValue,
-                    rightSort = aValue > bValue,
-                    aID = a[this.config.id_col],
-                    bID = b[this.config.id_col],
-                    aTime = a[this.config.time_col],
-                    bTime = b[this.config.time_col];
+    defineData.call(this, data);
 
-                let sort;
-                if (this.config.measures && this.config.measures.length) {
-                    const aPos = this.config.measures.indexOf(aValue),
-                        bPos = this.config.measures.indexOf(bValue),
-                        diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+    //Capture unique measures in an array and define initially displayed measures.
+    captureMeasures.call(this);
 
-                    sort = diff
-                        ? diff
-                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-                } else sort = leftSort ? -1 : rightSort ? 1 : 0;
-
-                if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
-
-                return sort;
-            })
-    };
-    if (this.data.raw.length !== this.data.sorted.length)
-        console.warn(
-            `${this.data.raw.length -
-                this.data.sorted.length} non-numeric observations have been removed from the data.`
-        );
-    this.data.sorted.forEach(d => {
-        d.brushed = false;
-        if (d[this.config.unit_col])
-            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
-        else d.measure_unit = d[this.config.measure_col];
-    });
-    this.data.filtered = this.data.sorted;
-    this.data.brushed = [];
-    this.data.selectedIDs = [];
-
-    //Capture unique measures.
-    this.config.allMeasures = set(this.data.sorted.map(d => d.measure_unit))
-        .values()
-        .sort((a, b) => {
-            const leftSort = a < b,
-                rightSort = a > b;
-
-            if (this.config.measures && this.config.measures.length) {
-                const aPos = this.config.measures.indexOf(a),
-                    bPos = this.config.measures.indexOf(b),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
-
-                return diff
-                    ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-            } else return leftSort ? -1 : rightSort ? 1 : 0;
-        });
-    this.config.measures =
-        this.config.measures && this.config.measures.length
-            ? this.config.measures
-            : this.config.allMeasures;
-
+    //Define layout of renderer.
     layout.call(this);
 
-    //Charts
-    this.wrap.attr('id', 'Charts');
+    //Initialize charts.
     multiply(this, this.data.sorted, 'measure_unit');
 
-    //Listing
-    this.listing.wrap.attr('id', 'Listing');
-    this.listing.parent = this;
+    //Initialize listing.
+    this.listing.config.cols = Object.keys(data[0]).filter(
+        key => ['brushed', 'measure_unit'].indexOf(key) === -1
+    ); // remove system variables from listing
     this.listing.init(this.data.sorted);
-    this.listing.wrap.classed('hidden', true);
 
     //Define custom event listener for filters.
-    this.wrap.selectAll('#left-side .wc-controls .control-group').on('change', function(d) {
+    const controls = this.controls.wrap.selectAll('.control-group');
+    controls
+        .filter(control => control.label === 'X-axis')
+        .selectAll('option')
+        .property(
+            'label',
+            d => this.config.time_cols.filter(time_col => time_col.value_col === d).pop().label
+        );
+
+    controls.on('change', function(d) {
         d.value = select(this)
             .selectAll('option')
             .filter(function() {

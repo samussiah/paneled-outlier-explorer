@@ -12,20 +12,20 @@ export default {
             vertical_space: 0
         },
         {
-            value_col: 'VISITN',
-            order: null,
+            value_col: 'VISIT',
             type: 'ordinal',
+            order: null,
+            label: 'Visit',
+            rotate_tick_labels: true,
+            vertical_space: 75
+        },
+        {
+            value_col: 'VISITN',
+            type: 'ordinal',
+            order: null,
             label: 'Visit Number',
             rotate_tick_labels: false,
             vertical_space: 0
-        },
-        {
-            value_col: 'VISIT',
-            order: null,
-            type: 'ordinal',
-            label: 'Visit',
-            rotate_tick_labels: true,
-            vertical_space: 100
         }
     ],
     value_col: 'STRESN',
@@ -40,7 +40,7 @@ export default {
     x: {
         type: null, // sync to [ time_cols[0].type ]
         column: null, // sync to [ time_cols[0].value_col ]
-        label: null // sync to [ time_cols[0].label ]
+        label: '' // sync to [ time_cols[0].label ]
     },
     y: {
         type: 'linear',
@@ -60,10 +60,11 @@ export default {
     ],
     resizable: false,
     scale_text: false,
-    width: 365,
+    width: 400,
     height: 200,
     margin: {
-        left: 40
+        bottom: 0,
+        left: 50
     },
     gridlines: 'xy'
 };
@@ -73,7 +74,6 @@ export function syncSettings(settings) {
     syncedSettings.x.type = settings.time_cols[0].type;
     syncedSettings.x.order = settings.time_cols[0].order;
     syncedSettings.x.column = settings.time_cols[0].value_col;
-    syncedSettings.x.label = settings.time_cols[0].label;
     syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
@@ -85,7 +85,7 @@ export const controlInputs = [
     {
         type: 'dropdown',
         label: 'X-axis',
-        option: 'x.label',
+        option: 'x.column',
         require: true
     }
 ];
@@ -95,7 +95,7 @@ export function syncControlInputs(controlInputs, settings) {
 
     syncedControlInputs.filter(
         controlInput => controlInput.label === 'X-axis'
-    )[0].values = settings.time_cols.map(d => d.label || d);
+    )[0].values = settings.time_cols.map(d => d.value_col || d);
 
     if (settings.filters)
         settings.filters.forEach(filter => {

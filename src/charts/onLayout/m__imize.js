@@ -10,7 +10,10 @@ export default function m__imize(chart) {
         chart.parent.expandedChart = chart;
 
         //Modify chart configuation and redraw.
-        chart.wrap.select('.m__imize-chart').html('&minus;').attr('title', 'Minimize chart');
+        chart.wrap
+            .select('.m__imize-chart')
+            .html('&minus;')
+            .attr('title', 'Minimize chart');
         chart.wrap.classed('expanded', true);
 
         chart.config.width = null;

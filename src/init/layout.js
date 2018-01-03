@@ -1,8 +1,11 @@
-import { select, selectAll } from 'd3';
-import toggleChart from './toggleChart';
-import toggleCharts from './toggleCharts';
+import { select } from 'd3';
+import toggleChart from './layout/toggleChart';
+import toggleCharts from './layout/toggleCharts';
 
 export default function layout() {
+    this.wrap.attr('id', 'Charts');
+    this.listing.wrap.attr('id', 'Listing').classed('hidden', true);
+
     const chart = this,
         //Create navigation bar.
         navigationBar = this.container.insert('ul', ':first-child').attr('id', 'navigation-bar'),
@@ -51,6 +54,7 @@ export default function layout() {
             .on('click', function() {
                 toggleCharts(chart, this);
             });
+
     measureListHeader.append('span').text('Measures');
     const measureList = measureListContainer //Define individual chart toggles.
         .append('ul')

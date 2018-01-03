@@ -1,3 +1,4 @@
+import { select } from 'd3';
 import defineStyles from './util/defineStyles';
 import clone from './util/clone';
 import './util/object-assign';
@@ -6,11 +7,12 @@ import { createControls, createChart, createTable } from 'webcharts';
 import init from './init';
 import chartCallbacks from './charts/index';
 import listingCallbacks from './listing/index';
-import { select } from 'd3';
 
 export default function paneledOutlierExplorer(element = 'body', settings) {
     //Define unique div within passed element argument.
-    const container = select(element).append('div').attr('id', 'paneled-outlier-explorer'),
+    const container = select(element)
+            .append('div')
+            .attr('id', 'paneled-outlier-explorer'),
         containerElement = container.node(),
         controlsContainer = container.append('div').attr('id', 'left-side'),
         controlsContainerElement = controlsContainer.node();
@@ -32,8 +34,8 @@ export default function paneledOutlierExplorer(element = 'body', settings) {
 
     //Attach stuff to chart.
     chart.container = container;
-    chart.config.initialSettings = clone(syncedSettings);
     chart.listing = listing;
+    chart.config.initialSettings = clone(syncedSettings);
 
     //Attach stuff to listing.
     listing.container = container;

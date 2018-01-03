@@ -2,15 +2,8 @@
   "name": "paneled-outlier-explorer",
   "version": "1.0.4",
   "description": "Paneled line charts of data points over time with point and line brushing",
-  "main": "./src/index.js",
-  "scripts": {
-    "build": "npm run bundle && npm run format",
-    "bundle": "rollup -c",
-    "format": "npm run format-src && npm run format-bundle",
-    "format-bundle": "prettier --single-quote --tab-width=4 --print-width=100 --write  ./build/paneledOutlierExplorer.js",
-    "format-src": "prettier --single-quote --tab-width=4 --print-width=100 --write \"src/**/!(*defineStyles).js\"",
-    "watch": "rollup -c -w"
-  },
+  "main": "./build/paneledOutlierExplorer.js",
+  "module": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RhoInc/paneled-outlier-explorer.git"
@@ -33,6 +26,15 @@
   "dependencies": {
       "d3": "~3",
       "webcharts": "~1"
+  },
+  "scripts": {
+    "build": "npm run bundle && npm run format && npm run build-md",
+    "build-md": "node ./scripts/configuration-markdown.js",
+    "bundle": "rollup -c",
+    "format": "npm run format-src && npm run format-bundle",
+    "format-bundle": "prettier --single-quote --tab-width=4 --print-width=100 --write  ./build/paneledOutlierExplorer.js",
+    "format-src": "prettier --single-quote --tab-width=4 --print-width=100 --write \"src/**/!(*defineStyles).js\"",
+    "watch": "rollup -c -w"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",

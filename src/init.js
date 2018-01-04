@@ -3,7 +3,7 @@ import initializeDisplays from './init/initializeDisplays';
 import xAxisControlLabels from './init/xAxisControlLabels';
 import updateAllMeasuresCheckbox from './init/updateAllMeasuresCheckbox';
 import addMeasureItems from './init/addMeasureItems';
-import defineFilteredData from './init/defineFilteredData';
+import addFilterEventListeners from './init/addFilterEventListeners';
 
 export default function init(data) {
     //Attach data arrays to central chart object.
@@ -21,9 +21,6 @@ export default function init(data) {
     //Add measure items to measure list.
     addMeasureItems.call(this);
 
-    //Add event listenersDefine filtered data array when controls change.
-    defineFilteredData.call(this);
-
-    //Define filtered data array when controls change.
-    defineFilteredData.call(this);
+    //Add filter event listeners.
+    addFilterEventListeners.call(this);
 }

@@ -8,5 +8,6 @@ export default function defineSettings() {
         clone(this.settings.user)
     );
     defaults.syncSettings.call(this);
+    Object.assign(this.settings, this.settings.synced);
     defaults.syncControls.call(this);
 }

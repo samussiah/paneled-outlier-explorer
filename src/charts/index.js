@@ -1,17 +1,11 @@
-import onInit from './onInit';
-import onLayout from './onLayout';
-import onPreprocess from './onPreprocess';
-import onDatatransform from './onDatatransform';
-import onDraw from './onDraw';
-import onResize from './onResize';
-import onDestroy from './onDestroy';
+import { createChart } from 'webcharts';
+import callbacks from './callbacks/index';
 
-export default {
-    onInit: onInit,
-    onLayout: onLayout,
-    onPreprocess: onPreprocess,
-    onDatatransform: onDatatransform,
-    onDraw: onDraw,
-    onResize: onResize,
-    onDestroy: onDestroy
-};
+export default function charts() {
+    this.charts = createChart(this.containers.charts.node(), this.settings.charts, this.controls);
+
+    for (const callback in callbacks)
+        this.charts.on(callback.substring(2).toLowerCase(), callbacks[callback]);
+
+    this.charts.paneledOutlierExplorer = this;
+}

@@ -1,61 +1,44 @@
-import { select } from 'd3';
 import defineStyles from './util/defineStyles';
-import clone from './util/clone';
-import './util/object-assign';
-import defaultSettings, { syncSettings, controlInputs, syncControlInputs } from './defaultSettings';
-import { createControls, createChart, createTable } from 'webcharts';
+import defineLayout from './util/defineLayout';
+import defineSettings from './defaultSettings';
+import controls from './controls';
+import charts from './charts/index';
+import listing from './listing/index';
+import recurse from './listing/index';
 import init from './init';
-import chartCallbacks from './charts/index';
-import listingCallbacks from './listing/index';
 
-export default function paneledOutlierExplorer(element = 'body', settings) {
-    //Define unique div within passed element argument.
-    const container = select(element)
-            .append('div')
-            .attr('id', 'paneled-outlier-explorer'),
-        containerElement = container.node(),
-        controlsContainer = container.append('div').attr('id', 'left-side'),
-        controlsContainerElement = controlsContainer.node();
+export default function paneledOutlierExplorer(element = 'body', settings = {}) {
+    const
+        paneledOutlierExplorer = {
+            element: element,
+            settings: {
+                user: settings
+            },
+            containers: {},
+            init: init,
+            data: {}
+        };
+
+    //Define layout.
+    defineLayout.call(paneledOutlierExplorer);
 
     //Define .css styles to avoid requiring a separate .css file.
-    defineStyles();
+    defineStyles.call(paneledOutlierExplorer);
 
-    //Clone, merge, and sync settings and define chart.
-    const initialSettings = clone(settings),
-        mergedSettings = Object.assign({}, defaultSettings, initialSettings),
-        syncedSettings = syncSettings(mergedSettings),
-        syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-        controls = createControls(controlsContainerElement, {
-            location: 'top',
-            inputs: syncedControlInputs
-        }),
-        chart = createChart(containerElement, syncedSettings, controls),
-        listing = createTable(containerElement, {}, controls);
+    //Define settings.
+    defineSettings.call(paneledOutlierExplorer);
 
-    //Attach stuff to chart.
-    chart.container = container;
-    chart.listing = listing;
-    chart.config.initialSettings = clone(syncedSettings);
+    //Create controls.
+    controls.call(paneledOutlierExplorer);
 
-    //Attach stuff to listing.
-    listing.container = container;
-    listing.chart = chart;
+    //Create charts.
+    charts.call(paneledOutlierExplorer);
 
-    //Define chart callbacks.
-    for (const callback in chartCallbacks)
-        chart.on(callback.substring(2).toLowerCase(), chartCallbacks[callback]);
+    //Create listing.
+    listing.call(paneledOutlierExplorer);
 
-    //Define listing callbacks.
-    for (const callback in listingCallbacks)
-        listing.on(callback.substring(2).toLowerCase(), listingCallbacks[callback]);
+    //Point paneledOutlierExplorer, charts, and listing objects at each other.
+    recurse.call(paneledOutlierExplorer);
 
-    //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
-    Object.defineProperty(chart, 'init', {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: init
-    });
-
-    return chart;
+    return paneledOutlierExplorer;
 }

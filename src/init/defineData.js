@@ -1,50 +1,52 @@
+import { set } from 'd3';
+
 export default function defineData(data) {
-    this.data = {
-        raw: data,
-        sorted: data
-            .filter(
-                d =>
-                    /^[0-9.]+$/.test(d[this.config.value_col]) &&
-                    !/^\s*$/.test(d[this.config.measure_col])
-            )
-            .sort((a, b) => {
-                const aValue = a[this.config.measure_col],
-                    bValue = b[this.config.measure_col],
-                    leftSort = aValue < bValue,
-                    rightSort = aValue > bValue,
-                    aID = a[this.config.id_col],
-                    bID = b[this.config.id_col],
-                    aTime = a[this.config.time_col],
-                    bTime = b[this.config.time_col];
+    //Capture variable names.
+    this.data.variables = Object.keys(data[0]);
 
-                let sort;
-                if (this.config.measures && this.config.measures.length) {
-                    const aPos = this.config.measures.indexOf(aValue),
-                        bPos = this.config.measures.indexOf(bValue),
-                        diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+    //Define set of unique IDs.
+    this.data.population = set(data.map(d => d[this.settings.synced.id_col])).values().sort();
 
-                    sort = diff
-                        ? diff
-                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-                } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+    //Define set of unique measures.
+    this.data.measures = set(data.map(d => d.measure_unit)).values().sort();
 
-                if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
-
-                return sort;
-            })
-    };
-    if (this.data.raw.length !== this.data.sorted.length)
-        console.warn(
-            `${this.data.raw.length -
-                this.data.sorted.length} non-numeric observations have been removed from the data.`
+    //Filter data on observations with numeric results.
+    this.data.raw = data
+        .filter(
+            d =>
+                /^[0-9.]+$/.test(d[this.settings.synced.value_col])
         );
-    this.data.sorted.forEach(d => {
-        d.brushed = false;
-        if (d[this.config.unit_col])
-            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
-        else d.measure_unit = d[this.config.measure_col];
-    });
-    this.data.filtered = this.data.sorted;
+
+    if (data.length !== this.data.raw.length)
+        console.warn(
+            `${data.length -
+                this.data.raw.length} non-numeric observations have been removed from the data.`
+        );
+
+    //Define set of unique quantitative measures.
+    this.data.quantitativeMeasures = set(this.data.raw.map(d => d.measure_unit)).values().sort();
+
+    //Define set of initially displayed measures.
+    this.data.currentMeasures = this.settings.synced.measures && this.settings.synced.measures.length
+        ? this.settings.synced.measures
+        : this.data.quantitativeMeasures;
+
+    //Define set of unique qualitative measures.
+    this.data.qualitativeMeasures = this.data.measures
+        .filter(measure => this.data.quantitativeMeasures.indexOf(measure) < 0);
+
+    //Define additional variables.
+    this.data.raw
+        .forEach(d => {
+            //Concatenate measure and unit.
+            if (d[this.settings.synced.unit_col])
+                d.measure_unit = `${d[this.settings.synced.measure_col]} (${d[this.settings.synced.unit_col]})`;
+            else
+                d.measure_unit = d[this.settings.synced.measure_col];
+
+            d.brushed = false;
+        });
+    this.data.filtered = this.data.raw;
     this.data.brushed = [];
     this.data.selectedIDs = [];
 }

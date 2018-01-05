@@ -3,95 +3,129 @@ export default function defineStyles() {
         styles = [
 
         /***--------------------------------------------------------------------------------------\
-          Controls
+          Global styles
         \--------------------------------------------------------------------------------------***/
 
-            '#paneled-outlier-explorer #controls-header {' +
-                '    margin: 0;' +
-                '    overflow: hidden;' +
-                '    background-color: #333;' +
-                '    width: 24%;' +
-                '    float: left;' +
-                '    font-size: 150%;' +
-                '    display: block;' +
-                '    color: white;' +
-                '    padding: 14px 16px;' +
-                '    box-sizing: border-box;' +
-                '}',
-            '#paneled-outlier-explorer #left-side {' +
-                '    width: 24%;' +
-                '    float: left;' +
-                '}',
-            '#paneled-outlier-explorer #left-side > * {' +
+            '#paneled-outlier-explorer {' +
+                '    display: inline-block;' +
                 '    width: 100%;' +
+                '}',
+            '#paneled-outlier-explorer .poe-column {' +
                 '    display: inline-block;' +
                 '}',
-            '#paneled-outlier-explorer #left-side .wc-controls {' +
-                '    padding: 10px 0;' +
-                '}',
-            '#paneled-outlier-explorer #left-side .wc-controls .control-group {' +
+            '#paneled-outlier-explorer #poe-left-column {' +
+                '    width: 20%;' +
                 '    float: left;' +
-                '    clear: left;' +
-                '    margin: 0 0 2px 0;' +
                 '}',
-            '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
+            '#paneled-outlier-explorer #poe-right-column {' +
+                '    width: 79%;' +
+                '    float: right;' +
+                '}',
+            '#paneled-outlier-explorer .poe-column > * {' +
+                '    width: 100%;' +
+                '    vertical-align: top;' +
                 '    display: inline-block;' +
-                '    margin-left: 3px;' +
+                '    margin-bottom: 10px;' +
+                '    border: 1px solid #eee;' +
                 '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container {' +
-                '   padding:0' +
-                '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-header {' +
+            '#paneled-outlier-explorer .poe-column .poe-header {' +
+                '    box-sizing: border-box;' +
+                '    padding: 14px 16px;' +
+                '    background-color: #333;' +
+                '    color: white;' +
                 '    font-size: 150%;' +
-                '    border-top: 1px solid lightgray;' +
-                '    font-weight: lighter;' +
-                '    padding: 14px 0;' +
                 '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' +
-                '    margin: 5px;' +
+            '#paneled-outlier-explorer .poe-column > * > * {' +
+                '    margin: 10px;' +
                 '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container #measure-list {' +
-                '    list-style-type: none;' +
-                '    font-weight: lighter;' +
-                '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container .measure-item {' +
-                '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container .measure-item-container {' +
-                '}',
-            '#paneled-outlier-explorer #left-side #measure-list-container .measure-checkbox {' +
-                '    margin: 5px;' +
+            '#paneled-outlier-explorer .poe-hidden {' +
+                '    display: none !important;' +
                 '}',
 
         /***--------------------------------------------------------------------------------------\
-          Navigation
+          Left column elements
         \--------------------------------------------------------------------------------------***/
 
-            '#paneled-outlier-explorer ul#navigation-bar {' +
-                '    list-style-type: none;' +
-                '    margin: 0;' +
-                '    padding: 0;' +
-                '    overflow: hidden;' +
-                '    background-color: #333;' +
-                '    width: 75%;' +
+            '#paneled-outlier-explorer #poe-left-column > * {' +
+                '}',
+
+          //webcharts controls
+            '#paneled-outlier-explorer #poe-controls .wc-controls {' +
+                '    margin-bottom: 0;' +
+                '    clear: left;' +
+                '}',
+            '#paneled-outlier-explorer #poe-controls .control-group {' +
+                '    margin: 0 0 5px 0;' +
+                '    display: block;' +
+                '    float: right;' +
+                '    clear: both;' +
+                '    width: 100%;' +
+                '}',
+            '#paneled-outlier-explorer #poe-controls .control-group > * {' +
+                '    display: inline-block;' +
+                '    vertical-align: top;' +
                 '    float: right;' +
                 '}',
-            '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
-                '    float: left;' +
+            '#paneled-outlier-explorer #poe-controls .span-description {' +
+                '    font-size: 90%;' +
+                '}',
+            '#paneled-outlier-explorer #poe-controls .changer {' +
+                '    margin-left: 5px;' +
+                '    width: 50%;' +
+                '    clear: right;' +
+                '    box-sizing: border-box;' +
+                '}',
+
+            //measure list
+            '#paneled-outlier-explorer #poe-all-measures {' +
+                '    width: 100%;' +
+                '    display: inline-block;' +
+                '    clear: both;' +
+                '}',
+            '#paneled-outlier-explorer #poe-all-measures > * {' +
+                '    float: right;' +
+                '}',
+            '#paneled-outlier-explorer #poe-measure-list {' +
+                '    list-style-type: none;' +
+                '    font-weight: lighter;' +
+                '    padding-left: 0;' +
+                '}',
+            '#paneled-outlier-explorer #poe-measure-list .poe-measure-item-container {' +
+                '    width: 100%;' +
+                '    clear: both;' +
+                '}',
+            '#paneled-outlier-explorer #poe-measure-list .poe-measure-item-container > * {' +
+                '    float: right;' +
+                '}',
+
+        /***--------------------------------------------------------------------------------------\
+          Right column elements
+        \--------------------------------------------------------------------------------------***/
+
+            '#paneled-outlier-explorer #poe-right-column > * {' +
+                '}',
+
+            //navigation
+            '#paneled-outlier-explorer #poe-nav-bar {' +
+                '    list-style-type: none;' +
+                '    padding: 0;' +
+                '    margin: 0;' +
+                '}',
+            '#paneled-outlier-explorer #poe-nav-bar .poe-nav {' +
                 '    cursor: pointer;' +
-                '    font-size: 150%;' +
-                '    display: block;' +
-                '    color: white;' +
-                '    text-align: center;' +
-                '    padding: 14px 16px;' +
                 '    text-decoration: none;' +
+                '    display: inline-block;' +
                 '}',
-            '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +
+            '#paneled-outlier-explorer #poe-nav-bar .poe-nav:not(:last-child) {' +
+                '    margin-right: 14px;' +
+                '}',
+            '#paneled-outlier-explorer #poe-nav-bar .poe-nav:hover {' +
                 '    background-color: #111;' +
                 '}',
-            '#paneled-outlier-explorer ul#navigation-bar li.navigation:hover {' +
+            '#paneled-outlier-explorer #poe-nav-bar .poe-nav.poe-active {' +
                 '    background-color: #111;' +
                 '}',
-            '#paneled-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' +
+            '#paneled-outlier-explorer #poe-nav-bar .poe-nav.poe-brushed {' +
                 '    color: orange;' +
                 '}',
 
@@ -99,6 +133,11 @@ export default function defineStyles() {
           Charts
         \--------------------------------------------------------------------------------------***/
 
+            '#paneled-outlier-explorer path.brushed {' +
+                '    stroke: orange;' +
+                '    stroke-width: 3px;' +
+                '    stroke-opacity: 1;' +
+                '}',
             '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
                 '    width: 75%;' +
                 '    float: right;' +
@@ -137,6 +176,9 @@ export default function defineStyles() {
           Listing
         \--------------------------------------------------------------------------------------***/
 
+            '#paneled-outlier-explorer tr.brushed {' +
+                '    border: 2px solid orange !important;' +
+                '}',
             '#paneled-outlier-explorer div.wc-chart#Listing {' +
                 '    width: 75%;' +
                 '    float: right;' +
@@ -145,26 +187,15 @@ export default function defineStyles() {
                 '}',
             '#paneled-outlier-explorer div.wc-chart#Listing table {' +
                 '}',
-
-        /***--------------------------------------------------------------------------------------\
-          General styles
-        \--------------------------------------------------------------------------------------***/
-
-            '#paneled-outlier-explorer .hidden {' +
-                '    display: none !important;' +
-                '}',
-            '#paneled-outlier-explorer path.brushed {' +
-                '    stroke: orange;' +
-                '    stroke-width: 3px;' +
-                '    stroke-opacity: 1;' +
-                '}',
-            '#paneled-outlier-explorer tr.brushed {' +
-                '    border: 2px solid orange !important;' +
-                '}'
         ],
-        style = document.createElement('style');
+        style = this.test
+            ? this.dom.window.document.createElement('style')
+            : document.createElement('style');
         style.type = 'text/css';
         style.innerHTML = styles.join('\n');
 
-    document.getElementsByTagName('head')[0].appendChild(style);
+    if (this.test)
+        this.dom.window.document.getElementsByTagName('head')[0].appendChild(style);
+    else
+        document.getElementsByTagName('head')[0].appendChild(style);
 }

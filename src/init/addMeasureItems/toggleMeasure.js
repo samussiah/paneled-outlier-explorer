@@ -1,5 +1,5 @@
 import { select } from 'd3';
-import defineFilteredData from '../defineFilteredData';
+import applyFilters from '../addFilterEventListeners/applyFilters';
 
 export default function toggleMeasure(input, d) {
     //Determine state of checkbox.
@@ -21,7 +21,7 @@ export default function toggleMeasure(input, d) {
         this.data.currentMeasures.push(d.measure).sort();
     else
         this.data.currentMeasures.splice(this.data.currentMeasures.indexOf(d.measure), 1);
-    defineFilteredData.call(this);
+    applyFilters.call(this);
 
     //Toggle all measures checkbox
     const

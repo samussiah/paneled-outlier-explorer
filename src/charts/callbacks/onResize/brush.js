@@ -1,4 +1,4 @@
-import { select, selectAll } from 'd3';
+import { select } from 'd3';
 import brushMarks from './brushMarks';
 
 export default function brush() {
@@ -32,9 +32,9 @@ export default function brush() {
     });
 
     //Highlight previously brushed points.
-    if (this.parent.data.selectedIDs.length) {
+    if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
         lines
-            .filter(d => this.parent.data.selectedIDs.indexOf(d.id) > -1)
+            .filter(d => this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1)
             .classed('brushed', true)
             .each(function() {
                 select(this.parentNode).moveToFront();

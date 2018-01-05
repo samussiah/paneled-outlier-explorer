@@ -1,6 +1,11 @@
-export default function createControls() {
-        controls = createControls(controlsContainerElement, {
+import { createControls } from 'webcharts';
+
+export default function controls() {
+    this.controls = createControls(
+        this.containers.controls.node(),
+        {
             location: 'top',
-            inputs: syncedControlInputs
-        }),
+            inputs: this.settings.controls
+        }
+    );
 }

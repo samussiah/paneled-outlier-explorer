@@ -23,13 +23,6 @@ export default function defineData(data) {
                 this.data.raw.length} non-numeric observations have been removed from the data.`
         );
 
-    //Define set of unique quantitative measures.
-    this.data.quantitativeMeasures = set(this.data.raw.map(d => d.measure_unit)).values().sort();
-
-    //Define set of unique qualitative measures.
-    this.data.qualitativeMeasures = this.data.measures
-        .filter(measure => this.data.quantitativeMeasures.indexOf(measure) < 0);
-
     //Define additional variables.
     this.data.raw
         .forEach(d => {
@@ -42,10 +35,18 @@ export default function defineData(data) {
             d.brushed = false;
         });
 
+    //Define set of unique quantitative measures.
+    this.data.quantitativeMeasures = set(this.data.raw.map(d => d.measure_unit)).values().sort();
+
+    //Define set of unique qualitative measures.
+    this.data.qualitativeMeasures = this.data.measures
+        .filter(measure => this.data.quantitativeMeasures.indexOf(measure) < 0);
+
     //Define set of initially displayed measures.
     this.data.currentMeasures = this.settings.measures && this.settings.measures.length
         ? this.settings.measures
         : this.data.quantitativeMeasures;
+    this.filters[this.settings.measure_col] = this.data.currentMeasures;
 
     //Filter data on the specified subset of measures.
     this.data.filtered = this.data.raw

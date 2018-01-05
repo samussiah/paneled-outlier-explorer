@@ -1,5 +1,5 @@
 import { select } from 'd3';
-import toggleChart from '../init/layout/toggleChart';
+import toggleMeasure from '../../init/addMeasureItems/toggleMeasure';
 import m__imize from './onLayout/m__imize';
 
 export default function onLayout() {
@@ -23,11 +23,10 @@ export default function onLayout() {
             //Minimize chart.
             if (this.wrap.classed('full-screen')) m__imize(this);
 
-            const li = select(
-                'li.measure-item.' + this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
-            );
-            li.select('input').property('checked', false);
-            toggleChart(this, li.node());
+            const
+                checkbox = select(`#poe-measure-item-checkbox-${this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')}`);
+                checkbox.property('checked', false);
+                toggleMeasure(this.paneledOutlierExplrorer, checkbox.node(), {measure: this.currentMeasure});
         });
 
     //Add ability to maximize charts in the chart title.
@@ -44,5 +43,5 @@ export default function onLayout() {
     //Hide measures not listed in [ settings.measures ].
     this.wrap
         .classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true)
-        .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+        .classed('hidden', this.parent.paneledOutlierExplorer.data.currentMeasures.indexOf(this.currentMeasure) === -1);
 }

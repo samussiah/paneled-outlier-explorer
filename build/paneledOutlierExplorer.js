@@ -8,39 +8,184 @@ function defineStyles() {
     var styles = [
 
     /***--------------------------------------------------------------------------------------\
-      Controls
+      Global styles
     \--------------------------------------------------------------------------------------***/
 
-    '#paneled-outlier-explorer #controls-header {' + '    margin: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 24%;' + '    float: left;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    padding: 14px 16px;' + '    box-sizing: border-box;' + '}', '#paneled-outlier-explorer #left-side {' + '    width: 24%;' + '    float: left;' + '}', '#paneled-outlier-explorer #left-side > * {' + '    width: 100%;' + '    display: inline-block;' + '}', '#paneled-outlier-explorer #left-side .wc-controls {' + '    padding: 10px 0;' + '}', '#paneled-outlier-explorer #left-side .wc-controls .control-group {' + '    float: left;' + '    clear: left;' + '    margin: 0 0 2px 0;' + '}', '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' + '    display: inline-block;' + '    margin-left: 3px;' + '}', '#paneled-outlier-explorer #left-side #measure-list-container {' + '   padding:0' + '}', '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-header {' + '    font-size: 150%;' + '    border-top: 1px solid lightgray;' + '    font-weight: lighter;' + '    padding: 14px 0;' + '}', '#paneled-outlier-explorer #left-side #measure-list-container #measure-list-checkbox {' + '    margin: 5px;' + '}', '#paneled-outlier-explorer #left-side #measure-list-container #measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '}', '#paneled-outlier-explorer #left-side #measure-list-container .measure-item {' + '}', '#paneled-outlier-explorer #left-side #measure-list-container .measure-item-container {' + '}', '#paneled-outlier-explorer #left-side #measure-list-container .measure-checkbox {' + '    margin: 5px;' + '}',
+    '#paneled-outlier-explorer {' + '    display: inline-block;' + '    width: 100%;' + '}', '#paneled-outlier-explorer .poe-column {' + '    display: inline-block;' + '}', '#paneled-outlier-explorer #poe-left-column {' + '    width: 20%;' + '    float: left;' + '}', '#paneled-outlier-explorer #poe-right-column {' + '    width: 79%;' + '    float: right;' + '}', '#paneled-outlier-explorer .poe-column > * {' + '    width: 100%;' + '    vertical-align: top;' + '    display: inline-block;' + '    margin-bottom: 10px;' + '    border: 1px solid #eee;' + '}', '#paneled-outlier-explorer .poe-column .poe-header {' + '    box-sizing: border-box;' + '    padding: 14px 16px;' + '    background-color: #333;' + '    color: white;' + '    font-size: 150%;' + '}', '#paneled-outlier-explorer .poe-column > * > * {' + '    margin: 10px;' + '}', '#paneled-outlier-explorer .poe-hidden {' + '    display: none !important;' + '}',
 
     /***--------------------------------------------------------------------------------------\
-      Navigation
+      Left column elements
     \--------------------------------------------------------------------------------------***/
 
-    '#paneled-outlier-explorer ul#navigation-bar {' + '    list-style-type: none;' + '    margin: 0;' + '    padding: 0;' + '    overflow: hidden;' + '    background-color: #333;' + '    width: 75%;' + '    float: right;' + '}', '#paneled-outlier-explorer ul#navigation-bar li.navigation {' + '    float: left;' + '    cursor: pointer;' + '    font-size: 150%;' + '    display: block;' + '    color: white;' + '    text-align: center;' + '    padding: 14px 16px;' + '    text-decoration: none;' + '}', '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' + '    background-color: #111;' + '}', '#paneled-outlier-explorer ul#navigation-bar li.navigation:hover {' + '    background-color: #111;' + '}', '#paneled-outlier-explorer ul#navigation-bar li.navigation#Listing-nav.brushed {' + '    color: orange;' + '}',
+    '#paneled-outlier-explorer #poe-left-column > * {' + '}',
+
+    //webcharts controls
+    '#paneled-outlier-explorer #poe-controls .wc-controls {' + '    margin-bottom: 0;' + '    clear: left;' + '}', '#paneled-outlier-explorer #poe-controls .control-group {' + '    margin: 0 0 5px 0;' + '    display: block;' + '    float: right;' + '    clear: both;' + '    width: 100%;' + '}', '#paneled-outlier-explorer #poe-controls .control-group > * {' + '    display: inline-block;' + '    vertical-align: top;' + '    float: right;' + '}', '#paneled-outlier-explorer #poe-controls .span-description {' + '    font-size: 90%;' + '}', '#paneled-outlier-explorer #poe-controls .changer {' + '    margin-left: 5px;' + '    width: 50%;' + '    clear: right;' + '    box-sizing: border-box;' + '}',
+
+    //measure list
+    '#paneled-outlier-explorer #poe-all-measures {' + '    width: 100%;' + '    display: inline-block;' + '    clear: both;' + '}', '#paneled-outlier-explorer #poe-all-measures > * {' + '    float: right;' + '}', '#paneled-outlier-explorer #poe-measure-list {' + '    list-style-type: none;' + '    font-weight: lighter;' + '    padding-left: 0;' + '}', '#paneled-outlier-explorer #poe-measure-list .poe-measure-item-container {' + '    width: 100%;' + '    clear: both;' + '}', '#paneled-outlier-explorer #poe-measure-list .poe-measure-item-container > * {' + '    float: right;' + '}',
+
+    /***--------------------------------------------------------------------------------------\
+      Right column elements
+    \--------------------------------------------------------------------------------------***/
+
+    '#paneled-outlier-explorer #poe-right-column > * {' + '}',
+
+    //navigation
+    '#paneled-outlier-explorer #poe-nav-bar {' + '    list-style-type: none;' + '    padding: 0;' + '    margin: 0;' + '}', '#paneled-outlier-explorer #poe-nav-bar .poe-nav {' + '    cursor: pointer;' + '    text-decoration: none;' + '    display: inline-block;' + '}', '#paneled-outlier-explorer #poe-nav-bar .poe-nav:not(:last-child) {' + '    margin-right: 14px;' + '}', '#paneled-outlier-explorer #poe-nav-bar .poe-nav:hover {' + '    background-color: #111;' + '}', '#paneled-outlier-explorer #poe-nav-bar .poe-nav.poe-active {' + '    background-color: #111;' + '}', '#paneled-outlier-explorer #poe-nav-bar .poe-nav.poe-brushed {' + '    color: orange;' + '}',
 
     /***--------------------------------------------------------------------------------------\
       Charts
     \--------------------------------------------------------------------------------------***/
 
-    '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' + '    width: 75%;' + '    float: right;' + '    padding-top: 10px;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' + '    padding: 0 1em 0 0;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' + '    width: 100%;' + ' }', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    font-size: .9em;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '    visibility: hidden;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' + '    fill: red;' + '    font-size: 0.8em;' + '}',
+    '#paneled-outlier-explorer path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' + '    width: 75%;' + '    float: right;' + '    padding-top: 10px;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' + '    padding: 0 1em 0 0;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' + '    width: 100%;' + ' }', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    font-size: .9em;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '    visibility: hidden;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' + '    fill: red;' + '    font-size: 0.8em;' + '}',
 
     /***--------------------------------------------------------------------------------------\
       Listing
     \--------------------------------------------------------------------------------------***/
 
-    '#paneled-outlier-explorer div.wc-chart#Listing {' + '    width: 75%;' + '    float: right;' + '    padding-top: 10px;' + '    overflow-x: scroll;' + '}', '#paneled-outlier-explorer div.wc-chart#Listing table {' + '}',
-
-    /***--------------------------------------------------------------------------------------\
-      General styles
-    \--------------------------------------------------------------------------------------***/
-
-    '#paneled-outlier-explorer .hidden {' + '    display: none !important;' + '}', '#paneled-outlier-explorer path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', '#paneled-outlier-explorer tr.brushed {' + '    border: 2px solid orange !important;' + '}'],
-        style = document.createElement('style');
+    '#paneled-outlier-explorer tr.brushed {' + '    border: 2px solid orange !important;' + '}', '#paneled-outlier-explorer div.wc-chart#Listing {' + '    width: 75%;' + '    float: right;' + '    padding-top: 10px;' + '    overflow-x: scroll;' + '}', '#paneled-outlier-explorer div.wc-chart#Listing table {' + '}'],
+        style = this.test ? this.dom.window.document.createElement('style') : document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = styles.join('\n');
 
-    document.getElementsByTagName('head')[0].appendChild(style);
+    if (this.test) this.dom.window.document.getElementsByTagName('head')[0].appendChild(style);else document.getElementsByTagName('head')[0].appendChild(style);
+}
+
+function applyFilters$1() {
+    var _this = this;
+
+    this.data.filtered = this.data.raw.filter(function (d) {
+        var filtered = false;
+
+        for (var variable in _this.filters) {
+            if (filtered === false && !(values.length === 1 && values[0] === 'All')) filtered = _this.filters[variable].indexOf(d[variable]) === -1;
+        }
+
+        return !filtered;
+    });
+    this.charts.multiples.forEach(function (multiple) {
+        multiple.draw(_this.data.filtered);
+    });
+    this.listing.draw(this.data.filtered);
+}
+
+function toggleMeasure(input, d) {
+    //Determine state of checkbox.
+    var checkbox = d3.select(input),
+        checked = checkbox.property('checked');
+
+    //Toggle tooltip.
+    checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
+
+    //Hide/display associated chart.
+    this.containers.charts.selectAll('.wc-chart').filter(function (di) {
+        return di.measure === d.measure;
+    }).classed('poe-hidden', !checked);
+
+    //Update currently selected measures.
+    if (checked) this.data.currentMeasures.push(d.measure).sort();else this.data.currentMeasures.splice(this.data.currentMeasures.indexOf(d.measure), 1);
+    applyFilters$1.call(this);
+
+    //Toggle all measures checkbox
+    var allChecked = this.containers.measureToggles.size() === this.containers.measureToggles.filter(function () {
+        return this.checked;
+    }).size();
+    this.allMeasuresToggle.attr('title', allChecked ? 'Remove all charts' : 'Display all charts').property('checked', allChecked);
+}
+
+function toggleAllMeasures() {
+    var context = this,
+        checked = this.containers.allMeasureToggle.property('checked');
+
+    this.containers.allMeasureToggle.attr('title', checked ? 'Remove all charts' : 'Display all charts');
+
+    this.containers.measureToggles.each(function (d) {
+        d3.select(this).property('checked', checked);
+        toggleMeasure(context, this, d);
+    });
+}
+
+function navClick(d) {
+    this.containers.navs.classed('active', function (di) {
+        return di === d;
+    });
+    this.containers.rightColumn.selectAll('.poe-display').classed('hidden', true);
+    this.containers.rightColumn.select('#poe-' + d.toLowerCase()).classed('hidden', false);
+}
+
+function defineLayout() {
+    var _this = this;
+
+    var context = this;
+
+    //Top-level container
+    this.containers.main = d3.select(this.element).append('div').attr('id', 'paneled-outlier-explorer');
+
+    /**-------------------------------------------------------------------------------------------\
+      Left column
+    \-------------------------------------------------------------------------------------------**/
+
+    this.containers.leftColumn = this.containers.main.append('div').classed('poe-column', true).attr('id', 'poe-left-column');
+    this.containers.leftColumnHeader = this.containers.leftColumn.append('div').classed('poe-header', true).attr('id', 'poe-left-column-header').text('Controls');
+    this.containers.controls = this.containers.leftColumn.append('div').attr('id', 'poe-controls');
+
+    //Measure controls
+    this.containers.measures = this.containers.leftColumn.append('div').attr('id', 'poe-measures');
+    this.containers.allMeasures = this.containers.measures.append('div').attr('id', 'poe-all-measures');
+    this.containers.allMeasuresToggle = this.containers.allMeasures.append('input').attr({
+        'id': 'poe-toggle-all-measures',
+        'type': 'checkbox'
+    }).on('change', function () {
+        toggleAllMeasures.call(context);
+    });
+    this.containers.allMeasures.append('label').attr('for', 'poe-toggle-all-measures').text('Measures');
+    this.containers.measureList = this.containers.measures.append('ul').attr('id', 'poe-measure-list');
+
+    /**-------------------------------------------------------------------------------------------\
+      Right column
+    \-------------------------------------------------------------------------------------------**/
+
+    this.containers.rightColumn = this.containers.main.append('div').classed('poe-column', true).attr('id', 'poe-right-column');
+    this.containers.rightColumnHeader = this.containers.rightColumn.append('div').classed('poe-header', true).attr('id', 'poe-right-column-header');
+    this.containers.navBar = this.containers.rightColumnHeader.append('ul').attr('id', 'poe-nav-bar');
+    this.containers.navs = this.containers.navBar.selectAll('li.poe-nav').data(['Charts', 'Listing']).enter().append('li').classed('poe-nav', true).classed('active', function (d) {
+        return d === 'Charts';
+    }).attr('id', function (d) {
+        return 'poe-' + d + '-nav';
+    }).text(function (d) {
+        return d;
+    });
+    this.containers.navs.on('click', function (d) {
+        navClick.call(_this, d);
+    });
+    this.containers.charts = this.containers.rightColumn.append('div').classed('poe-display', true).attr('id', 'poe-charts');
+    this.containers.listing = this.containers.rightColumn.append('div').classed('poe-display', true).attr('id', 'poe-listing');
+}
+
+if (typeof Object.assign != 'function') {
+    (function () {
+        Object.assign = function (target) {
+            'use strict';
+
+            if (target === undefined || target === null) {
+                throw new TypeError('Cannot convert undefined or null to object');
+            }
+
+            var output = Object(target);
+            for (var index = 1; index < arguments.length; index++) {
+                var source = arguments[index];
+                if (source !== undefined && source !== null) {
+                    for (var nextKey in source) {
+                        if (source.hasOwnProperty(nextKey)) {
+                            output[nextKey] = source[nextKey];
+                        }
+                    }
+                }
+            }
+            return output;
+        };
+    })();
 }
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -200,52 +345,34 @@ function clone(obj) {
     throw new Error('Unable to copy [obj]! Its type is not supported.');
 }
 
-if (typeof Object.assign != 'function') {
-    (function () {
-        Object.assign = function (target) {
-            'use strict';
+var controls = [{
+    type: 'dropdown',
+    label: 'X-axis',
+    option: 'x.column',
+    require: true
+}];
 
-            if (target === undefined || target === null) {
-                throw new TypeError('Cannot convert undefined or null to object');
-            }
-
-            var output = Object(target);
-            for (var index = 1; index < arguments.length; index++) {
-                var source = arguments[index];
-                if (source !== undefined && source !== null) {
-                    for (var nextKey in source) {
-                        if (source.hasOwnProperty(nextKey)) {
-                            output[nextKey] = source[nextKey];
-                        }
-                    }
-                }
-            }
-            return output;
-        };
-    })();
-}
-
-var defaultSettings = {
+var rendererSettings = {
     measure_col: 'TEST',
     time_cols: [{
         value_col: 'DY',
         type: 'linear',
-        order: null,
         label: 'Study Day',
+        order: null,
         rotate_tick_labels: false,
         vertical_space: 0
     }, {
         value_col: 'VISIT',
         type: 'ordinal',
-        order: null,
         label: 'Visit',
+        order: null,
         rotate_tick_labels: true,
         vertical_space: 75
     }, {
         value_col: 'VISITN',
         type: 'ordinal',
-        order: null,
         label: 'Visit Number',
+        order: null,
         rotate_tick_labels: false,
         vertical_space: 0
     }],
@@ -256,12 +383,14 @@ var defaultSettings = {
     uln_col: 'STNRHI',
     measures: null,
     filters: null,
-    rotate_x_tick_labels: true,
+    rotate_x_tick_labels: false
+};
 
+var webchartsSettings = {
     x: {
         type: null, // sync to [ time_cols[0].type ]
         column: null, // sync to [ time_cols[0].value_col ]
-        label: '' // sync to [ time_cols[0].label ]
+        label: ''
     },
     y: {
         type: 'linear',
@@ -270,11 +399,11 @@ var defaultSettings = {
     },
     marks: [{
         type: 'line',
-        per: null, // sync to [ id_col ] and [ measure_col ]
+        per: null, // sync to [ id_col ]
         attributes: {
             'stroke-width': 1,
             'stroke-opacity': 0.2,
-            stroke: 'black'
+            'stroke': 'black'
         }
     }],
     resizable: false,
@@ -288,288 +417,63 @@ var defaultSettings = {
     gridlines: 'xy'
 };
 
-function syncSettings(settings) {
-    var syncedSettings = clone(settings);
-    syncedSettings.x.type = settings.time_cols[0].type;
-    syncedSettings.x.order = settings.time_cols[0].order;
-    syncedSettings.x.column = settings.time_cols[0].value_col;
-    syncedSettings.x.rotate_tick_labels = settings.time_cols[0].rotate_tick_labels;
-    syncedSettings.y.column = settings.value_col;
-    syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
+function syncSettings() {
+    this.settings.synced = clone(this.settings.merged);
 
-    return syncedSettings;
+    //x
+    this.settings.synced.x.type = this.settings.synced.time_cols[0].type;
+    this.settings.synced.x.column = this.settings.synced.time_cols[0].value_col;
+    this.settings.synced.x.order = this.settings.synced.time_cols[0].order;
+    this.settings.synced.x.rotate_tick_labels = this.settings.synced.time_cols[0].rotate_tick_labels;
+
+    //y
+    this.settings.synced.y.column = this.settings.synced.value_col;
+
+    //marks
+    this.settings.synced.marks[0].per = [this.settings.synced.id_col, this.settings.synced.measure_col];
 }
 
-var controlInputs = [{
-    type: 'dropdown',
-    label: 'X-axis',
-    option: 'x.column',
-    require: true
-}];
-
-function syncControlInputs(controlInputs, settings) {
-    var syncedControlInputs = clone(controlInputs);
-
-    syncedControlInputs.filter(function (controlInput) {
-        return controlInput.label === 'X-axis';
-    })[0].values = settings.time_cols.map(function (d) {
-        return d.value_col || d;
+function syncControls() {
+    //Set x-axis control options to settings.time_cols[].value_col;
+    controls.filter(function (control) {
+        return control.label === 'X-axis';
+    }).pop().values = settings.time_cols.map(function (d) {
+        return d.value_col;
     });
 
-    if (settings.filters) settings.filters.forEach(function (filter) {
-        syncedControlInputs.push({
+    //Add user-defined filters to controls.
+    if (this.settings.synced.filters && this.settings.synced.filters.length) this.settings.synced.filters.forEach(function (filter) {
+        controls.push({
             type: 'subsetter',
             value_col: filter.value_col || filter,
             label: filter.label || filter.value_col || filter,
             description: 'filter',
-            multiple: false
+            multiple: filter.multiple || false
         });
     });
 
-    return syncedControlInputs;
+    this.settings.controls = controls;
 }
 
-function defineData(data) {
-    var _this = this;
+var defaults$1 = {
+    rendererSettings: rendererSettings,
+    webchartsSettings: webchartsSettings,
+    controlsSettings: controls,
+    syncSettings: syncSettings,
+    syncControls: syncControls
+};
 
-    this.data = {
-        raw: data,
-        sorted: data.filter(function (d) {
-            return (/^[0-9.]+$/.test(d[_this.config.value_col]) && !/^\s*$/.test(d[_this.config.measure_col])
-            );
-        }).sort(function (a, b) {
-            var aValue = a[_this.config.measure_col],
-                bValue = b[_this.config.measure_col],
-                leftSort = aValue < bValue,
-                rightSort = aValue > bValue,
-                aID = a[_this.config.id_col],
-                bID = b[_this.config.id_col],
-                aTime = a[_this.config.time_col],
-                bTime = b[_this.config.time_col];
-
-            var sort = void 0;
-            if (_this.config.measures && _this.config.measures.length) {
-                var aPos = _this.config.measures.indexOf(aValue),
-                    bPos = _this.config.measures.indexOf(bValue),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
-
-                sort = diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-            } else sort = leftSort ? -1 : rightSort ? 1 : 0;
-
-            if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
-
-            return sort;
-        })
-    };
-    if (this.data.raw.length !== this.data.sorted.length) console.warn(this.data.raw.length - this.data.sorted.length + " non-numeric observations have been removed from the data.");
-    this.data.sorted.forEach(function (d) {
-        d.brushed = false;
-        if (d[_this.config.unit_col]) d.measure_unit = d[_this.config.measure_col] + " (" + d[_this.config.unit_col] + ")";else d.measure_unit = d[_this.config.measure_col];
-    });
-    this.data.filtered = this.data.sorted;
-    this.data.brushed = [];
-    this.data.selectedIDs = [];
+function defineSettings() {
+    this.settings.merged = Object.assign(Object.assign(defaults$1.rendererSettings, defaults$1.webchartsSettings), clone(this.settings.user));
+    defaults$1.syncSettings.call(this);
+    Object.assign(this.settings, this.settings.synced);
+    defaults$1.syncControls.call(this);
 }
 
-function captureMeasures() {
-    var _this = this;
-
-    this.config.allMeasures = d3.set(this.data.sorted.map(function (d) {
-        return d.measure_unit;
-    })).values().sort(function (a, b) {
-        var leftSort = a < b,
-            rightSort = a > b;
-
-        if (_this.config.measures && _this.config.measures.length) {
-            var aPos = _this.config.measures.indexOf(a),
-                bPos = _this.config.measures.indexOf(b),
-                diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
-
-            return diff ? diff : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-        } else return leftSort ? -1 : rightSort ? 1 : 0;
-    });
-    this.config.measures = this.config.measures && this.config.measures.length ? this.config.measures : this.config.allMeasures;
-}
-
-function toggleCharts(chart) {
-    var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-    var measureListCheckbox = d3.select('#measure-list-checkbox'),
-        checked = measureListCheckbox.property('checked'),
-        measureItems = d3.selectAll('li.measure-item'),
-        anyUnchecked = measureItems[0].some(function (measureItem) {
-        return !measureItem.getElementsByTagName('input')[0].checked;
-    });
-
-    //Handle overall toggle.
-    if (toggle) {
-        measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
-        measureItems.each(function (d) {
-            d3.select(this).select('input').property('checked', checked);
-            toggleChart(chart, this, d);
-        });
-        measureListCheckbox.property('checked', checked);
-    } else {
-        //Handle individual toggles.
-        measureListCheckbox.attr('title', anyUnchecked ? 'Display all charts' : 'Remove all charts');
-        measureListCheckbox.property('checked', !anyUnchecked);
-    }
-}
-
-function toggleChart(chart, li) {
-    //Determine state of checkbox.
-    var checkbox = d3.select(li).select('input'),
-        checked = checkbox.property('checked');
-    checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-    d3.select(chart.div).selectAll('.wc-chart').filter(function (di) {
-        return di.measure === d3.select(li).datum();
-    }).classed('hidden', !checked);
-
-    //If any checkbox is unchecked, uncheck measureListCheckbox.
-    toggleCharts(chart, false);
-}
-
-function layout() {
-    this.wrap.attr('id', 'Charts');
-    this.listing.wrap.attr('id', 'Listing').classed('hidden', true);
-
-    var chart = this,
-
-    //Create navigation bar.
-    navigationBar = this.container.insert('ul', ':first-child').attr('id', 'navigation-bar'),
-        navigationButtons = navigationBar.selectAll('li.navigation').data(['Charts', 'Listing']).enter().append('li').classed('navigation', true).classed('active', function (d) {
-        return d === 'Charts';
-    }).attr('id', function (d) {
-        return d + '-nav';
-    }).text(function (d) {
-        return d;
-    }).on('click', function (d) {
-        navigationButtons.filter(function (di) {
-            return di === d;
-        }).classed('active', true);
-        navigationButtons.filter(function (di) {
-            return di !== d;
-        }).classed('active', false);
-        if (d === 'Charts') {
-            d3.select('#Listing').classed('hidden', true);
-            d3.select('#Charts').classed('hidden', false);
-        } else {
-            d3.select('#Charts').classed('hidden', true);
-            d3.select('#Listing').classed('hidden', false);
-        }
-    }),
-
-    //Create controls header.
-    controlsTab = this.container.insert('div', ':first-child').attr('id', 'controls-header').text('Controls'),
-
-    //Define all-chart toggle.
-    measureListContainer = this.container.select('#left-side').append('ul').attr('id', 'measure-list-container'),
-        measureListHeader = measureListContainer.append('div').attr('id', 'measure-list-header'),
-        measureListCheckbox = measureListHeader.append('input').attr({
-        id: 'measure-list-checkbox',
-        type: 'checkbox',
-        title: this.config.measures.length === this.config.allMeasures.length ? 'Remove all charts' : 'Display all charts'
-    }).property('checked', this.config.measures.length === this.config.allMeasures.length).on('click', function () {
-        toggleCharts(chart, this);
-    });
-
-    measureListHeader.append('span').text('Measures');
-    var measureList = measureListContainer //Define individual chart toggles.
-    .append('ul').attr('id', 'measure-list');
-    var measureItems = measureList.selectAll('li.measure-item').data(this.config.allMeasures).enter().append('li').attr('class', function (d) {
-        return 'measure-item ' + d.replace(/[^a-z0-9-]/gi, '-');
-    }).each(function (d) {
-        //Append div inside list item.
-        var measureItemContainer = d3.select(this).append('div').classed('measure-item-container', true);
-        //Check whether measure should by displayed initially.
-        var checked = chart.config.measures.indexOf(d) > -1; //Append checkbox inside div.
-        var measureItemCheckbox = measureItemContainer.append('input').classed('measure-checkbox', true).attr({
-            type: 'checkbox',
-            title: checked ? 'Remove chart' : 'Display chart'
-        }).property('checked', checked);
-        var measureItemLabel = measureItemContainer.append('span').text(function (d) {
-            return d;
-        });
-    }).on('change', function (d) {
-        toggleChart(chart, this);
-    });
-}
-
-function applyFilters(d) {
-    var _this = this;
-
-    this.data.brushed = [];
-    this.data.selectedIDs = [];
-
-    //Reset brush.
-    this.multiples.forEach(function (multiple) {
-        multiple.package.overlay.call(multiple.package.brush.clear());
-        multiple.config.extent = multiple.package.brush.extent();
-    });
-
-    //De-highlight brushed lines.
-    this.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false);
-
-    //De-highlight listing.
-    d3.select('#Listing-nav').classed('brushed', false);
-
-    //Define filtered data.
-    if (d.type === 'subsetter') {
-        this.data.filtered = this.data.sorted.filter(function (d) {
-            var filtered = false;
-
-            _this.controls.config.inputs.filter(function (d) {
-                return d.type === 'subsetter';
-            }).forEach(function (filter) {
-                if (!filtered && filter.value && filter.value !== 'All') filtered = d[filter.value_col] !== filter.value;
-            });
-
-            return !filtered;
-        });
-    }
-
-    //Redraw listing.
-    this.listing.draw(this.data.filtered);
-}
-
-function init(data) {
-    var _this = this;
-
-    var chart = this;
-
-    //Attach data arrays to central chart object.
-    defineData.call(this, data);
-
-    //Capture unique measures in an array and define initially displayed measures.
-    captureMeasures.call(this);
-
-    //Define layout of renderer.
-    layout.call(this);
-
-    //Initialize charts.
-    webcharts.multiply(this, this.data.sorted, 'measure_unit');
-
-    //Initialize listing.
-    this.listing.config.cols = Object.keys(data[0]).filter(function (key) {
-        return ['brushed', 'measure_unit'].indexOf(key) === -1;
-    }); // remove system variables from listing
-    this.listing.init(this.data.sorted);
-
-    //Define custom event listener for filters.
-    var controls = this.controls.wrap.selectAll('.control-group');
-    controls.filter(function (control) {
-        return control.label === 'X-axis';
-    }).selectAll('option').property('label', function (d) {
-        return _this.config.time_cols.filter(function (time_col) {
-            return time_col.value_col === d;
-        }).pop().label;
-    });
-
-    controls.on('change', function (d) {
-        d.value = d3.select(this).selectAll('option').filter(function () {
-            return this.selected;
-        }).text();
-        applyFilters.call(chart, d);
+function controls$1() {
+    this.controls = webcharts.createControls(this.containers.controls.node(), {
+        location: 'top',
+        inputs: this.settings.controls
     });
 }
 
@@ -642,9 +546,9 @@ function onLayout() {
         //Minimize chart.
         if (_this.wrap.classed('full-screen')) m__imize(_this);
 
-        var li = d3.select('li.measure-item.' + _this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'));
-        li.select('input').property('checked', false);
-        toggleChart(_this, li.node());
+        var checkbox = d3.select('#poe-measure-item-checkbox-' + _this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'));
+        checkbox.property('checked', false);
+        toggleMeasure(_this.paneledOutlierExplrorer, checkbox.node(), { measure: _this.currentMeasure });
     });
 
     //Add ability to maximize charts in the chart title.
@@ -654,7 +558,7 @@ function onLayout() {
     });
 
     //Hide measures not listed in [ settings.measures ].
-    this.wrap.classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true).classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+    this.wrap.classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true).classed('hidden', this.parent.paneledOutlierExplorer.data.currentMeasures.indexOf(this.currentMeasure) === -1);
 }
 
 function onPreprocess() {
@@ -673,7 +577,7 @@ function onPreprocess() {
     var xInput = this.controls.config.inputs.filter(function (input) {
         return input.label === 'X-axis';
     })[0],
-        time_col = this.config.time_cols.filter(function (time_col) {
+        time_col = this.parent.paneledOutlierExplorer.settings.time_cols.filter(function (time_col) {
         return time_col.value_col === _this.config.x.column;
     })[0];
 
@@ -889,9 +793,9 @@ function brush() {
     });
 
     //Highlight previously brushed points.
-    if (this.parent.data.selectedIDs.length) {
+    if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
         lines.filter(function (d) {
-            return _this.parent.data.selectedIDs.indexOf(d.id) > -1;
+            return _this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1;
         }).classed('brushed', true).each(function () {
             d3.select(this.parentNode).moveToFront();
         });
@@ -1003,7 +907,7 @@ function onResize() {
 
 function onDestroy() {}
 
-var chartCallbacks = {
+var callbacks = {
     onInit: onInit,
     onLayout: onLayout,
     onPreprocess: onPreprocess,
@@ -1013,7 +917,18 @@ var chartCallbacks = {
     onDestroy: onDestroy
 };
 
-function onInit$1() {}
+function charts() {
+    this.charts = webcharts.createChart(this.containers.charts.node(), this.settings, this.controls);
+
+    for (var callback in callbacks) {
+        this.charts.on(callback.substring(2).toLowerCase(), callbacks[callback]);
+    }this.charts.paneledOutlierExplorer = this;
+}
+
+function onInit$1() {
+    this.config.cols = this.paneledOutlierExplorer.data.variables;
+    this.config.headers = this.config.cols;
+}
 
 function onLayout$1() {}
 
@@ -1032,7 +947,7 @@ function onResize$1() {}
 
 function onDestroy$1() {}
 
-var listingCallbacks = {
+var callbacks$1 = {
     onInit: onInit$1,
     onLayout: onLayout$1,
     onPreprocess: onPreprocess$1,
@@ -1042,55 +957,198 @@ var listingCallbacks = {
     onDestroy: onDestroy$1
 };
 
-function paneledOutlierExplorer() {
-    var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'body';
-    var settings = arguments[1];
+function listing() {
+    this.listing = webcharts.createTable(this.containers.listing.node(), this.settings.listing);
 
-    //Define unique div within passed element argument.
-    var container = d3.select(element).append('div').attr('id', 'paneled-outlier-explorer'),
-        containerElement = container.node(),
-        controlsContainer = container.append('div').attr('id', 'left-side'),
-        controlsContainerElement = controlsContainer.node();
+    for (var callback in callbacks$1) {
+        this.listing.on(callback.substring(2).toLowerCase(), callbacks$1[callback]);
+    }this.listing.paneledOutlierExplorer = this;
+}
 
-    //Define .css styles to avoid requiring a separate .css file.
-    defineStyles();
+function recurse() {
+    this.charts.listing = this.listing;
+    this.listing.charts = this.charts;
+}
 
-    //Clone, merge, and sync settings and define chart.
-    var initialSettings = clone(settings),
-        mergedSettings = Object.assign({}, defaultSettings, initialSettings),
-        syncedSettings = syncSettings(mergedSettings),
-        syncedControlInputs = syncControlInputs(controlInputs, syncedSettings),
-        controls = webcharts.createControls(controlsContainerElement, {
-        location: 'top',
-        inputs: syncedControlInputs
-    }),
-        chart = webcharts.createChart(containerElement, syncedSettings, controls),
-        listing = webcharts.createTable(containerElement, {}, controls);
+function defineData(data) {
+    var _this = this;
 
-    //Attach stuff to chart.
-    chart.container = container;
-    chart.listing = listing;
-    chart.config.initialSettings = clone(syncedSettings);
+    //Capture variable names.
+    this.data.variables = Object.keys(data[0]);
 
-    //Attach stuff to listing.
-    listing.container = container;
-    listing.chart = chart;
+    //Define set of unique IDs.
+    this.data.population = d3.set(data.map(function (d) {
+        return d[_this.settings.id_col];
+    })).values().sort();
 
-    //Define chart callbacks.
-    for (var callback in chartCallbacks) {
-        chart.on(callback.substring(2).toLowerCase(), chartCallbacks[callback]);
-    } //Define listing callbacks.
-    for (var _callback in listingCallbacks) {
-        listing.on(_callback.substring(2).toLowerCase(), listingCallbacks[_callback]);
-    } //Redefine chart.init() in order to call webCharts.multiply() on paneledOutlierExplorer().init().
-    Object.defineProperty(chart, 'init', {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: init
+    //Define set of unique measures.
+    this.data.measures = d3.set(data.map(function (d) {
+        return d.measure_unit;
+    })).values().sort();
+
+    //Filter data on observations with numeric results.
+    this.data.raw = data.filter(function (d) {
+        return (/^[0-9.]+$/.test(d[_this.settings.value_col])
+        );
     });
 
-    return chart;
+    if (data.length !== this.data.raw.length) console.warn(data.length - this.data.raw.length + ' non-numeric observations have been removed from the data.');
+
+    //Define additional variables.
+    this.data.raw.forEach(function (d) {
+        //Concatenate measure and unit.
+        if (d[_this.settings.unit_col]) d.measure_unit = d[_this.settings.measure_col] + ' (' + d[_this.settings.unit_col] + ')';else d.measure_unit = d[_this.settings.measure_col];
+
+        d.brushed = false;
+    });
+
+    //Define set of unique quantitative measures.
+    this.data.quantitativeMeasures = d3.set(this.data.raw.map(function (d) {
+        return d.measure_unit;
+    })).values().sort();
+
+    //Define set of unique qualitative measures.
+    this.data.qualitativeMeasures = this.data.measures.filter(function (measure) {
+        return _this.data.quantitativeMeasures.indexOf(measure) < 0;
+    });
+
+    //Define set of initially displayed measures.
+    this.data.currentMeasures = this.settings.measures && this.settings.measures.length ? this.settings.measures : this.data.quantitativeMeasures;
+    this.filters[this.settings.measure_col] = this.data.currentMeasures;
+
+    //Filter data on the specified subset of measures.
+    this.data.filtered = this.data.raw.filter(function (d) {
+        return _this.data.currentMeasures.indexOf(d[_this.settings.measure_col]) > -1;
+    });
+
+    //Placeholder data arrays.
+    this.data.brushed = [];
+    this.data.selectedIDs = [];
+}
+
+function initializeDisplays() {
+    //Initialize charts.
+    webcharts.multiply(this.charts, this.data.raw, 'measure_unit');
+
+    //Initialize listing.
+    this.listing.init(this.data.raw);
+}
+
+function xAxisControlLabels() {
+    var _this = this;
+
+    this.controls.wrap.selectAll('.control-group').filter(function (control) {
+        return control.label === 'X-axis';
+    }).selectAll('option').property('label', function (d) {
+        return _this.settings.synced.time_cols.filter(function (time_col) {
+            return time_col.value_col === d;
+        }).pop().label;
+    });
+}
+
+function updateAllMeasuresCheckbox() {
+    this.containers.allMeasuresToggle.attr('title', this.data.currentMeasures.length === this.data.quantitativeMeasures.length ? 'Remove all charts' : 'Display all charts').property('checked', this.data.currentMeasures.length === this.data.quantitativeMeasures.length);
+}
+
+function addMeasureList() {
+    var context = this;
+
+    //Append a list item for each measure.
+    this.containers.measureList.selectAll('li.poe-measure-item').data(this.data.quantitativeMeasures.map(function (measure) {
+        return {
+            'measure': measure,
+            'selector': measure.replace(/[^a-z0-9-]/gi, '-')
+        };
+    })).enter().append('li').classed('poe-measure-item', true).attr('id', function (d) {
+        return 'poe-measure-item-' + d.selector;
+    }).each(function (d) {
+        //Append div inside list item.
+        var measureItemContainer = d3.select(this).append('div').classed('poe-measure-item-container', true),
+            checked = context.data.currentMeasures.indexOf(d.measure) > -1,
+            measureItemCheckbox = measureItemContainer.append('input').classed('poe-measure-item-checkbox', true).attr({
+            'id': 'poe-measure-item-checkbox-' + d.selector,
+            'type': 'checkbox',
+            'title': checked ? 'Remove chart' : 'Display chart'
+        }).property('checked', checked),
+            measureItemLabel = measureItemContainer.append('label').attr('for', 'poe-measure-item-checkbox-' + d.selector).text(d.measure);
+    });
+    this.containers.measureToggles = this.containers.measureList.selectAll('input');
+
+    //Add event listeners to checkboxes.
+    this.containers.measureToggles.on('change', function (d) {
+        toggleMeasure.call(context, this, d);
+    });
+}
+
+function addFilterEventListeners() {
+    var context = this;
+
+    this.controls.wrap.selectAll('.control-group').filter(function (control) {
+        return control.type === 'subsetter';
+    }).select('select').on('change', function (d) {
+        context.filters[d.value_col] = d3.select(this).selectAll('option:checked').data();
+
+        applyFilters.call(context);
+    });
+}
+
+function init(data) {
+    //Attach data arrays to central chart object.
+    defineData.call(this, data);
+
+    //Initialize displays.
+    initializeDisplays.call(this);
+
+    //Label x-axis options.
+    xAxisControlLabels.call(this);
+
+    //Update all measures checkbox.
+    updateAllMeasuresCheckbox.call(this);
+
+    //Add measure items to measure list.
+    addMeasureList.call(this);
+
+    //Add filter event listeners.
+    addFilterEventListeners.call(this);
+}
+
+function paneledOutlierExplorer() {
+    var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'body';
+    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var paneledOutlierExplorer = {
+        element: element,
+        settings: {
+            user: settings
+        },
+        containers: {},
+        init: init,
+        data: {},
+        filters: {}
+    };
+
+    //Define layout.
+    defineLayout.call(paneledOutlierExplorer);
+
+    //Define .css styles to avoid requiring a separate .css file.
+    defineStyles.call(paneledOutlierExplorer);
+
+    //Define settings.
+    defineSettings.call(paneledOutlierExplorer);
+
+    //Create controls.
+    controls$1.call(paneledOutlierExplorer);
+
+    //Create charts.
+    charts.call(paneledOutlierExplorer);
+
+    //Create listing.
+    listing.call(paneledOutlierExplorer);
+
+    //Point paneledOutlierExplorer, charts, and listing objects at each other.
+    recurse.call(paneledOutlierExplorer);
+
+    return paneledOutlierExplorer;
 }
 
 return paneledOutlierExplorer;

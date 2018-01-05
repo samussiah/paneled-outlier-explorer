@@ -1,10 +1,10 @@
-import defineStyles from './util/defineStyles';
-import defineLayout from './util/defineLayout';
-import defineSettings from './defaultSettings';
+import defineStyles from './defineStyles';
+import defineLayout from './defineLayout';
+import defineSettings from './defineSettings';
 import controls from './controls';
 import charts from './charts/index';
 import listing from './listing/index';
-import recurse from './listing/index';
+import recurse from './recurse';
 import init from './init';
 
 export default function paneledOutlierExplorer(element = 'body', settings = {}) {
@@ -16,7 +16,8 @@ export default function paneledOutlierExplorer(element = 'body', settings = {}) 
             },
             containers: {},
             init: init,
-            data: {}
+            data: {},
+            filters: {}
         };
 
     //Define layout.

@@ -67,7 +67,7 @@ export default function defineLayout() {
             .append('ul')
             .attr('id', 'poe-nav-bar');
         this.containers.navs = this.containers.navBar
-            .selectAll('li.navigation')
+            .selectAll('li.poe-nav')
                 .data(['Charts', 'Listing'])
                 .enter()
             .append('li')

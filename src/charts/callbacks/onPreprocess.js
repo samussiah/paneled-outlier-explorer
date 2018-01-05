@@ -11,7 +11,7 @@ export default function onPreprocess() {
 
     //Sync config with X-axis selection.
     const xInput = this.controls.config.inputs.filter(input => input.label === 'X-axis')[0],
-        time_col = this.config.time_cols.filter(
+        time_col = this.parent.paneledOutlierExplorer.settings.time_cols.filter(
             time_col => time_col.value_col === this.config.x.column
         )[0];
 

@@ -1,6 +1,6 @@
-import clone from '../util/clone';
+import clone from '../../util/clone';
 import { svg, select } from 'd3';
-import '../util/moveToFront';
+import '../../util/moveToFront';
 import brush from './onResize/brush';
 import adjustTicks from './onResize/adjustTicks';
 

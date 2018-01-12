@@ -9,7 +9,7 @@ export default function addMeasureList() {
     this.containers.measureList
         .selectAll('li.poe-measure-item')
             .data(
-                this.data.quantitativeMeasures
+                this.data.measures
                     .map(measure => {
                         return {
                             'measure': measure,

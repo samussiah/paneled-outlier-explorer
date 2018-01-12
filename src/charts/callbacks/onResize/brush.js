@@ -1,35 +1,36 @@
 import { select } from 'd3';
-import brushMarks from './brushMarks';
+import brushMarks from './brush/brushMarks';
 
 export default function brush() {
-    const chart = this;
+    const context = this;
 
     //lines
-    const lines = this.svg.selectAll('.line-supergroup g.line path');
-    lines.each(function(d, i) {
-        d.id = d.values[0].values.raw[0][chart.config.id_col];
-        d.lln = d.values[0].values.raw[0][chart.config.lln_col];
-        d.uln = d.values[0].values.raw[0][chart.config.uln_col];
-        d.lines = d.values.map((di, i) => {
-            var line;
-            if (i) {
-                line = {
-                    x0:
-                        chart.config.x.type === 'linear'
-                            ? d.values[i - 1].values.x
-                            : chart.x(d.values[i - 1].values.x) + chart.x.rangeBand() / 2,
-                    y0: d.values[i - 1].values.y,
-                    x1:
-                        chart.config.x.type === 'linear'
-                            ? di.values.x
-                            : chart.x(di.values.x) + chart.x.rangeBand() / 2,
-                    y1: di.values.y
-                };
-            }
-            return line;
+    const
+        lines = this.svg.selectAll('.line-supergroup g.line path');
+        lines.each(function(d, i) {
+            d.id = d.values[0].values.raw[0][context.config.id_col];
+            d.lln = d.values[0].values.raw[0][context.config.lln_col];
+            d.uln = d.values[0].values.raw[0][context.config.uln_col];
+            d.lines = d.values.map((di, i) => {
+                var line;
+                if (i) {
+                    line = {
+                        x0:
+                            context.config.x.type === 'linear'
+                                ? d.values[i - 1].values.x
+                                : context.x(d.values[i - 1].values.x) + context.x.rangeBand() / 2,
+                        y0: d.values[i - 1].values.y,
+                        x1:
+                            context.config.x.type === 'linear'
+                                ? di.values.x
+                                : context.x(di.values.x) + context.x.rangeBand() / 2,
+                        y1: di.values.y
+                    };
+                }
+                return line;
+            });
+            d.lines.shift();
         });
-        d.lines.shift();
-    });
 
     //Highlight previously brushed points.
     if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
@@ -45,13 +46,13 @@ export default function brush() {
     this.package.brush
         .on('brushstart', function() {})
         .on('brush', function() {
-            chart.parent.wrap.selectAll('.wc-chart').each(d => {
-                if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
+            context.parent.wrap.selectAll('.wc-chart').each(d => {
+                if (d.measure !== context.measure) d.overlay.call(d.brush.clear());
             });
-            chart.config.extent = chart.package.brush.extent();
+            context.config.extent = context.package.brush.extent();
 
             //brush marks
-            brushMarks(chart, lines);
+            brushMarks.call(context, lines);
         })
         .on('brushend', function() {});
 
@@ -65,10 +66,10 @@ export default function brush() {
             this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
             this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
             this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
-        this.currentMeasure === chart.parent.brushedMeasure
+        this.measure === this.parent.brushedMeasure
     ) {
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
-        brushMarks(chart, lines);
+        brushMarks.call(this, lines);
     }
 }

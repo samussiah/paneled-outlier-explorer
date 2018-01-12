@@ -30,8 +30,8 @@ export default function toggleMeasure(input, d) {
             this.containers.measureToggles.filter(function() { return this.checked; }).size());
     this.allMeasuresToggle
         .attr('title', allChecked
-            ? 'Remove all charts'
-            : 'Display all charts'
+            ? 'Remove all charts.'
+            : 'Display all charts.'
         )
         .property('checked', allChecked);
 }

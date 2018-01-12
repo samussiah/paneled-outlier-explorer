@@ -1,3 +1,3 @@
 export default function onInit() {
-    this.currentMeasure = this.filters[0].val;
+    this.measure = this.filters[0].val;
 }

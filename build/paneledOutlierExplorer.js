@@ -38,13 +38,13 @@ function defineStyles() {
       Charts
     \--------------------------------------------------------------------------------------***/
 
-    '#paneled-outlier-explorer path.brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' + '    width: 75%;' + '    float: right;' + '    padding-top: 10px;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' + '    padding: 0 1em 0 0;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' + '    width: 100%;' + ' }', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' + '    text-align: left;' + '    font-size: .9em;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '    visibility: hidden;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' + '    background: black;' + '    color: white;' + '}', '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' + '    fill: red;' + '    font-size: 0.8em;' + '}',
+    '#paneled-outlier-explorer path.poe-brushed {' + '    stroke: orange;' + '    stroke-width: 3px;' + '    stroke-opacity: 1;' + '}', '#paneled-outlier-explorer #poe-charts .wc-chart {' + '    padding: 0 1em 0 0;' + '}', '#paneled-outlier-explorer #poe-charts .wc-chart.poe-maximized {' + '    width: 100%;' + ' }', '#paneled-outlier-explorer #poe-charts .wc-chart-title {' + '    text-align: left;' + '    font-size: .9em;' + '}', '#paneled-outlier-explorer #poe-charts .poe-chart-button {' + '    float: right;' + '    cursor: pointer;' + '    border: 1px solid black;' + '    border-radius: 3px;' + '    padding: 0px 3px 1px 3px;' + '    font-size: 75%;' + '    margin-left: 5px;' + '    visibility: hidden;' + '}', '#paneled-outlier-explorer #poe-charts .poe-chart-button:hover {' + '    background: black;' + '    color: white;' + '}', '#paneled-outlier-explorer #poe-charts .poe-no-data {' + '    fill: red;' + '    font-size: 0.8em;' + '}',
 
     /***--------------------------------------------------------------------------------------\
       Listing
     \--------------------------------------------------------------------------------------***/
 
-    '#paneled-outlier-explorer tr.brushed {' + '    border: 2px solid orange !important;' + '}', '#paneled-outlier-explorer div.wc-chart#Listing {' + '    width: 75%;' + '    float: right;' + '    padding-top: 10px;' + '    overflow-x: scroll;' + '}', '#paneled-outlier-explorer div.wc-chart#Listing table {' + '}'],
+    '#paneled-outlier-explorer #poe-listing .poe-brushed {' + '    border: 2px solid orange !important;' + '}', '#paneled-outlier-explorer #poe-listing {' + '    overflow-x: scroll;' + '}'],
         style = this.test ? this.dom.window.document.createElement('style') : document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = styles.join('\n');
@@ -91,7 +91,7 @@ function toggleMeasure(input, d) {
     var allChecked = this.containers.measureToggles.size() === this.containers.measureToggles.filter(function () {
         return this.checked;
     }).size();
-    this.allMeasuresToggle.attr('title', allChecked ? 'Remove all charts' : 'Display all charts').property('checked', allChecked);
+    this.allMeasuresToggle.attr('title', allChecked ? 'Remove all charts.' : 'Display all charts.').property('checked', allChecked);
 }
 
 function toggleAllMeasures() {
@@ -107,11 +107,11 @@ function toggleAllMeasures() {
 }
 
 function navClick(d) {
-    this.containers.navs.classed('active', function (di) {
+    this.containers.navs.classed('poe-active', function (di) {
         return di === d;
     });
-    this.containers.rightColumn.selectAll('.poe-display').classed('hidden', true);
-    this.containers.rightColumn.select('#poe-' + d.toLowerCase()).classed('hidden', false);
+    this.containers.rightColumn.selectAll('.poe-display').classed('poe-hidden', true);
+    this.containers.rightColumn.select('#poe-' + d.toLowerCase()).classed('poe-hidden', false);
 }
 
 function defineLayout() {
@@ -478,102 +478,155 @@ function controls$1() {
 }
 
 function onInit() {
-    this.currentMeasure = this.filters[0].val;
+    this.measure = this.filters[0].val;
 }
 
-function minimize(chart) {
-    //Modify chart config and redraw.
-    chart.wrap.select('.m__imize-chart').html('&plus;').attr('title', 'Maximize chart');
-    chart.wrap.classed('expanded', false);
-
-    chart.config.width = chart.config.initialSettings.width;
-    chart.config.max_width = null;
-    chart.config.height = chart.config.initialSettings.height;
-    chart.config.aspect = null;
-
-    chart.draw();
+function classChart() {
+    this.wrap.classed(this.measure.replace(/[^a-z0-9-]/gi, '-'), true).classed('poe-hidden', this.parent.paneledOutlierExplorer.data.currentMeasures.indexOf(this.measure) === -1);
 }
 
-function m__imize(chart) {
-    //Maximize chart.
-    if (!chart.wrap.classed('expanded')) {
-        //Clear previously expanded chart.
-        if (chart.parent.expandedChart) minimize(chart.parent.expandedChart);
+function minimize() {
+    var context = this;
 
-        //Attach expanded chart to parent.
-        chart.parent.expandedChart = chart;
+    //Remove references to maximized chart.
+    delete this.parent.maximizedChart;
+    this.wrap.classed('poe-maximized', false);
 
-        //Modify chart configuation and redraw.
-        chart.wrap.select('.m__imize-chart').html('&minus;').attr('title', 'Minimize chart');
-        chart.wrap.classed('expanded', true);
+    //Toggle maximize/minimize buttons.
+    this.wrap.select('.poe-maximize-chart').classed('poe-hidden', false);
+    this.wrap.select('.poe-minimize-chart').classed('poe-hidden', true);
 
-        chart.config.width = null;
-        chart.config.max_width = 9999;
-        chart.config.height = null;
-        chart.config.aspect = 2.5;
+    //Revert chart dimension settings.
+    this.config.width = this.parent.paneledOutlierExplorer.settings.width;
+    this.config.max_width = null;
+    this.config.height = this.parent.paneledOutlierExplorer.settings.height;
+    this.config.aspect = null;
 
-        chart.draw();
+    //Draw the chart.
+    this.draw();
 
-        //Sort expanded chart first.
-        chart.parent.wrap.selectAll('.wc-chart').sort(function (a, b) {
-            return a.measure === chart.currentMeasure ? -1 : b.measure === chart.currentMeasure ? 1 : chart.config.measures.indexOf(a.measure) - chart.config.measures.indexOf(b.measure);
-        });
-
-        //Scroll window to expanded chart.
-        var bodyRect = document.body.getBoundingClientRect(),
-            elemRect = chart.wrap.node().getBoundingClientRect(),
-            offset = elemRect.top - bodyRect.top;
-        window.scrollTo(0, offset);
-    } else {
-        //Minimize chart
-        minimize(chart);
-
-        //Revert to default sort.
-        chart.parent.wrap.selectAll('.wc-chart').sort(function (a, b) {
-            return chart.config.measures.indexOf(a.measure) - chart.config.measures.indexOf(b.measure);
-        });
-    }
+    //Revert to default sort.
+    this.parent.wrap.selectAll('.wc-chart').sort(function (a, b) {
+        return context.config.measures.indexOf(a.measure) - context.config.measures.indexOf(b.measure);
+    });
 }
 
-function onLayout() {
+function removeChart() {
+    if (this.wrap.classed('poe-maximized')) minimize.call(this);
+
+    var checkbox = d3.select('#poe-measure-item-checkbox-' + this.measure.replace(/[^a-z0-9-]/gi, '-'));
+    checkbox.property('checked', false);
+    toggleMeasure.call(this.parent.paneledOutlierExplorer, checkbox.node(), { measure: this.measure });
+}
+
+function maximize() {
+    var context = this;
+
+    //Clear previously maximized chart.
+    if (this.parent.maximizedChart) minimize.call(this.parent.maximizedChart);
+
+    //Attach maximized chart to parent.
+    this.parent.maximizedChart = this;
+    this.wrap.classed('poe-maximized', true);
+
+    //Toggle maximize/minimize buttons.
+    this.wrap.select('.poe-maximize-chart').classed('poe-hidden', true);
+    this.wrap.select('.poe-minimize-chart').classed('poe-hidden', false);
+
+    //Define maximized chart dimensions.
+    this.config.width = null;
+    this.config.max_width = 9999;
+    this.config.height = null;
+    this.config.aspect = 2.5;
+
+    //Redraw chart.
+    this.draw();
+
+    //Sort maximized chart first.
+    this.parent.wrap.selectAll('.wc-chart').sort(function (a, b) {
+        return a.measure === context.measure ? -1 : b.measure === context.measure ? 1 : context.parent.paneledOutlierExplorer.data.measures.indexOf(a.measure) - context.parent.paneledOutlierExplorer.data.measures.indexOf(b.measure);
+    });
+
+    //Scroll window to maximized chart.
+    var bodyRect = document.body.getBoundingClientRect(),
+        elemRect = this.wrap.node().getBoundingClientRect(),
+        offset = elemRect.top - bodyRect.top;
+    window.scrollTo(0, offset);
+}
+
+function addButtons() {
+    var _this = this;
+
+    //Add buttons in chart title.
+    this.buttons = this.wrap.select('.wc-chart-title').selectAll('span.poe-chart-button').data([{
+        function: removeChart,
+        text: '&#10006;',
+        title: 'Remove chart.'
+    }, {
+        function: maximize,
+        text: '&plus;',
+        title: 'Maximize chart.'
+    }, {
+        function: minimize,
+        text: '&minus;',
+        title: 'Minimize chart.'
+    }]).enter().append('span').attr({
+        'class': function _class(d) {
+            return 'poe-chart-button ' + (d.text === '&minus;' ? 'poe-hidden' : '') + ' poe-' + d.title.split(' ')[0].toLowerCase() + '-chart';
+        },
+        'title': function title(d) {
+            return d.title;
+        }
+    }).style('visibility', 'hidden').html(function (d) {
+        return d.text;
+    });
+
+    //Add event listeners to chart buttons.
+    this.buttons.on('click', function (d) {
+        d.function.call(_this);
+    });
+}
+
+function addChartHover() {
     var _this = this;
 
     this.wrap.on('mouseover', function () {
-        _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'visible');
+        _this.buttons.style('visibility', 'visible');
     }).on('mouseout', function () {
-        _this.wrap.selectAll('.wc-chart-title span').style('visibility', 'hidden');
-    }).select('.wc-chart-title').append('span').classed('remove-chart chart-button', true).html('&#10006;').attr('title', 'Remove chart').style('visibility', 'hidden').on('click', function () {
-        //Minimize chart.
-        if (_this.wrap.classed('full-screen')) m__imize(_this);
-
-        var checkbox = d3.select('#poe-measure-item-checkbox-' + _this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'));
-        checkbox.property('checked', false);
-        toggleMeasure(_this.paneledOutlierExplrorer, checkbox.node(), { measure: _this.currentMeasure });
+        _this.buttons.style('visibility', 'hidden');
     });
-
-    //Add ability to maximize charts in the chart title.
-    var m__imizeButton = this.wrap.select('.wc-chart-title').append('span').classed('m__imize-chart chart-button', true).html('&plus;').attr('title', 'Maximize chart');
-    m__imizeButton.on('click', function () {
-        m__imize(_this);
-    });
-
-    //Hide measures not listed in [ settings.measures ].
-    this.wrap.classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true).classed('hidden', this.parent.paneledOutlierExplorer.data.currentMeasures.indexOf(this.currentMeasure) === -1);
 }
 
-function onPreprocess() {
+function onLayout() {
+    //Assign initial chart classes.
+    classChart.call(this);
+
+    //Add buttons to maximize, minimize, and remove charts.
+    addButtons.call(this);
+
+    //Add chart hover functionality.
+    addChartHover.call(this);
+}
+
+function setYdomain() {
     var _this = this;
 
-    //Set the y-domain individually for each measure.
+    //Set y-domain manually for each measure.
     this.config.y.domain = d3.extent(this.raw_data.filter(function (d) {
-        return d.measure_unit === _this.currentMeasure;
+        return d.measure_unit === _this.measure;
     }), function (d) {
         return +d[_this.config.value_col];
     });
-    var range = this.config.y.domain[1] - this.config.y.domain[0];
-    this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
 
-    //Sync config with X-axis selection.
+    //Set y-format based on range of y-domain.
+    var range = this.config.y.domain[1] - this.config.y.domain[0];
+
+    this.config.y.format = range < 0.0002 ? '.5f' : range < 0.0020 ? '.4f' : range < 0.0200 ? '.3f' : range < 0.2000 ? '.2f' : range < 2.0000 ? '.1f' : '1d';
+}
+
+function syncTimeScale() {
+    var _this = this;
+
     var xInput = this.controls.config.inputs.filter(function (input) {
         return input.label === 'X-axis';
     })[0],
@@ -587,17 +640,75 @@ function onPreprocess() {
     this.config.margin.bottom = time_col.vertical_space;
 }
 
+function onPreprocess() {
+    //Set the y-domain individually for each measure.
+    setYdomain.call(this);
+
+    //Sync config with X-axis selection.
+    syncTimeScale.call(this);
+}
+
 function onDatatransform() {}
 
 function onDraw() {
     if (this.package) this.package.overlay.call(this.package.brush.clear());
 }
 
-d3.selection.prototype.moveToFront = function () {
-    return this.each(function () {
-        this.parentNode.appendChild(this);
-    });
-};
+function resetSVG() {
+    this.svg.selectAll('*').classed('hidden', false);
+    this.svg.select('.poe-no-data').remove();
+}
+
+function noData() {
+    this.svg.append('text').classed('poe-no-data', true).attr({
+        x: 0,
+        dx: -this.config.margin.left,
+        y: 0,
+        dy: 10
+    }).text('No data selected.');
+}
+
+function drawNormalRange() {
+    this.svg.select('.poe-normal-range').remove();
+    if (this.filtered_data[0].hasOwnProperty(this.config.lln_col) && this.filtered_data[0].hasOwnProperty(this.config.uln_col)) {
+        var y0 = this.y(this.filtered_data[0][this.config.uln_col]);
+        this.svg.insert('rect', '.line-supergroup').classed('poe-normal-range', true).attr({
+            'x': this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+            'y': y0,
+            'width': this.plot_width + 10, // make sure right side of normal range does not appear in chart
+            'height': this.y(this.filtered_data[0][this.config.lln_col]) - y0,
+            'fill': 'green',
+            'fill-opacity': 0.05,
+            'stroke': 'green',
+            'stroke-opacity': 1,
+            'clip-path': 'url(#' + this.id + ')'
+        });
+    }
+}
+
+function definePackage() {
+    this.package = {
+        measure: this.measure,
+        container: this.wrap,
+        overlay: this.svg.append('g').classed('brush', true),
+        value: this.measure,
+        domain: clone(this.config.y.domain),
+        xScale: clone(this.x),
+        yScale: clone(this.y),
+        brush: d3.svg.brush().x(this.x).y(this.y)
+    };
+    this.wrap.datum(this.package);
+}
+
+function addBrushOverlay() {
+    this.package.overlay.append('rect').datum({ measure: this.measure }).classed('poe-brush-overlay', true).attr({
+        'x': 0,
+        'y': 0,
+        'width': this.plot_width,
+        'height': this.plot_height,
+        'fill-opacity': 0
+    }).style('cursor', 'crosshair');
+}
 
 /**
  * @author Peter Kelley
@@ -707,10 +818,12 @@ function allEqual(args) {
     return true;
 }
 
-function brushMarks(chart, lines) {
-    chart.parent.brushedMeasure = chart.currentMeasure;
+function brushMarks(lines) {
+    var _this = this;
 
-    var extent$$1 = chart.config.extent,
+    this.parent.brushedMeasure = this.measure;
+
+    var extent$$1 = this.config.extent,
         x0 = extent$$1[0][0],
         // top left x-coordinate
     y0 = extent$$1[1][1],
@@ -738,30 +851,30 @@ function brushMarks(chart, lines) {
     });
 
     //Attached brushed IDs to chart parent object.
-    chart.parent.data.selectedIDs = brushedLines.data().map(function (d) {
+    this.parent.data.selectedIDs = brushedLines.data().map(function (d) {
         return d.id;
     });
 
     //Highlight brushed lines.
-    chart.parent.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false).filter(function (d) {
-        return chart.parent.data.selectedIDs.indexOf(d.id) > -1;
+    this.parent.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false).filter(function (d) {
+        return _this.parent.data.selectedIDs.indexOf(d.id) > -1;
     }).classed('brushed', true).each(function (d) {
         d3.select(this.parentNode).moveToFront();
     });
 
     //Draw listing displaying brushed IDs first.
-    if (chart.parent.data.selectedIDs.length) {
-        chart.parent.data.filtered.forEach(function (d) {
-            d.brushed = chart.parent.data.selectedIDs.indexOf(d[chart.config.id_col]) > -1;
+    if (this.parent.data.selectedIDs.length) {
+        this.parent.data.filtered.forEach(function (d) {
+            d.brushed = _this.parent.data.selectedIDs.indexOf(d[_this.config.id_col]) > -1;
         });
-        chart.parent.data.brushed = chart.parent.data.filtered.filter(function (d) {
+        this.parent.data.brushed = this.parent.data.filtered.filter(function (d) {
             return d.brushed;
         });
-        chart.parent.listing.draw(chart.parent.data.brushed);
+        this.parent.listing.draw(this.parent.data.brushed);
         d3.select('#Listing-nav').classed('brushed', true);
     } else {
-        chart.parent.data.brushed = [];
-        chart.parent.listing.draw(chart.parent.data.filtered);
+        this.parent.data.brushed = [];
+        this.parent.listing.draw(this.parent.data.filtered);
         d3.select('#Listing-nav').classed('brushed', false);
     }
 }
@@ -769,21 +882,21 @@ function brushMarks(chart, lines) {
 function brush() {
     var _this = this;
 
-    var chart = this;
+    var context = this;
 
     //lines
     var lines = this.svg.selectAll('.line-supergroup g.line path');
     lines.each(function (d, i) {
-        d.id = d.values[0].values.raw[0][chart.config.id_col];
-        d.lln = d.values[0].values.raw[0][chart.config.lln_col];
-        d.uln = d.values[0].values.raw[0][chart.config.uln_col];
+        d.id = d.values[0].values.raw[0][context.config.id_col];
+        d.lln = d.values[0].values.raw[0][context.config.lln_col];
+        d.uln = d.values[0].values.raw[0][context.config.uln_col];
         d.lines = d.values.map(function (di, i) {
             var line;
             if (i) {
                 line = {
-                    x0: chart.config.x.type === 'linear' ? d.values[i - 1].values.x : chart.x(d.values[i - 1].values.x) + chart.x.rangeBand() / 2,
+                    x0: context.config.x.type === 'linear' ? d.values[i - 1].values.x : context.x(d.values[i - 1].values.x) + context.x.rangeBand() / 2,
                     y0: d.values[i - 1].values.y,
-                    x1: chart.config.x.type === 'linear' ? di.values.x : chart.x(di.values.x) + chart.x.rangeBand() / 2,
+                    x1: context.config.x.type === 'linear' ? di.values.x : context.x(di.values.x) + context.x.rangeBand() / 2,
                     y1: di.values.y
                 };
             }
@@ -803,13 +916,13 @@ function brush() {
 
     //Apply brush.
     this.package.brush.on('brushstart', function () {}).on('brush', function () {
-        chart.parent.wrap.selectAll('.wc-chart').each(function (d) {
-            if (d.measure !== chart.currentMeasure) d.overlay.call(d.brush.clear());
+        context.parent.wrap.selectAll('.wc-chart').each(function (d) {
+            if (d.measure !== context.measure) d.overlay.call(d.brush.clear());
         });
-        chart.config.extent = chart.package.brush.extent();
+        context.config.extent = context.package.brush.extent();
 
         //brush marks
-        brushMarks(chart, lines);
+        brushMarks.call(context, lines);
     }).on('brushend', function () {});
 
     //Initialize brush on brush overlay.
@@ -817,27 +930,25 @@ function brush() {
 
     //Maintain brush on redraw.
     if (!this.config.extent) this.config.extent = this.package.brush.extent();
-    if ((this.config.extent[0][0] !== this.package.brush.extent()[0][0] || this.config.extent[0][1] !== this.package.brush.extent()[0][1] || this.config.extent[1][0] !== this.package.brush.extent()[1][0] || this.config.extent[1][1] !== this.package.brush.extent()[1][1]) && this.currentMeasure === chart.parent.brushedMeasure) {
+    if ((this.config.extent[0][0] !== this.package.brush.extent()[0][0] || this.config.extent[0][1] !== this.package.brush.extent()[0][1] || this.config.extent[1][0] !== this.package.brush.extent()[1][0] || this.config.extent[1][1] !== this.package.brush.extent()[1][1]) && this.measure === this.parent.brushedMeasure) {
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
-        brushMarks(chart, lines);
+        brushMarks.call(this, lines);
     }
 }
 
-function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
-    if (!axis) return;
-    var ticks = this.svg.selectAll('.' + axis + '.axis .tick text').attr({
-        transform: 'rotate(' + rotation + ')',
-        dx: dx,
-        dy: dy
-    }).style('text-anchor', anchor || 'start');
+function adjustTicks() {
+    if (this.config.x.rotate_tick_labels) {
+        var ticks = this.svg.selectAll('.x.axis .tick text').attr({
+            transform: 'rotate(-45)',
+            dx: -10,
+            dy: 10
+        }).style('text-anchor', 'end');
 
-    if (nchar) {
         ticks.filter(function (d) {
-            var dText = '' + d;
-            return dText.length > nchar;
+            return ('' + d).length > 10;
         }).text(function (d) {
-            return d.slice(0, nchar - 3) + '...';
+            return d.slice(0, 7) + '...';
         }).style('cursor', 'help').append('title').text(function (d) {
             return d;
         });
@@ -845,63 +956,25 @@ function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
 }
 
 function onResize() {
-    if (this.filtered_data.length == 0) {
-        this.svg.selectAll('*').classed('hidden', true);
-        this.svg.select('text.no-data').remove();
-        this.svg.append('text').classed('no-data', true).attr({
-            x: 0,
-            dx: -this.config.margin.left,
-            y: 0,
-            dy: 10
-        }).text('No data selected.');
+    resetSVG.call(this);
+
+    if (this.filtered_data.length === 0) {
+        noData.call(this);
     } else {
-        this.svg.selectAll('*').classed('hidden', false);
-        this.svg.select('text.no-data').remove();
-        this.svg.select('.normal-range').remove();
-        this.svg.insert('rect', '.line-supergroup').classed('normal-range', true).attr({
-            x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-            y: this.y(this.filtered_data[0][this.config.uln_col]),
-            width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-            height: this.y(this.filtered_data[0][this.config.lln_col]) - this.y(this.filtered_data[0][this.config.uln_col]),
-            fill: 'green',
-            'fill-opacity': 0.05,
-            stroke: 'green',
-            'stroke-opacity': 1,
-            'clip-path': 'url(#' + this.id + ')'
-        });
+        //Draw normal range.
+        drawNormalRange.call(this);
 
         //Capture each multiple's scale.
-        this.package = {
-            measure: this.currentMeasure,
-            container: this.wrap,
-            overlay: this.svg.append('g').classed('brush', true),
-            value: this.currentMeasure,
-            domain: clone(this.config.y.domain),
-            xScale: clone(this.x),
-            yScale: clone(this.y),
-            brush: d3.svg.brush().x(this.x).y(this.y)
-        };
-        this.wrap.datum(this.package);
+        definePackage.call(this);
 
         //Define invisible brush overlay.
-        this.package.overlay.append('rect').attr({
-            x: 0,
-            y: 0,
-            width: this.plot_width,
-            height: this.plot_height,
-            'fill-opacity': 0
-        });
-
-        //Attach additional data to SVG and marks.
-        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.currentMeasure });
+        addBrushOverlay.call(this);
 
         //Add brush functionality.
         brush.call(this);
 
         //Rotate x-axis tick labels.
-        if (this.config.x.rotate_tick_labels) {
-            adjustTicks.call(this, 'x', -10, 10, -45, 'end', 10);
-        }
+        adjustTicks.call(this);
     }
 }
 
@@ -932,28 +1005,19 @@ function onInit$1() {
 
 function onLayout$1() {}
 
-function onPreprocess$1() {}
-
-function onDatatransform$1() {}
-
 function onDraw$1() {
     //Highlight selected rows.
-    this.table.selectAll('tbody tr').classed('brushed', function (d) {
+    this.table.selectAll('tbody tr').classed('poe-brushed', function (d) {
         return d ? d.brushed : false;
     });
 }
-
-function onResize$1() {}
 
 function onDestroy$1() {}
 
 var callbacks$1 = {
     onInit: onInit$1,
     onLayout: onLayout$1,
-    onPreprocess: onPreprocess$1,
-    onDatatransform: onDatatransform$1,
     onDraw: onDraw$1,
-    onResize: onResize$1,
     onDestroy: onDestroy$1
 };
 
@@ -981,11 +1045,6 @@ function defineData(data) {
         return d[_this.settings.id_col];
     })).values().sort();
 
-    //Define set of unique measures.
-    this.data.measures = d3.set(data.map(function (d) {
-        return d.measure_unit;
-    })).values().sort();
-
     //Filter data on observations with numeric results.
     this.data.raw = data.filter(function (d) {
         return (/^[0-9.]+$/.test(d[_this.settings.value_col])
@@ -1002,19 +1061,17 @@ function defineData(data) {
         d.brushed = false;
     });
 
-    //Define set of unique quantitative measures.
+    //Define quantitative, initial, and all measure sets.
     this.data.quantitativeMeasures = d3.set(this.data.raw.map(function (d) {
         return d.measure_unit;
     })).values().sort();
-
-    //Define set of unique qualitative measures.
-    this.data.qualitativeMeasures = this.data.measures.filter(function (measure) {
-        return _this.data.quantitativeMeasures.indexOf(measure) < 0;
-    });
-
-    //Define set of initially displayed measures.
-    this.data.currentMeasures = this.settings.measures && this.settings.measures.length ? this.settings.measures : this.data.quantitativeMeasures;
+    this.data.currentMeasures = this.settings.measures && this.settings.measures.length ? this.settings.measures.filter(function (measure) {
+        return _this.data.quantitativeMeasures.indexOf(measure) > -1;
+    }) : this.data.quantitativeMeasures;
     this.filters[this.settings.measure_col] = this.data.currentMeasures;
+    this.data.measures = this.data.currentMeasures.concat(this.data.quantitativeMeasures.filter(function (measure) {
+        return _this.data.currentMeasures.indexOf(measure) < 0;
+    }));
 
     //Filter data on the specified subset of measures.
     this.data.filtered = this.data.raw.filter(function (d) {
@@ -1028,10 +1085,11 @@ function defineData(data) {
 
 function initializeDisplays() {
     //Initialize charts.
-    webcharts.multiply(this.charts, this.data.raw, 'measure_unit');
+    webcharts.multiply(this.charts, this.data.raw, 'measure_unit', this.data.measures);
 
     //Initialize listing.
     this.listing.init(this.data.raw);
+    this.containers.listing.classed('poe-hidden', true);
 }
 
 function xAxisControlLabels() {
@@ -1054,7 +1112,7 @@ function addMeasureList() {
     var context = this;
 
     //Append a list item for each measure.
-    this.containers.measureList.selectAll('li.poe-measure-item').data(this.data.quantitativeMeasures.map(function (measure) {
+    this.containers.measureList.selectAll('li.poe-measure-item').data(this.data.measures.map(function (measure) {
         return {
             'measure': measure,
             'selector': measure.replace(/[^a-z0-9-]/gi, '-')

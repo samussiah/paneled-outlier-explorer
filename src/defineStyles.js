@@ -133,27 +133,22 @@ export default function defineStyles() {
           Charts
         \--------------------------------------------------------------------------------------***/
 
-            '#paneled-outlier-explorer path.brushed {' +
+            '#paneled-outlier-explorer path.poe-brushed {' +
                 '    stroke: orange;' +
                 '    stroke-width: 3px;' +
                 '    stroke-opacity: 1;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts {' +
-                '    width: 75%;' +
-                '    float: right;' +
-                '    padding-top: 10px;' +
-                '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart {' +
+            '#paneled-outlier-explorer #poe-charts .wc-chart {' +
                 '    padding: 0 1em 0 0;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart.expanded {' +
+            '#paneled-outlier-explorer #poe-charts .wc-chart.poe-maximized {' +
                 '    width: 100%;' +
                 ' }',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .wc-chart-title {' +
+            '#paneled-outlier-explorer #poe-charts .wc-chart-title {' +
                 '    text-align: left;' +
                 '    font-size: .9em;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button {' +
+            '#paneled-outlier-explorer #poe-charts .poe-chart-button {' +
                 '    float: right;' +
                 '    cursor: pointer;' +
                 '    border: 1px solid black;' +
@@ -163,11 +158,11 @@ export default function defineStyles() {
                 '    margin-left: 5px;' +
                 '    visibility: hidden;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart .chart-button:hover {' +
+            '#paneled-outlier-explorer #poe-charts .poe-chart-button:hover {' +
                 '    background: black;' +
                 '    color: white;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' +
+            '#paneled-outlier-explorer #poe-charts .poe-no-data {' +
                 '    fill: red;' +
                 '    font-size: 0.8em;' +
                 '}',
@@ -176,17 +171,12 @@ export default function defineStyles() {
           Listing
         \--------------------------------------------------------------------------------------***/
 
-            '#paneled-outlier-explorer tr.brushed {' +
+            '#paneled-outlier-explorer #poe-listing .poe-brushed {' +
                 '    border: 2px solid orange !important;' +
                 '}',
-            '#paneled-outlier-explorer div.wc-chart#Listing {' +
-                '    width: 75%;' +
-                '    float: right;' +
-                '    padding-top: 10px;' +
+            '#paneled-outlier-explorer #poe-listing {' +
                 '    overflow-x: scroll;' +
-                '}',
-            '#paneled-outlier-explorer div.wc-chart#Listing table {' +
-                '}',
+                '}'
         ],
         style = this.test
             ? this.dom.window.document.createElement('style')

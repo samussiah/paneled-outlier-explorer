@@ -1,10 +1,10 @@
 export default function navClick(d) {
     this.containers.navs
-        .classed('active', di => di === d);
+        .classed('poe-active', di => di === d);
     this.containers.rightColumn
         .selectAll('.poe-display')
-        .classed('hidden', true);
+        .classed('poe-hidden', true);
     this.containers.rightColumn
         .select(`#poe-${d.toLowerCase()}`)
-        .classed('hidden', false);
+        .classed('poe-hidden', false);
 }

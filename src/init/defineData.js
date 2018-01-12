@@ -7,9 +7,6 @@ export default function defineData(data) {
     //Define set of unique IDs.
     this.data.population = set(data.map(d => d[this.settings.id_col])).values().sort();
 
-    //Define set of unique measures.
-    this.data.measures = set(data.map(d => d.measure_unit)).values().sort();
-
     //Filter data on observations with numeric results.
     this.data.raw = data
         .filter(
@@ -35,18 +32,18 @@ export default function defineData(data) {
             d.brushed = false;
         });
 
-    //Define set of unique quantitative measures.
+    //Define quantitative, initial, and all measure sets.
     this.data.quantitativeMeasures = set(this.data.raw.map(d => d.measure_unit)).values().sort();
-
-    //Define set of unique qualitative measures.
-    this.data.qualitativeMeasures = this.data.measures
-        .filter(measure => this.data.quantitativeMeasures.indexOf(measure) < 0);
-
-    //Define set of initially displayed measures.
     this.data.currentMeasures = this.settings.measures && this.settings.measures.length
         ? this.settings.measures
+            .filter(measure => this.data.quantitativeMeasures.indexOf(measure) > -1)
         : this.data.quantitativeMeasures;
     this.filters[this.settings.measure_col] = this.data.currentMeasures;
+    this.data.measures = this.data.currentMeasures
+        .concat(
+            this.data.quantitativeMeasures
+                .filter(measure => this.data.currentMeasures.indexOf(measure) < 0)
+        );
 
     //Filter data on the specified subset of measures.
     this.data.filtered = this.data.raw

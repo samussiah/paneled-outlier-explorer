@@ -1,23 +1,20 @@
-export default function adjustTicks(axis, dx, dy, rotation, anchor, nchar) {
-    if (!axis) return;
-    var ticks = this.svg
-        .selectAll('.' + axis + '.axis .tick text')
-        .attr({
-            transform: 'rotate(' + rotation + ')',
-            dx: dx,
-            dy: dy
-        })
-        .style('text-anchor', anchor || 'start');
+export default function adjustTicks() {
+    if (this.config.x.rotate_tick_labels) {
+        const
+            ticks = this.svg
+                .selectAll('.x.axis .tick text')
+                .attr({
+                    transform: 'rotate(-45)',
+                    dx: -10,
+                    dy: 10
+                })
+                .style('text-anchor', 'end');
 
-    if (nchar) {
         ticks
-            .filter(function(d) {
-                var dText = '' + d;
-                return dText.length > nchar;
-            })
-            .text(d => d.slice(0, nchar - 3) + '...')
+            .filter(d => ('' + d).length > 10)
+            .text(d => d.slice(0, 7) + '...')
             .style('cursor', 'help')
-            .append('title')
-            .text(d => d);
+                .append('title')
+                .text(d => d);
     }
 }

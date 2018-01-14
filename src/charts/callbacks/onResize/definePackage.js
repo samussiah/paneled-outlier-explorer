@@ -1,5 +1,6 @@
 import clone from '../../../util/clone';
 import { svg } from 'd3';
+import defineLineDataArray from './definePackage/defineLineDataArray';
 
 export default function definePackage() {
     this.package = {
@@ -8,7 +9,6 @@ export default function definePackage() {
         overlay: this.svg
             .append('g')
             .classed('brush', true),
-        value: this.measure,
         domain: clone(this.config.y.domain),
         xScale: clone(this.x),
         yScale: clone(this.y),
@@ -17,5 +17,10 @@ export default function definePackage() {
             .x(this.x)
             .y(this.y)
     };
+
+    //Define line data arrays.
+    defineLineDataArray.call(this);
+
+    //Attach packge to chart container.
     this.wrap.datum(this.package);
 }

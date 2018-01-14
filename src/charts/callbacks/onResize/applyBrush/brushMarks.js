@@ -1,7 +1,8 @@
-import { select } from 'd3';
 import doLineSegmentsIntersect from './brushMarks/doLineSegmentsIntersect';
+import { select } from 'd3';
+import '../../../../util/moveToFront';
 
-export default function brushMarks(lines) {
+export default function brushMarks() {
     this.parent.brushedMeasure = this.measure;
 
     const extent = this.config.extent,
@@ -16,7 +17,7 @@ export default function brushMarks(lines) {
         sides = [top, right, bottom, left];
 
     //Determine which lines fall inside the brush.
-    const brushedLines = lines.filter((d, i) => {
+    const brushedLines = this.package.lines.filter((d, i) => {
         let intersection = false;
         d.lines.forEach((line, j) => {
             sides.forEach((side, k) => {
@@ -34,29 +35,29 @@ export default function brushMarks(lines) {
     });
 
     //Attached brushed IDs to chart parent object.
-    this.parent.data.selectedIDs = brushedLines.data().map(d => d.id);
+    this.parent.paneledOutlierExplorer.data.selectedIDs = brushedLines.data().map(d => d.id);
 
     //Highlight brushed lines.
     this.parent.wrap
         .selectAll('.line-supergroup g.line path')
         .classed('brushed', false)
-        .filter(d => this.parent.data.selectedIDs.indexOf(d.id) > -1)
+        .filter(d => this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1)
         .classed('brushed', true)
         .each(function(d) {
             select(this.parentNode).moveToFront();
         });
 
     //Draw listing displaying brushed IDs first.
-    if (this.parent.data.selectedIDs.length) {
-        this.parent.data.filtered.forEach(d => {
-            d.brushed = this.parent.data.selectedIDs.indexOf(d[this.config.id_col]) > -1;
+    if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
+        this.parent.paneledOutlierExplorer.data.filtered.forEach(d => {
+            d.brushed = this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d[this.config.id_col]) > -1;
         });
-        this.parent.data.brushed = this.parent.data.filtered.filter(d => d.brushed);
-        this.parent.listing.draw(this.parent.data.brushed);
+        this.parent.paneledOutlierExplorer.data.brushed = this.parent.paneledOutlierExplorer.data.filtered.filter(d => d.brushed);
+        this.parent.listing.draw(this.parent.paneledOutlierExplorer.data.brushed);
         select('#Listing-nav').classed('brushed', true);
     } else {
-        this.parent.data.brushed = [];
-        this.parent.listing.draw(this.parent.data.filtered);
+        this.parent.paneledOutlierExplorer.data.brushed = [];
+        this.parent.listing.draw(this.parent.paneledOutlierExplorer.data.filtered);
         select('#Listing-nav').classed('brushed', false);
     }
 }

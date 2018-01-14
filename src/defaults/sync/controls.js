@@ -5,11 +5,11 @@ export default function syncControls() {
     controls
         .filter(control => control.label === 'X-axis')
         .pop()
-        .values = settings.time_cols.map(d => d.value_col);
+        .values = this.settings.time_cols.map(d => d.value_col);
 
     //Add user-defined filters to controls.
-    if (this.settings.synced.filters && this.settings.synced.filters.length)
-        this.settings.synced.filters
+    if (this.settings.filters && this.settings.filters.length)
+        this.settings.filters
             .forEach(filter => {
                 controls.push({
                     type: 'subsetter',

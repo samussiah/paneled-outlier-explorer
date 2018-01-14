@@ -437,12 +437,12 @@ function syncControls() {
     //Set x-axis control options to settings.time_cols[].value_col;
     controls.filter(function (control) {
         return control.label === 'X-axis';
-    }).pop().values = settings.time_cols.map(function (d) {
+    }).pop().values = this.settings.time_cols.map(function (d) {
         return d.value_col;
     });
 
     //Add user-defined filters to controls.
-    if (this.settings.synced.filters && this.settings.synced.filters.length) this.settings.synced.filters.forEach(function (filter) {
+    if (this.settings.filters && this.settings.filters.length) this.settings.filters.forEach(function (filter) {
         controls.push({
             type: 'subsetter',
             value_col: filter.value_col || filter,
@@ -466,7 +466,7 @@ var defaults$1 = {
 function defineSettings() {
     this.settings.merged = Object.assign(Object.assign(defaults$1.rendererSettings, defaults$1.webchartsSettings), clone(this.settings.user));
     defaults$1.syncSettings.call(this);
-    Object.assign(this.settings, this.settings.synced);
+    Object.assign(this.settings, this.settings.synced); // attach settings to top-level settings object
     defaults$1.syncControls.call(this);
 }
 
@@ -651,12 +651,8 @@ function onPreprocess() {
 function onDatatransform() {}
 
 function onDraw() {
-    if (this.package) this.package.overlay.call(this.package.brush.clear());
-}
-
-function resetSVG() {
-    this.svg.selectAll('*').classed('hidden', false);
-    this.svg.select('.poe-no-data').remove();
+    //if (this.package)
+    //    this.package.overlay.call(this.package.brush.clear());
 }
 
 function noData() {
@@ -666,48 +662,6 @@ function noData() {
         y: 0,
         dy: 10
     }).text('No data selected.');
-}
-
-function drawNormalRange() {
-    this.svg.select('.poe-normal-range').remove();
-    if (this.filtered_data[0].hasOwnProperty(this.config.lln_col) && this.filtered_data[0].hasOwnProperty(this.config.uln_col)) {
-        var y0 = this.y(this.filtered_data[0][this.config.uln_col]);
-        this.svg.insert('rect', '.line-supergroup').classed('poe-normal-range', true).attr({
-            'x': this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-            'y': y0,
-            'width': this.plot_width + 10, // make sure right side of normal range does not appear in chart
-            'height': this.y(this.filtered_data[0][this.config.lln_col]) - y0,
-            'fill': 'green',
-            'fill-opacity': 0.05,
-            'stroke': 'green',
-            'stroke-opacity': 1,
-            'clip-path': 'url(#' + this.id + ')'
-        });
-    }
-}
-
-function definePackage() {
-    this.package = {
-        measure: this.measure,
-        container: this.wrap,
-        overlay: this.svg.append('g').classed('brush', true),
-        value: this.measure,
-        domain: clone(this.config.y.domain),
-        xScale: clone(this.x),
-        yScale: clone(this.y),
-        brush: d3.svg.brush().x(this.x).y(this.y)
-    };
-    this.wrap.datum(this.package);
-}
-
-function addBrushOverlay() {
-    this.package.overlay.append('rect').datum({ measure: this.measure }).classed('poe-brush-overlay', true).attr({
-        'x': 0,
-        'y': 0,
-        'width': this.plot_width,
-        'height': this.plot_height,
-        'fill-opacity': 0
-    }).style('cursor', 'crosshair');
 }
 
 /**
@@ -730,46 +684,7 @@ function addBrushOverlay() {
  *  representing the end of the 2nd line.
  */
 
-function doLineSegmentsIntersect(p, p2, q, q2) {
-    var r = subtractPoints(p2, p);
-    var s = subtractPoints(q2, q);
 
-    var uNumerator = crossProduct(subtractPoints(q, p), r);
-    var denominator = crossProduct(r, s);
-
-    if (uNumerator == 0 && denominator == 0) {
-        // They are coLlinear
-
-        // Do they touch? (Are any of the points equal?)
-        if (equalPoints(p, q) || equalPoints(p, q2) || equalPoints(p2, q) || equalPoints(p2, q2)) {
-            return true;
-        }
-        // Do they overlap? (Are all the point differences in either direction the same sign)
-        return !allEqual(q.x - p.x < 0, q.x - p2.x < 0, q2.x - p.x < 0, q2.x - p2.x < 0) || !allEqual(q.y - p.y < 0, q.y - p2.y < 0, q2.y - p.y < 0, q2.y - p2.y < 0);
-    }
-
-    if (denominator == 0) {
-        // lines are paralell
-        return false;
-    }
-
-    var u = uNumerator / denominator;
-    var t = crossProduct(subtractPoints(q, p), s) / denominator;
-
-    return t >= 0 && t <= 1 && u >= 0 && u <= 1;
-}
-
-/**
- * Calculate the cross product of the two points.
- *
- * @param {Object} point1 point object with x and y coordinates
- * @param {Object} point2 point object with x and y coordinates
- *
- * @return the cross product result as a float
- */
-function crossProduct(point1, point2) {
-    return point1.x * point2.y - point1.y * point2.x;
-}
 
 /**
  * Subtract the second point from the first.
@@ -780,13 +695,7 @@ function crossProduct(point1, point2) {
  * @return the subtraction result as a point object
  */
 
-function subtractPoints(point1, point2) {
-    var result = {};
-    result.x = point1.x - point2.x;
-    result.y = point1.y - point2.y;
 
-    return result;
-}
 
 /**
  * See if the points are equal.
@@ -796,9 +705,7 @@ function subtractPoints(point1, point2) {
  *
  * @return if the points are equal
  */
-function equalPoints(point1, point2) {
-    return point1.x == point2.x && point1.y == point2.y;
-}
+
 
 /**
  * See if all arguments are equal.
@@ -807,133 +714,28 @@ function equalPoints(point1, point2) {
  *
  * @return if all arguments are equal
  */
-function allEqual(args) {
-    var firstValue = arguments[0],
-        i;
-    for (i = 1; i < arguments.length; i += 1) {
-        if (arguments[i] != firstValue) {
-            return false;
-        }
-    }
-    return true;
-}
 
-function brushMarks(lines) {
-    var _this = this;
-
-    this.parent.brushedMeasure = this.measure;
-
-    var extent$$1 = this.config.extent,
-        x0 = extent$$1[0][0],
-        // top left x-coordinate
-    y0 = extent$$1[1][1],
-        // top left y-coordinate
-    x1 = extent$$1[1][0],
-        // bottom right x-coordinate
-    y1 = extent$$1[0][1],
-        // bottom right y-coordinate
-    top = { x0: x1, y0: y0, x1: x0, y1: y0 },
-        right = { x0: x1, y0: y1, x1: x1, y1: y0 },
-        bottom = { x0: x0, y0: y1, x1: x1, y1: y1 },
-        left = { x0: x0, y0: y0, x1: x0, y1: y1 },
-        sides = [top, right, bottom, left];
-
-    //Determine which lines fall inside the brush.
-    var brushedLines = lines.filter(function (d, i) {
-        var intersection = false;
-        d.lines.forEach(function (line, j) {
-            sides.forEach(function (side, k) {
-                if (!intersection) intersection = doLineSegmentsIntersect({ x: line.x0, y: line.y0 }, { x: line.x1, y: line.y1 }, { x: side.x0, y: side.y0 }, { x: side.x1, y: side.y1 });
-            });
-        });
-
-        return intersection;
+d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
+        this.parentNode.appendChild(this);
     });
+};
 
-    //Attached brushed IDs to chart parent object.
-    this.parent.data.selectedIDs = brushedLines.data().map(function (d) {
-        return d.id;
-    });
-
-    //Highlight brushed lines.
-    this.parent.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false).filter(function (d) {
-        return _this.parent.data.selectedIDs.indexOf(d.id) > -1;
-    }).classed('brushed', true).each(function (d) {
-        d3.select(this.parentNode).moveToFront();
-    });
-
-    //Draw listing displaying brushed IDs first.
-    if (this.parent.data.selectedIDs.length) {
-        this.parent.data.filtered.forEach(function (d) {
-            d.brushed = _this.parent.data.selectedIDs.indexOf(d[_this.config.id_col]) > -1;
+function drawNormalRange() {
+    this.svg.select('.poe-normal-range').remove();
+    if (this.filtered_data[0].hasOwnProperty(this.config.lln_col) && this.filtered_data[0].hasOwnProperty(this.config.uln_col)) {
+        var y0 = this.y(this.filtered_data[0][this.config.uln_col]);
+        this.svg.insert('rect', '.line-supergroup').classed('poe-normal-range', true).attr({
+            'x': this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+            'y': y0,
+            'width': this.plot_width + 10, // make sure right side of normal range does not appear in chart
+            'height': this.y(this.filtered_data[0][this.config.lln_col]) - y0,
+            'fill': 'green',
+            'fill-opacity': 0.05,
+            'stroke': 'green',
+            'stroke-opacity': 1,
+            'clip-path': 'url(#' + this.id + ')'
         });
-        this.parent.data.brushed = this.parent.data.filtered.filter(function (d) {
-            return d.brushed;
-        });
-        this.parent.listing.draw(this.parent.data.brushed);
-        d3.select('#Listing-nav').classed('brushed', true);
-    } else {
-        this.parent.data.brushed = [];
-        this.parent.listing.draw(this.parent.data.filtered);
-        d3.select('#Listing-nav').classed('brushed', false);
-    }
-}
-
-function brush() {
-    var _this = this;
-
-    var context = this;
-
-    //lines
-    var lines = this.svg.selectAll('.line-supergroup g.line path');
-    lines.each(function (d, i) {
-        d.id = d.values[0].values.raw[0][context.config.id_col];
-        d.lln = d.values[0].values.raw[0][context.config.lln_col];
-        d.uln = d.values[0].values.raw[0][context.config.uln_col];
-        d.lines = d.values.map(function (di, i) {
-            var line;
-            if (i) {
-                line = {
-                    x0: context.config.x.type === 'linear' ? d.values[i - 1].values.x : context.x(d.values[i - 1].values.x) + context.x.rangeBand() / 2,
-                    y0: d.values[i - 1].values.y,
-                    x1: context.config.x.type === 'linear' ? di.values.x : context.x(di.values.x) + context.x.rangeBand() / 2,
-                    y1: di.values.y
-                };
-            }
-            return line;
-        });
-        d.lines.shift();
-    });
-
-    //Highlight previously brushed points.
-    if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
-        lines.filter(function (d) {
-            return _this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1;
-        }).classed('brushed', true).each(function () {
-            d3.select(this.parentNode).moveToFront();
-        });
-    }
-
-    //Apply brush.
-    this.package.brush.on('brushstart', function () {}).on('brush', function () {
-        context.parent.wrap.selectAll('.wc-chart').each(function (d) {
-            if (d.measure !== context.measure) d.overlay.call(d.brush.clear());
-        });
-        context.config.extent = context.package.brush.extent();
-
-        //brush marks
-        brushMarks.call(context, lines);
-    }).on('brushend', function () {});
-
-    //Initialize brush on brush overlay.
-    this.package.overlay.call(this.package.brush);
-
-    //Maintain brush on redraw.
-    if (!this.config.extent) this.config.extent = this.package.brush.extent();
-    if ((this.config.extent[0][0] !== this.package.brush.extent()[0][0] || this.config.extent[0][1] !== this.package.brush.extent()[0][1] || this.config.extent[1][0] !== this.package.brush.extent()[1][0] || this.config.extent[1][1] !== this.package.brush.extent()[1][1]) && this.measure === this.parent.brushedMeasure) {
-        this.package.brush.extent(this.config.extent);
-        this.package.overlay.call(this.package.brush);
-        brushMarks.call(this, lines);
     }
 }
 
@@ -956,26 +758,30 @@ function adjustTicks() {
 }
 
 function onResize() {
-    resetSVG.call(this);
+        if (this.filtered_data.length === 0) {
+                noData.call(this);
+        } else {
+                //Capture each multiple's scale.
+                //definePackage.call(this);
 
-    if (this.filtered_data.length === 0) {
-        noData.call(this);
-    } else {
-        //Draw normal range.
-        drawNormalRange.call(this);
+                //Define invisible brush overlay.
+                //addBrushOverlay.call(this);
 
-        //Capture each multiple's scale.
-        definePackage.call(this);
+                //Highlight previously brushed points.
+                //maintainHighlighting.call(this);
 
-        //Define invisible brush overlay.
-        addBrushOverlay.call(this);
+                //Apply brush.
+                //applyBrush.call(this);
 
-        //Add brush functionality.
-        brush.call(this);
+                //Maintain brush on redraw.
+                //maintainBrush.call(this);
 
-        //Rotate x-axis tick labels.
-        adjustTicks.call(this);
-    }
+                //Draw normal range.
+                drawNormalRange.call(this);
+
+                //Rotate x-axis tick labels.
+                adjustTicks.call(this);
+        }
 }
 
 function onDestroy() {}

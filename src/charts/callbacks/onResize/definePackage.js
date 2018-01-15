@@ -22,5 +22,9 @@ export default function definePackage() {
     defineLineDataArray.call(this);
 
     //Attach packge to chart container.
+    console.log(this.wrap.select('.poe-chart-button').datum());
+    this.wrap.select('.wc-title').datum(function() { return null; });
+    console.log(this.wrap.select('.wc-title'));
     this.wrap.datum(this.package);
+    console.log(this.wrap.select('.poe-chart-button').datum());
 }

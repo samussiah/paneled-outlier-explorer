@@ -12,25 +12,25 @@ export default function onResize() {
     const context = this;
 
     //Reset SVG.
-    //resetSVG.call(this);
+    resetSVG.call(this);
 
     if (this.filtered_data.length === 0) {
         noData.call(this);
     } else {
         //Capture each multiple's scale.
-        //definePackage.call(this);
+        definePackage.call(this);
 
         //Define invisible brush overlay.
-        //addBrushOverlay.call(this);
+        addBrushOverlay.call(this);
 
         //Highlight previously brushed points.
-        //maintainHighlighting.call(this);
+        maintainHighlighting.call(this);
 
         //Apply brush.
-        //applyBrush.call(this);
+        applyBrush.call(this);
 
         //Maintain brush on redraw.
-        //maintainBrush.call(this);
+        maintainBrush.call(this);
 
         //Draw normal range.
         drawNormalRange.call(this);

@@ -1,8 +1,6 @@
 export default function addBrushOverlay() {
     this.package.overlay
         .append('rect')
-        .datum({ measure: this.measure })
-        .classed('poe-brush-overlay', true)
         .attr({
             x: 0,
             y: 0,
@@ -10,4 +8,5 @@ export default function addBrushOverlay() {
             height: this.plot_height,
             'fill-opacity': 0
         });
+    this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.measure });
 }

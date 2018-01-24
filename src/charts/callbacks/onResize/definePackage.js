@@ -6,7 +6,7 @@ export default function definePackage() {
     this.package = {
         measure: this.measure,
         container: this.wrap,
-        overlay: this.svg.append('g').classed('brush', true),
+        overlay: this.svg.append('g'),
         domain: clone(this.config.y.domain),
         xScale: clone(this.x),
         yScale: clone(this.y),

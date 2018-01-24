@@ -47,8 +47,9 @@ export default function defineData(data) {
 
     //Filter data on the specified subset of measures.
     this.data.filtered = this.data.raw.filter(
-        d => this.data.currentMeasures.indexOf(d[this.settings.measure_col]) > -1
+        d => this.data.currentMeasures.indexOf(d.measure_unit) > -1
     );
+    console.log(this.data.filtered);
 
     //Placeholder data arrays.
     this.data.brushed = [];

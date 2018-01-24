@@ -2,7 +2,6 @@ import brushMarks from './applyBrush/brushMarks';
 
 export default function applyBrush() {
     const context = this;
-    console.log(context.package.brush.extent());
 
     //Define brush events.
     this.package.brush
@@ -11,7 +10,7 @@ export default function applyBrush() {
             context.parent.wrap.selectAll('.wc-chart').each(d => {
                 if (d.measure !== context.measure) d.overlay.call(d.brush.clear());
             });
-            context.config.extent = context.package.brush.extent();
+            context.extent = context.package.brush.extent();
 
             //brush marks
             brushMarks.call(context);

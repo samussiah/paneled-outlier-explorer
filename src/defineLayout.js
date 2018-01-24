@@ -69,7 +69,7 @@ export default function defineLayout() {
         .append('li')
         .classed('poe-nav', true)
         .classed('active', d => d === 'Charts')
-        .attr('id', d => `poe-${d}-nav`)
+        .attr('id', d => `poe-${d.toLowerCase()}-nav`)
         .text(d => d);
     this.containers.navs.on('click', d => {
         navClick.call(this, d);

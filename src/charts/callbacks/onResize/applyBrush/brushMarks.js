@@ -5,7 +5,7 @@ import '../../../../util/moveToFront';
 export default function brushMarks() {
     this.parent.brushedMeasure = this.measure;
 
-    const extent = this.config.extent,
+    const extent = this.extent,
         x0 = extent[0][0], // top left x-coordinate
         y0 = extent[1][1], // top left y-coordinate
         x1 = extent[1][0], // bottom right x-coordinate
@@ -35,33 +35,33 @@ export default function brushMarks() {
     });
 
     //Attached brushed IDs to chart parent object.
-    this.parent.paneledOutlierExplorer.data.selectedIDs = brushedLines.data().map(d => d.id);
+    this.POE.data.selectedIDs = brushedLines.data().map(d => d.id);
 
     //Highlight brushed lines.
     this.parent.wrap
         .selectAll('.line-supergroup g.line path')
-        .classed('brushed', false)
+        .classed('poe-brushed', d => this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1)
         .filter(d => this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1)
-        .classed('brushed', true)
         .each(function(d) {
             select(this.parentNode).moveToFront();
         });
 
     //Draw listing displaying brushed IDs first.
-    if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
-        this.parent.paneledOutlierExplorer.data.filtered.forEach(d => {
+    if (this.POE.data.selectedIDs.length) {
+        this.POE.data.filtered.forEach(d => {
             d.brushed =
-                this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d[this.config.id_col]) >
+                this.POE.data.selectedIDs.indexOf(d[this.config.id_col]) >
                 -1;
         });
-        this.parent.paneledOutlierExplorer.data.brushed = this.parent.paneledOutlierExplorer.data.filtered.filter(
+        this.POE.data.brushed = this.POE.data.filtered.filter(
             d => d.brushed
         );
-        this.parent.listing.draw(this.parent.paneledOutlierExplorer.data.brushed);
-        select('#Listing-nav').classed('brushed', true);
+        console.log(this.POE.data.brushed);
+        this.POE.listing.draw(this.POE.data.brushed);
+        select('#poe-listing-nav').classed('poe-brushed', true);
     } else {
-        this.parent.paneledOutlierExplorer.data.brushed = [];
-        this.parent.listing.draw(this.parent.paneledOutlierExplorer.data.filtered);
-        select('#Listing-nav').classed('brushed', false);
+        this.POE.data.brushed = [];
+        this.POE.listing.draw(this.POE.data.filtered);
+        select('#poe-listing-nav').classed('poe-brushed', false);
     }
 }

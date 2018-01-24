@@ -1,12 +1,13 @@
 import { select } from 'd3';
 
 export default function maintainHighlighting() {
-    if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
+    if (this.POE.data.selectedIDs.length) {
+        const context = this;
         this.package.lines
-            .filter(d => this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d.id) > -1)
-            .classed('brushed', true)
-            .each(function() {
-                select(this.parentNode).moveToFront();
+            .classed('poe-brushed', d => this.POE.data.selectedIDs.indexOf(d.id) > -1)
+            .each(function(d) {
+                if (context.POE.data.selectedIDs.indexOf(d.id) > -1)
+                    select(this.parentNode).moveToFront();
             });
     }
 }

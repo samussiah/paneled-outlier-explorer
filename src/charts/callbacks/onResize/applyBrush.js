@@ -2,6 +2,7 @@ import brushMarks from './applyBrush/brushMarks';
 
 export default function applyBrush() {
     const context = this;
+    console.log(context.package.brush.extent());
 
     //Define brush events.
     this.package.brush

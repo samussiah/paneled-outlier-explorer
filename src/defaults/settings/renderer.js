@@ -34,4 +34,4 @@ export default {
     measures: null,
     filters: null,
     rotate_x_tick_labels: false
-}
+};

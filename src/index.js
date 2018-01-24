@@ -8,17 +8,16 @@ import recurse from './recurse';
 import init from './init';
 
 export default function paneledOutlierExplorer(element = 'body', settings = {}) {
-    const
-        paneledOutlierExplorer = {
-            element: element,
-            settings: {
-                user: settings
-            },
-            containers: {},
-            init: init,
-            data: {},
-            filters: {}
-        };
+    const paneledOutlierExplorer = {
+        element: element,
+        settings: {
+            user: settings
+        },
+        containers: {},
+        init: init,
+        data: {},
+        filters: {}
+    };
 
     //Define layout.
     defineLayout.call(paneledOutlierExplorer);

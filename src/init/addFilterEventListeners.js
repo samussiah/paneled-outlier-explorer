@@ -1,8 +1,7 @@
 import { select as d3select } from 'd3';
 
 export default function addFilterEventListeners() {
-    const
-        context = this;
+    const context = this;
 
     this.controls.wrap
         .selectAll('.control-group')

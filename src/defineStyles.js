@@ -166,6 +166,9 @@ export default function defineStyles() {
                 '    fill: red;' +
                 '    font-size: 0.8em;' +
                 '}',
+            '#paneled-outlier-explorer #poe-charts .poe-brush-overlay {' +
+                '    cursor: crosshair;' +
+                '}',
 
         /***--------------------------------------------------------------------------------------\
           Listing

@@ -10,4 +10,4 @@ export default {
     controlsSettings: controlsSettings,
     syncSettings: syncSettings,
     syncControls: syncControls
-}
+};

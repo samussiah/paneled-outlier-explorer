@@ -5,4 +5,4 @@ export default [
         option: 'x.column',
         require: true
     }
-]
+];

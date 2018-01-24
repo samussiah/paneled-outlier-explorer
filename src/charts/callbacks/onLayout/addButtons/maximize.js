@@ -4,20 +4,15 @@ export default function maximize() {
     const context = this;
 
     //Clear previously maximized chart.
-    if (this.parent.maximizedChart)
-        minimize.call(this.parent.maximizedChart);
+    if (this.parent.maximizedChart) minimize.call(this.parent.maximizedChart);
 
     //Attach maximized chart to parent.
     this.parent.maximizedChart = this;
     this.wrap.classed('poe-maximized', true);
 
     //Toggle maximize/minimize buttons.
-    this.wrap
-        .select('.poe-maximize-chart')
-        .classed('poe-hidden', true);
-    this.wrap
-        .select('.poe-minimize-chart')
-        .classed('poe-hidden', false);
+    this.wrap.select('.poe-maximize-chart').classed('poe-hidden', true);
+    this.wrap.select('.poe-minimize-chart').classed('poe-hidden', false);
 
     //Define maximized chart dimensions.
     this.config.width = null;
@@ -33,8 +28,8 @@ export default function maximize() {
         return a.measure === context.measure
             ? -1
             : b.measure === context.measure
-                ? 1
-                : context.parent.paneledOutlierExplorer.data.measures.indexOf(a.measure) -
+              ? 1
+              : context.parent.paneledOutlierExplorer.data.measures.indexOf(a.measure) -
                 context.parent.paneledOutlierExplorer.data.measures.indexOf(b.measure);
     });
 

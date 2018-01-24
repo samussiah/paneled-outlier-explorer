@@ -16,7 +16,7 @@ export default {
             attributes: {
                 'stroke-width': 1,
                 'stroke-opacity': 0.2,
-                'stroke': 'black'
+                stroke: 'black'
             }
         }
     ],
@@ -29,4 +29,4 @@ export default {
         left: 50
     },
     gridlines: 'xy'
-}
+};

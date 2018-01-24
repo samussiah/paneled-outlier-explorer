@@ -6,12 +6,8 @@ export default function minimize() {
     this.wrap.classed('poe-maximized', false);
 
     //Toggle maximize/minimize buttons.
-    this.wrap
-        .select('.poe-maximize-chart')
-        .classed('poe-hidden', false);
-    this.wrap
-        .select('.poe-minimize-chart')
-        .classed('poe-hidden', true);
+    this.wrap.select('.poe-maximize-chart').classed('poe-hidden', false);
+    this.wrap.select('.poe-minimize-chart').classed('poe-hidden', true);
 
     //Revert chart dimension settings.
     this.config.width = this.parent.paneledOutlierExplorer.settings.width;
@@ -23,11 +19,10 @@ export default function minimize() {
     this.draw();
 
     //Revert to default sort.
-    this.parent.wrap
-        .selectAll('.wc-chart')
-        .sort(function(a,b) {
-            return (
-                context.config.measures.indexOf(a.measure) - context.config.measures.indexOf(b.measure)
-            );
-        });
+    this.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
+        return (
+            context.POE.data.measures.indexOf(a.measure) -
+            context.POE.data.measures.indexOf(b.measure)
+        );
+    });
 }

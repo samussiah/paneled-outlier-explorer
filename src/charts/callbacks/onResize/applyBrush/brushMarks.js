@@ -50,9 +50,13 @@ export default function brushMarks() {
     //Draw listing displaying brushed IDs first.
     if (this.parent.paneledOutlierExplorer.data.selectedIDs.length) {
         this.parent.paneledOutlierExplorer.data.filtered.forEach(d => {
-            d.brushed = this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d[this.config.id_col]) > -1;
+            d.brushed =
+                this.parent.paneledOutlierExplorer.data.selectedIDs.indexOf(d[this.config.id_col]) >
+                -1;
         });
-        this.parent.paneledOutlierExplorer.data.brushed = this.parent.paneledOutlierExplorer.data.filtered.filter(d => d.brushed);
+        this.parent.paneledOutlierExplorer.data.brushed = this.parent.paneledOutlierExplorer.data.filtered.filter(
+            d => d.brushed
+        );
         this.parent.listing.draw(this.parent.paneledOutlierExplorer.data.brushed);
         select('#Listing-nav').classed('brushed', true);
     } else {

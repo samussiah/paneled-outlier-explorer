@@ -13,5 +13,8 @@ export default function syncSettings() {
     this.settings.synced.y.column = this.settings.synced.value_col;
 
     //marks
-    this.settings.synced.marks[0].per = [this.settings.synced.id_col, this.settings.synced.measure_col];
+    this.settings.synced.marks[0].per = [
+        this.settings.synced.id_col,
+        this.settings.synced.measure_col
+    ];
 }

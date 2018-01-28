@@ -1,0 +1,30 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans';
+}
+#title {
+    width: 100%;
+    padding: 0 0 12px 0;
+    border-bottom: 2px solid lightgray;
+    margin: 24px 24px 12px 24px;
+    font-size: 32px;
+    font-weight: normal;
+}
+#subtitle {
+    width: 100%;
+    margin: 0 24px 12px 24px;
+    font-size: 24px;
+    font-weight: lighter;
+}
+#container {
+    width: 100%;
+    margin: 12px 24px;
+    display: inline-block;
+}
+#paneled-outlier-explorer .poe-line {
+    fill: none;
+    stroke: lightgray;
+    stroke-width: 1px;
+}

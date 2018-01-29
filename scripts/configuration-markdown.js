@@ -57,4 +57,11 @@ Object.keys(properties).forEach(property => {
     markdown.push(``);
 });
 
-fs.writeFile('./scripts/configuration.md', markdown.join('\n'), 'utf8');
+fs.writeFile(
+    './scripts/configuration.md',
+    markdown.join('\n'),
+    err => {
+        if (err) console.log(err);
+        console.log('./scripts/configuration.md successfully built!');
+    }
+);

@@ -18,7 +18,7 @@ export default function applyFilters(d) {
 
     //Define filtered data.
     if (d.type === 'subsetter') {
-        this.data.filtered = this.data.sorted.filter(d => {
+        this.data.filtered = this.data.raw.filter(d => {
             let filtered = false;
 
             this.controls.config.inputs.filter(d => d.type === 'subsetter').forEach(filter => {

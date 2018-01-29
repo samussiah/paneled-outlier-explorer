@@ -476,58 +476,61 @@
         return syncedControlInputs;
     }
 
-    function defineData(data) {
+    function deriveVariables() {
         var _this = this;
 
-        this.data = {
-            raw: data,
-            sorted: data
-                .filter(function(d) {
-                    return (
-                        /^[0-9.]+$/.test(d[_this.config.value_col]) &&
-                        !/^\s*$/.test(d[_this.config.measure_col])
-                    );
-                })
-                .sort(function(a, b) {
-                    var aValue = a[_this.config.measure_col],
-                        bValue = b[_this.config.measure_col],
-                        leftSort = aValue < bValue,
-                        rightSort = aValue > bValue,
-                        aID = a[_this.config.id_col],
-                        bID = b[_this.config.id_col],
-                        aTime = a[_this.config.time_col],
-                        bTime = b[_this.config.time_col];
+        this.config.variables = d3
+            .set(
+                d3.merge([
+                    [this.config.measure_col],
+                    [this.config.id_col],
+                    this.config.time_cols.map(function(time_col) {
+                        return time_col.value_col;
+                    }),
+                    [this.config.value_col],
+                    [this.config.unit_col],
+                    [this.config.lln_col],
+                    [this.config.uln_col],
+                    this.config.filters.map(function(filter) {
+                        return filter.value_col;
+                    })
+                ])
+            )
+            .values()
+            .filter(function(variable) {
+                return Object.keys(_this.data.initial[0]).indexOf(variable) > -1;
+            });
 
-                    var sort = void 0;
-                    if (_this.config.measures && _this.config.measures.length) {
-                        var aPos = _this.config.measures.indexOf(aValue),
-                            bPos = _this.config.measures.indexOf(bValue),
-                            diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
-
-                        sort = diff
-                            ? diff
-                            : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-                    } else sort = leftSort ? -1 : rightSort ? 1 : 0;
-
-                    if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
-
-                    return sort;
-                })
-        };
-        if (this.data.raw.length !== this.data.sorted.length)
-            console.warn(
-                this.data.raw.length -
-                    this.data.sorted.length +
-                    ' non-numeric observations have been removed from the data.'
-            );
-        this.data.sorted.forEach(function(d) {
+        this.data.initial.forEach(function(d) {
+            for (var variable in d) {
+                if (_this.config.variables.indexOf(variable) < 0) delete d[variable];
+            }
             d.brushed = false;
             if (d[_this.config.unit_col])
                 d.measure_unit =
                     d[_this.config.measure_col] + ' (' + d[_this.config.unit_col] + ')';
             else d.measure_unit = d[_this.config.measure_col];
         });
-        this.data.filtered = this.data.sorted;
+    }
+
+    function defineData() {
+        var _this = this;
+
+        this.data.raw = this.data.initial.filter(function(d) {
+            return (
+                /^[0-9.]+$/.test(d[_this.config.value_col]) &&
+                !/^\s*$/.test(d[_this.config.measure_col])
+            );
+        });
+
+        if (this.data.raw.length !== this.data.initial.length)
+            console.warn(
+                this.data.initial.length -
+                    this.data.raw.length +
+                    ' non-numeric observations have been removed from the data.'
+            );
+
+        this.data.filtered = this.data.raw;
         this.data.brushed = [];
         this.data.selectedIDs = [];
     }
@@ -537,7 +540,7 @@
 
         this.config.allMeasures = d3
             .set(
-                this.data.sorted.map(function(d) {
+                this.data.raw.map(function(d) {
                     return d.measure_unit;
                 })
             )
@@ -738,7 +741,7 @@
 
         //Define filtered data.
         if (d.type === 'subsetter') {
-            this.data.filtered = this.data.sorted.filter(function(d) {
+            this.data.filtered = this.data.raw.filter(function(d) {
                 var filtered = false;
 
                 _this.controls.config.inputs
@@ -763,8 +766,14 @@
 
         var chart = this;
 
+        this.data = {
+            initial: data
+        };
+
+        deriveVariables.call(this);
+
         //Attach data arrays to central chart object.
-        defineData.call(this, data);
+        defineData.call(this);
 
         //Capture unique measures in an array and define initially displayed measures.
         captureMeasures.call(this);
@@ -773,13 +782,13 @@
         layout.call(this);
 
         //Initialize charts.
-        webcharts.multiply(this, this.data.sorted, 'measure_unit');
+        webcharts.multiply(this, this.data.raw, 'measure_unit');
 
         //Initialize listing.
         this.listing.config.cols = Object.keys(data[0]).filter(function(key) {
             return ['brushed', 'measure_unit'].indexOf(key) === -1;
         }); // remove system variables from listing
-        this.listing.init(this.data.sorted);
+        this.listing.init(this.data.raw);
 
         //Define custom event listener for filters.
         var controls = this.controls.wrap.selectAll('.control-group');

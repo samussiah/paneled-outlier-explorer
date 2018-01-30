@@ -19,7 +19,71 @@ measure variable name
 
 an array of each time variable and associated metadata
 
-**default:** undefined
+**default:** 
+```
+[
+  {
+    "value_col": "VISIT",
+    "type": "ordinal",
+    "order": null,
+    "order_col": "VISITNUM",
+    "label": "Visit",
+    "rotate_tick_labels": true,
+    "vertical_space": 75
+  },
+  {
+    "value_col": "DY",
+    "type": "linear",
+    "order": null,
+    "order_col": "DY",
+    "label": "Study Day",
+    "rotate_tick_labels": false,
+    "vertical_space": 0
+  }
+]
+```
+
+### settings.time_cols[].value_col
+`string`
+
+undefined
+
+**default:** `"VISIT"`
+
+### settings.time_cols[].type
+`string`
+
+undefined
+
+**default:** `"ordinal"`
+
+### settings.time_cols[].label
+`string`
+
+undefined
+
+**default:** `"Visit"`
+
+### settings.time_cols[].order_col
+`string`
+
+undefined
+
+**default:** `"VISITNUM"`
+
+### settings.time_cols[].rotate_tick_labels
+`boolean`
+
+undefined
+
+**default:** `true`
+
+### settings.time_cols[].vertical_space
+`number`
+
+undefined
+
+**default:** `75`
 
 
 
@@ -82,7 +146,21 @@ list of initially displayed measures
 
 an array of each filter variable and associated metadata
 
-**default:** undefined
+**default:** none
+
+### settings.filters[].value_col
+`string`
+
+undefined
+
+**default:** none
+
+### settings.filters[].label
+`string`
+
+undefined
+
+**default:** none
 
 
 
@@ -91,17 +169,17 @@ an array of each filter variable and associated metadata
 
 width and height of small multiples
 
-## settings.multiples_sizing.width
+### settings.multiples_sizing.width
 `number`
 
-Width
+undefined
 
 **default:** `350`
 
-## settings.multiples_sizing.height
+### settings.multiples_sizing.height
 `number`
 
-Height
+undefined
 
 **default:** `175`
 

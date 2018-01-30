@@ -32,12 +32,14 @@ export default {
     rotate_x_tick_labels: true,
     inliers: false,
     visits_without_data: false,
+    unscheduled_visits: false,
+    unscheduled_visit_pattern: '/unscheduled|early termination/i',
+    unscheduled_visit_values: null, // takes precedence over unscheduled_visit_pattern   visits_without_data: false,
 
     x: {
         type: null, // sync to [ time_cols[0].type ]
         column: null, // sync to [ time_cols[0].value_col ]
-        label: '',
-        behavior: 'flex' // sync to [ time_cols[0].label ]
+        label: '' // sync to [ time_cols[0].label ]
     },
     y: {
         type: 'linear',
@@ -75,6 +77,19 @@ export function syncSettings(settings) {
     syncedSettings.y.column = settings.value_col;
     syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
+    //Convert unscheduled_visit_pattern from string to regular expression.
+    if (
+        typeof syncedSettings.unscheduled_visit_pattern === 'string' &&
+        syncedSettings.unscheduled_visit_pattern !== ''
+    ) {
+        const flags = settings.unscheduled_visit_pattern.replace(/.*?\/([gimy]*)$/, '$1'),
+            pattern = settings.unscheduled_visit_pattern.replace(
+                new RegExp('^/(.*?)/' + flags + '$'),
+                '$1'
+            );
+        syncedSettings.unscheduled_visit_regex = new RegExp(pattern, flags);
+    }
+
     return syncedSettings;
 }
 
@@ -94,6 +109,11 @@ export const controlInputs = [
         type: 'checkbox',
         label: 'Visits without data',
         option: 'visits_without_data'
+    },
+    {
+        type: 'checkbox',
+        label: 'Unscheduled visits',
+        option: 'unscheduled_visits'
     }
 ];
 
@@ -114,6 +134,13 @@ export function syncControlInputs(controlInputs, settings) {
                 multiple: false
             });
         });
+
+    //Remove unscheduled visit control if unscheduled visit pattern is unscpecified.
+    if (!(settings.unscheduled_visit_regex || settings.unscheduled_visit_values))
+        controlInputs.splice(
+            controlInputs.map(controlInput => controlInput.label).indexOf('Unscheduled visits'),
+            1
+        );
 
     return syncedControlInputs;
 }

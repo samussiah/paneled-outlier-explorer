@@ -36,6 +36,7 @@ export default {
     measures: null,
     filters: null,
     rotate_x_tick_labels: true,
+    inliers: false,
 
     x: {
         type: null, // sync to [ time_cols[0].type ]
@@ -87,6 +88,11 @@ export const controlInputs = [
         label: 'X-axis',
         option: 'x.column',
         require: true
+    },
+    {
+        type: 'checkbox',
+        label: 'Include inliers?',
+        option: 'inliers'
     }
 ];
 

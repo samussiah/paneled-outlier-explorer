@@ -1,4 +1,3 @@
-import deriveVariables from './init/deriveVariables';
 import defineData from './init/defineData';
 import captureMeasures from './init/captureMeasures';
 import { select } from 'd3';
@@ -9,16 +8,10 @@ import applyFilters from './init/applyFilters';
 export default function init(data) {
     const chart = this;
 
-    this.data = {
-        initial: data
-    };
+    //Attach various data arrays to charts.
+    defineData.call(this, data);
 
-    deriveVariables.call(this);
-
-    //Attach data arrays to central chart object.
-    defineData.call(this);
-
-    //Capture unique measures in an array and define initially displayed measures.
+    //Capture unique set of measures in data.
     captureMeasures.call(this);
 
     //Define layout of renderer.
@@ -44,12 +37,14 @@ export default function init(data) {
         );
 
     controls.on('change', function(d) {
-        d.value = select(this)
-            .selectAll('option')
-            .filter(function() {
-                return this.selected;
-            })
-            .text();
-        applyFilters.call(chart, d);
+        if (['dropdown', 'subsetter'].indexOf(d.type) > -1) {
+            d.value = select(this)
+                .selectAll('option')
+                .filter(function() {
+                    return this.selected;
+                })
+                .text();
+            applyFilters.call(chart, d);
+        }
     });
 }

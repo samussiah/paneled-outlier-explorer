@@ -1,6 +1,6 @@
 import { set, merge } from 'd3';
 
-export default function deriveVariables() {
+export default function removeVariables() {
     this.config.variables = set(
         merge([
             [this.config.measure_col],
@@ -10,7 +10,7 @@ export default function deriveVariables() {
             [this.config.unit_col],
             [this.config.lln_col],
             [this.config.uln_col],
-            this.config.filters.map(filter => filter.value_col)
+            this.config.filters ? this.config.filters.map(filter => filter.value_col) : []
         ])
     )
         .values()
@@ -19,10 +19,5 @@ export default function deriveVariables() {
     this.data.initial.forEach(d => {
         for (const variable in d)
             if (this.config.variables.indexOf(variable) < 0) delete d[variable];
-
-        d.brushed = false;
-        if (d[this.config.unit_col])
-            d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;
-        else d.measure_unit = d[this.config.measure_col];
     });
 }

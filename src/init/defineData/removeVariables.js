@@ -6,6 +6,7 @@ export default function removeVariables() {
             [this.config.measure_col],
             [this.config.id_col],
             this.config.time_cols.map(time_col => time_col.value_col),
+            this.config.time_cols.map(time_col => time_col.order_col),
             [this.config.value_col],
             [this.config.unit_col],
             [this.config.lln_col],

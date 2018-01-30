@@ -7,6 +7,7 @@ export default {
             value_col: 'VISIT',
             type: 'ordinal',
             order: null,
+            order_col: 'VISITNUM',
             label: 'Visit',
             rotate_tick_labels: true,
             vertical_space: 75
@@ -15,15 +16,8 @@ export default {
             value_col: 'DY',
             type: 'linear',
             order: null,
+            order_col: 'DY',
             label: 'Study Day',
-            rotate_tick_labels: false,
-            vertical_space: 0
-        },
-        {
-            value_col: 'VISITN',
-            type: 'ordinal',
-            order: null,
-            label: 'Visit Number',
             rotate_tick_labels: false,
             vertical_space: 0
         }

@@ -414,6 +414,7 @@
                 value_col: 'VISIT',
                 type: 'ordinal',
                 order: null,
+                order_col: 'VISITNUM',
                 label: 'Visit',
                 rotate_tick_labels: true,
                 vertical_space: 75
@@ -422,15 +423,8 @@
                 value_col: 'DY',
                 type: 'linear',
                 order: null,
+                order_col: 'DY',
                 label: 'Study Day',
-                rotate_tick_labels: false,
-                vertical_space: 0
-            },
-            {
-                value_col: 'VISITN',
-                type: 'ordinal',
-                order: null,
-                label: 'Visit Number',
                 rotate_tick_labels: false,
                 vertical_space: 0
             }
@@ -538,6 +532,9 @@
                     this.config.time_cols.map(function(time_col) {
                         return time_col.value_col;
                     }),
+                    this.config.time_cols.map(function(time_col) {
+                        return time_col.order_col;
+                    }),
                     [this.config.value_col],
                     [this.config.unit_col],
                     [this.config.lln_col],
@@ -565,12 +562,16 @@
         var _this = this;
 
         this.data.raw.forEach(function(d) {
+            //brushed datum placeholder
             d.brushed = false;
+
+            //Concatenate measure and unit.
             if (d[_this.config.unit_col])
                 d.measure_unit =
                     d[_this.config.measure_col] + ' (' + d[_this.config.unit_col] + ')';
             else d.measure_unit = d[_this.config.measure_col];
 
+            //Identify abnormal results.
             var lo =
                     d[_this.config.lln_col] !== undefined
                         ? +d[_this.config.value_col] < +d[_this.config.lln_col]
@@ -646,6 +647,78 @@
             this.config.measures && this.config.measures.length
                 ? this.config.measures
                 : this.config.allMeasures;
+    }
+
+    function defineVisitOrder() {
+        var _this = this;
+
+        this.config.time_cols.forEach(function(time_settings) {
+            if (time_settings.type === 'ordinal') {
+                var visits = void 0,
+                    visitOrder = void 0;
+
+                //Given an ordering variable sort a unique set of visits by the ordering variable.
+                if (
+                    time_settings.order_col &&
+                    _this.data.raw[0].hasOwnProperty(time_settings.order_col)
+                ) {
+                    //Define a unique set of visits with visit order concatenated.
+                    visits = d3
+                        .set(
+                            _this.data.raw.map(function(d) {
+                                return (
+                                    d[time_settings.order_col] + '|' + d[time_settings.value_col]
+                                );
+                            })
+                        )
+                        .values();
+
+                    //Sort visits.
+                    visitOrder = visits
+                        .sort(function(a, b) {
+                            var aOrder = a.split('|')[0],
+                                bOrder = b.split('|')[0],
+                                diff = +aOrder - +bOrder;
+                            return diff ? diff : d3.ascending(a, b);
+                        })
+                        .map(function(visit) {
+                            return visit.split('|')[1];
+                        });
+                } else {
+                    //Otherwise sort a unique set of visits alphanumerically.
+                    //Define a unique set of visits.
+                    visits = d3
+                        .set(
+                            _this.data.raw.map(function(d) {
+                                return d[time_settings.value_col];
+                            })
+                        )
+                        .values();
+
+                    //Sort visits;
+                    visitOrder = visits.sort();
+                }
+
+                //Set x-axis domain.
+                if (time_settings.order) {
+                    //If a visit order is specified, use it and concatenate any unspecified visits at the end.
+                    time_settings.order = time_settings.order.concat(
+                        visitOrder.filter(function(visit) {
+                            return time_settings.order.indexOf(visit) < 0;
+                        })
+                    );
+                } else
+                    //Otherwise use data-driven visit order.
+                    time_settings.order = visitOrder;
+
+                //Define domain.
+                time_settings.domain = time_settings.order;
+            } else if (time_settings.type === 'linear') {
+                time_settings.domain = d3.extent(_this.data.raw, function(d) {
+                    return +d[time_settings.value_col];
+                });
+            }
+        });
     }
 
     function toggleCharts(chart) {
@@ -854,6 +927,9 @@
 
         //Capture unique set of measures in data.
         captureMeasures.call(this);
+
+        //Capture ordered set of visits.
+        defineVisitOrder.call(this);
 
         //Define layout of renderer.
         layout.call(this);

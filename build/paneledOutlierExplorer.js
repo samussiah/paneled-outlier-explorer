@@ -7,6 +7,75 @@
 })(this, function(d3, webcharts) {
     'use strict';
 
+    if (typeof Object.assign != 'function') {
+        (function() {
+            Object.assign = function(target) {
+                'use strict';
+
+                if (target === undefined || target === null) {
+                    throw new TypeError('Cannot convert undefined or null to object');
+                }
+
+                var output = Object(target);
+                for (var index = 1; index < arguments.length; index++) {
+                    var source = arguments[index];
+                    if (source !== undefined && source !== null) {
+                        for (var nextKey in source) {
+                            if (source.hasOwnProperty(nextKey)) {
+                                output[nextKey] = source[nextKey];
+                            }
+                        }
+                    }
+                }
+                return output;
+            };
+        })();
+    }
+
+    if (!Array.prototype.find) {
+        Object.defineProperty(Array.prototype, 'find', {
+            value: function value(predicate) {
+                // 1. Let O be ? ToObject(this value).
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
+                }
+
+                var o = Object(this);
+
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
+
+                // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                if (typeof predicate !== 'function') {
+                    throw new TypeError('predicate must be a function');
+                }
+
+                // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                var thisArg = arguments[1];
+
+                // 5. Let k be 0.
+                var k = 0;
+
+                // 6. Repeat, while k < len
+                while (k < len) {
+                    // a. Let Pk be ! ToString(k).
+                    // b. Let kValue be ? Get(O, Pk).
+                    // c. Let testResult be ToBoolean(? Call(predicate, T, � kValue, k, O �)).
+                    // d. If testResult is true, return kValue.
+                    var kValue = o[k];
+                    if (predicate.call(thisArg, kValue, k, o)) {
+                        return kValue;
+                    }
+                    // e. Increase k by 1.
+                    k++;
+                }
+
+                // 7. Return undefined.
+                return undefined;
+            }
+        });
+    }
+
     function defineStyles() {
         var styles = [
                 /***--------------------------------------------------------------------------------------\
@@ -338,42 +407,9 @@
         throw new Error('Unable to copy [obj]! Its type is not supported.');
     }
 
-    if (typeof Object.assign != 'function') {
-        (function() {
-            Object.assign = function(target) {
-                'use strict';
-
-                if (target === undefined || target === null) {
-                    throw new TypeError('Cannot convert undefined or null to object');
-                }
-
-                var output = Object(target);
-                for (var index = 1; index < arguments.length; index++) {
-                    var source = arguments[index];
-                    if (source !== undefined && source !== null) {
-                        for (var nextKey in source) {
-                            if (source.hasOwnProperty(nextKey)) {
-                                output[nextKey] = source[nextKey];
-                            }
-                        }
-                    }
-                }
-                return output;
-            };
-        })();
-    }
-
     var defaultSettings = {
         measure_col: 'TEST',
         time_cols: [
-            {
-                value_col: 'DY',
-                type: 'linear',
-                order: null,
-                label: 'Study Day',
-                rotate_tick_labels: false,
-                vertical_space: 0
-            },
             {
                 value_col: 'VISIT',
                 type: 'ordinal',
@@ -381,6 +417,14 @@
                 label: 'Visit',
                 rotate_tick_labels: true,
                 vertical_space: 75
+            },
+            {
+                value_col: 'DY',
+                type: 'linear',
+                order: null,
+                label: 'Study Day',
+                rotate_tick_labels: false,
+                vertical_space: 0
             },
             {
                 value_col: 'VISITN',
@@ -404,7 +448,8 @@
         x: {
             type: null, // sync to [ time_cols[0].type ]
             column: null, // sync to [ time_cols[0].value_col ]
-            label: '' // sync to [ time_cols[0].label ]
+            label: '',
+            behavior: 'flex' // sync to [ time_cols[0].label ]
         },
         y: {
             type: 'linear',
@@ -424,8 +469,8 @@
         ],
         resizable: false,
         scale_text: false,
-        width: 400,
-        height: 200,
+        width: 350,
+        height: 175,
         margin: {
             bottom: 0,
             left: 50
@@ -454,7 +499,7 @@
         },
         {
             type: 'checkbox',
-            label: 'Include inliers?',
+            label: 'Inliers',
             option: 'inliers'
         }
     ];
@@ -818,7 +863,7 @@
 
         //Initialize listing.
         this.listing.config.cols = Object.keys(data[0]).filter(function(key) {
-            return ['brushed', 'measure_unit'].indexOf(key) === -1;
+            return ['brushed', 'measure_unit', 'abnormal', 'abnormalID'].indexOf(key) === -1;
         }); // remove system variables from listing
         this.listing.init(this.data.raw);
 
@@ -1459,6 +1504,7 @@
         onDestroy: onDestroy$1
     };
 
+    //Utility polyfills
     function paneledOutlierExplorer() {
         var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'body';
         var settings = arguments[1];

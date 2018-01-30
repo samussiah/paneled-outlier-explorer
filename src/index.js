@@ -1,3 +1,7 @@
+//Utility polyfills
+import './util/object-assign';
+import './util/array-find';
+
 import { select } from 'd3';
 import defineStyles from './util/defineStyles';
 import clone from './util/clone';

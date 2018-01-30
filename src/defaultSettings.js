@@ -4,20 +4,20 @@ export default {
     measure_col: 'TEST',
     time_cols: [
         {
-            value_col: 'DY',
-            type: 'linear',
-            order: null,
-            label: 'Study Day',
-            rotate_tick_labels: false,
-            vertical_space: 0
-        },
-        {
             value_col: 'VISIT',
             type: 'ordinal',
             order: null,
             label: 'Visit',
             rotate_tick_labels: true,
             vertical_space: 75
+        },
+        {
+            value_col: 'DY',
+            type: 'linear',
+            order: null,
+            label: 'Study Day',
+            rotate_tick_labels: false,
+            vertical_space: 0
         },
         {
             value_col: 'VISITN',
@@ -41,7 +41,8 @@ export default {
     x: {
         type: null, // sync to [ time_cols[0].type ]
         column: null, // sync to [ time_cols[0].value_col ]
-        label: '' // sync to [ time_cols[0].label ]
+        label: '',
+        behavior: 'flex' // sync to [ time_cols[0].label ]
     },
     y: {
         type: 'linear',
@@ -61,8 +62,8 @@ export default {
     ],
     resizable: false,
     scale_text: false,
-    width: 400,
-    height: 200,
+    width: 350,
+    height: 175,
     margin: {
         bottom: 0,
         left: 50
@@ -91,7 +92,7 @@ export const controlInputs = [
     },
     {
         type: 'checkbox',
-        label: 'Include inliers?',
+        label: 'Inliers',
         option: 'inliers'
     }
 ];

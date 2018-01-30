@@ -22,7 +22,7 @@ export default function init(data) {
 
     //Initialize listing.
     this.listing.config.cols = Object.keys(data[0]).filter(
-        key => ['brushed', 'measure_unit'].indexOf(key) === -1
+        key => ['brushed', 'measure_unit', 'abnormal', 'abnormalID'].indexOf(key) === -1
     ); // remove system variables from listing
     this.listing.init(this.data.raw);
 

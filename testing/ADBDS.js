@@ -92,9 +92,10 @@ d3.csv(
                     .attr('height', POE.settings.height * POE.settings.devicePixelRatio);
                 d.canvasContext = d.canvas
                     .node()
-                    .getContext('2d')
+                    .getContext('2d');
+                d.canvasContext
                     .translate(POE.settings.margins.left, POE.settings.margins.top);
-                console.log(d.canvas);
+                console.log(d.canvasContext);
 
                 //x-axis
                 d.xAxis = d.svg
@@ -121,16 +122,16 @@ d3.csv(
                 //lines
                 d.values
                     .forEach(di => {
-                        d.canvasContext.beginPath();
-                        d.lineFunction(di.values);
-                        d.canvasContext.lineWidth = 1.5;
-                        d.canvasContext.strokeStyle = 'steelblue';
-                        d.canvasContext.stroke();
-                        //di.path = d.svg
-                        //    .append('path')
-                        //    .attr('class', d => 'poe-line id-' + d.key)
-                        //    .data([di.values])
-                        //    .attr('d', d.lineFunction);
+                        //d.canvasContext.beginPath();
+                        //d.lineFunction(di.values);
+                        //d.canvasContext.lineWidth = 1.5;
+                        //d.canvasContext.strokeStyle = 'steelblue';
+                        //d.canvasContext.stroke();
+                        di.path = d.svg
+                            .append('path')
+                            .attr('class', d => 'poe-line id-' + d.key)
+                            .data([di.values])
+                            .attr('d', d.lineFunction);
                     });
             });
     }

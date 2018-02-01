@@ -144,12 +144,6 @@
                 }
             }
         }
-    ,"inliers":
-        {"type": "boolean"
-        ,"title": "Display of normal participants"
-        ,"description": "toggles the display of participants with entirely normal results within each measure"
-        ,"default": false
-        }
     ,"visits_without_data":
         {"type": "boolean"
         ,"title": "Display of visits without data"
@@ -175,6 +169,42 @@
         ,"items":
             {"type": "string"
             }
+        }
+    ,"inliers":
+        {"type": "boolean"
+        ,"title": "Normal range inliers"
+        ,"description": "toggles the display of participants with entirely normal results within each measure"
+        ,"default": false
+        }
+    ,"normal_range_method":
+        {"type": "string"
+        ,"title": "Normal range method"
+        ,"description": "method for identifying the normal range"
+        ,"default": "LLN-ULN"
+        ,"enum":
+            ["None"
+            ,"LLN-ULN"
+            ,"Standard Deviation"
+            ,"Qunatiles"
+            ]
+        }
+    ,"normal_range_sd":
+        {"type": "number"
+        ,"title": "Number of standard deviations"
+        ,"description": "results less/greater than this the mean minus/plus this many standard deviations are outliers"
+        ,"default": 1.96
+        }
+    ,"normal_range_quantile_low":
+        {"type": "number"
+        ,"title": "Lower quantile"
+        ,"description": "results less than this quantile are outliers"
+        ,"default": 0.05
+        }
+    ,"normal_range_quantile_high":
+        {"type": "number"
+        ,"title": "Upper quantile"
+        ,"description": "results greater than this quantile are outliers"
+        ,"default": 0.95
         }
     }
 }

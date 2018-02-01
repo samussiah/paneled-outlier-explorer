@@ -185,15 +185,6 @@ undefined
 
 
 
-## settings.inliers
-`boolean`
-
-toggles the display of participants with entirely normal results within each measure
-
-**default:** `false`
-
-
-
 ## settings.visits_without_data
 `boolean`
 
@@ -227,6 +218,51 @@ a regular expression that identifies unscheduled visits
 an array of strings that identify unscheduled visits; overrides unscheduled_visit_pattern
 
 **default:** none
+
+
+
+## settings.inliers
+`boolean`
+
+toggles the display of participants with entirely normal results within each measure
+
+**default:** `false`
+
+
+
+## settings.normal_range_method
+`string`
+
+method for identifying the normal range
+
+**default:** `"LLN-ULN"`
+
+
+
+## settings.normal_range_sd
+`number`
+
+results less/greater than this the mean minus/plus this many standard deviations are outliers
+
+**default:** `1.96`
+
+
+
+## settings.normal_range_quantile_low
+`number`
+
+results less than this quantile are outliers
+
+**default:** `0.05`
+
+
+
+## settings.normal_range_quantile_high
+`number`
+
+results greater than this quantile are outliers
+
+**default:** `0.95`
 
 # Webcharts-specific settings
 The object below contains each Webcharts setting as of version 1.1.0.

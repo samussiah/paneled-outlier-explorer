@@ -528,6 +528,37 @@
             type: 'checkbox',
             label: 'Unscheduled visits',
             option: 'unscheduled_visits'
+        },
+        {
+            type: 'dropdown',
+            label: 'Normal Range Method',
+            option: 'normal_range_method',
+            values: ['Data-driven', 'Standard Deviations', 'Quantiles', 'User-defined']
+        },
+        {
+            type: 'number',
+            label: 'Normal Range - Standard Deviations',
+            option: 'normal_range_sd'
+        },
+        {
+            type: 'number',
+            label: 'Normal Range - Lower Quantile',
+            option: 'normal_range_quantile_low'
+        },
+        {
+            type: 'number',
+            label: 'Normal Range - Upper Quantile',
+            option: 'normal_range_quantile_high'
+        },
+        {
+            type: 'number',
+            label: 'Normal Range - Lower Value',
+            option: 'normal_range_value_low'
+        },
+        {
+            type: 'number',
+            label: 'Normal Range - Upper Value',
+            option: 'normal_range_value_high'
         }
     ];
 

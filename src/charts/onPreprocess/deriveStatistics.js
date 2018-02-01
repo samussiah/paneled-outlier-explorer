@@ -10,7 +10,7 @@ export default function deriveStatistics() {
             d instanceof Object
                 ? +d[this.config.uln_col]
                 : median(this.measure_data, d => +d[this.config.uln_col]);
-    } else if (this.config.normal_range_method === 'Standard Deviations') {
+    } else if (this.config.normal_range_method === 'Standard Deviation') {
         this.mean = mean(this.results);
         this.sd = deviation(this.results);
         this.lln = () => this.mean - this.config.normal_range_sd * this.sd;

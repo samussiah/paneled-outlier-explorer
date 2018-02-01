@@ -594,6 +594,7 @@
     function removeVariables() {
         var _this = this;
 
+        //Define set of required variables.
         this.config.variables = d3
             .set(
                 d3.merge([
@@ -621,11 +622,26 @@
                 return Object.keys(_this.data.initial[0]).indexOf(variable) > -1;
             });
 
+        //Delete extraneous variables.
         this.data.initial.forEach(function(d) {
             for (var variable in d) {
                 if (_this.config.variables.indexOf(variable) < 0) delete d[variable];
             }
         });
+
+        //If data do not have normal range variables update normal range method setting and options.
+        if (
+            this.config.variables.indexOf(this.config.lln_col) < 0 ||
+            this.config.variables.indexOf(this.config.uln_col) < 0
+        ) {
+            if (this.config.normal_range_method === 'LLN-ULN')
+                this.config.normal_range_method = 'Standard Deviation';
+            this.controls.config.inputs
+                .find(function(input) {
+                    return input.option === 'normal_range_method';
+                })
+                .values.splice(1, 1);
+        }
     }
 
     function deriveVariables() {
@@ -1010,15 +1026,19 @@
         var _this = this;
 
         var context = this,
-            controls = this.controls.wrap.selectAll('.control-group');
+            controls = this.controls.wrap
+                .selectAll('.control-group')
+                .classed('hidden', function(d) {
+                    return (
+                        (_this.config.normal_range_method !== 'Standard Deviation' &&
+                            /standard deviation/i.test(d.label)) ||
+                        (_this.config.normal_range_method !== 'Quantiles' &&
+                            /quantile/i.test(d.label))
+                    );
+                });
+
+        //Define x-axis option labels.
         controls
-            .classed('hidden', function(d) {
-                return (
-                    (_this.config.normal_range_method !== 'Standard Deviation' &&
-                        /standard deviation/i.test(d.label)) ||
-                    (_this.config.normal_range_method !== 'Quantiles' && /quantile/i.test(d.label))
-                );
-            })
             .filter(function(control) {
                 return control.label === 'X-axis';
             })
@@ -1031,8 +1051,26 @@
                     .pop().label;
             });
 
-        controls.on('change', function(d) {
-            if (d.type === 'subsetter' || d.label === 'X-axis') {
+        //Define x-axis option labels.
+        controls
+            .filter(function(control) {
+                return control.label === 'X-axis';
+            })
+            .selectAll('option')
+            .property('label', function(d) {
+                return _this.config.time_cols
+                    .filter(function(time_col) {
+                        return time_col.value_col === d;
+                    })
+                    .pop().label;
+            });
+
+        //Add custom x-domain and filter functionality.
+        controls
+            .filter(function(d) {
+                return d.type === 'subsetter' || d.label === 'X-axis';
+            })
+            .on('change', function(d) {
                 d.value = d3
                     .select(this)
                     .selectAll('option')
@@ -1041,20 +1079,25 @@
                     })
                     .text();
                 applyFilters.call(context, d);
-            } else if (d.label === 'Normal range method') {
-                var normal_range_method = d3
-                    .select(this)
-                    .select('option:checked')
-                    .text();
+            });
 
-                controls.classed('hidden', function(d) {
-                    return (
-                        (normal_range_method !== 'Standard Deviation' &&
-                            /standard deviation/i.test(d.label)) ||
-                        (normal_range_method !== 'Quantiles' && /quantile/i.test(d.label))
-                    );
-                });
-            }
+        //Add custom normal range functionality.
+        var normalRangeControl = controls.filter(function(d) {
+            return d.label === 'Normal range method';
+        });
+        normalRangeControl.on('change', function(d) {
+            var normal_range_method = d3
+                .select(this)
+                .select('option:checked')
+                .text();
+
+            controls.classed('hidden', function(d) {
+                return (
+                    (normal_range_method !== 'Standard Deviation' &&
+                        /standard deviation/i.test(d.label)) ||
+                    (normal_range_method !== 'Quantiles' && /quantile/i.test(d.label))
+                );
+            });
         });
     }
 
@@ -1306,7 +1349,7 @@
                           return +d[_this.config.uln_col];
                       });
             };
-        } else if (this.config.normal_range_method === 'Standard Deviations') {
+        } else if (this.config.normal_range_method === 'Standard Deviation') {
             this.mean = d3.mean(this.results);
             this.sd = d3.deviation(this.results);
             this.lln = function() {

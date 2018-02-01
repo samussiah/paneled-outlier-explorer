@@ -34,6 +34,10 @@ export const rendererSettings = {
         height: 175
     },
     inliers: false,
+    normal_range_method: 'LLN-ULN',
+    normal_range_sd: 1.96,
+    normal_range_quantile_low: 0.05,
+    normal_range_quantile_high: 0.95,
     visits_without_data: false,
     unscheduled_visits: false,
     unscheduled_visit_pattern: '/unscheduled|early termination/i',
@@ -109,11 +113,6 @@ export const controlInputs = [
     },
     {
         type: 'checkbox',
-        label: 'Inliers',
-        option: 'inliers'
-    },
-    {
-        type: 'checkbox',
         label: 'Visits without data',
         option: 'visits_without_data'
     },
@@ -123,35 +122,31 @@ export const controlInputs = [
         option: 'unscheduled_visits'
     },
     {
+        type: 'checkbox',
+        label: 'Normal range inliers',
+        option: 'inliers'
+    },
+    {
         type: 'dropdown',
-        label: 'Normal Range Method',
+        label: 'Normal range method',
         option: 'normal_range_method',
-        values: ['Data-driven', 'Standard Deviations', 'Quantiles', 'User-defined']
+        values: ['None', 'LLN-ULN', 'Standard Deviation', 'Quantiles'],
+        require: true
     },
     {
         type: 'number',
-        label: 'Normal Range - Standard Deviations',
+        label: 'Number of standard deviations',
         option: 'normal_range_sd'
     },
     {
         type: 'number',
-        label: 'Normal Range - Lower Quantile',
+        label: 'Lower quantile',
         option: 'normal_range_quantile_low'
     },
     {
         type: 'number',
-        label: 'Normal Range - Upper Quantile',
+        label: 'Upper quantile',
         option: 'normal_range_quantile_high'
-    },
-    {
-        type: 'number',
-        label: 'Normal Range - Lower Value',
-        option: 'normal_range_value_low'
-    },
-    {
-        type: 'number',
-        label: 'Normal Range - Upper Value',
-        option: 'normal_range_value_high'
     }
 ];
 

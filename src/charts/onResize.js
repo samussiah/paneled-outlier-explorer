@@ -1,6 +1,7 @@
 import clone from '../util/clone';
-import { svg, select } from 'd3';
+import { svg } from 'd3';
 import '../util/moveToFront';
+import drawNormalRange from './onResize/drawNormalRange';
 import brush from './onResize/brush';
 import adjustTicks from './onResize/adjustTicks';
 
@@ -24,23 +25,9 @@ export default function onResize() {
     } else {
         this.svg.selectAll('*').classed('hidden', false);
         this.svg.select('text.no-data').remove();
-        this.svg.select('.normal-range').remove();
-        this.svg
-            .insert('rect', '.line-supergroup')
-            .classed('normal-range', true)
-            .attr({
-                x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-                y: this.y(this.filtered_data[0][this.config.uln_col]),
-                width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-                height:
-                    this.y(this.filtered_data[0][this.config.lln_col]) -
-                    this.y(this.filtered_data[0][this.config.uln_col]),
-                fill: 'green',
-                'fill-opacity': 0.05,
-                stroke: 'green',
-                'stroke-opacity': 1,
-                'clip-path': `url(#${this.id})`
-            });
+
+        //Draw normal range.
+        drawNormalRange.call(this);
 
         //Capture each multiple's scale.
         this.package = {

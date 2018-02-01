@@ -441,6 +441,10 @@
             height: 175
         },
         inliers: false,
+        normal_range_method: 'LLN-ULN',
+        normal_range_sd: 1.96,
+        normal_range_quantile_low: 0.05,
+        normal_range_quantile_high: 0.95,
         visits_without_data: false,
         unscheduled_visits: false,
         unscheduled_visit_pattern: '/unscheduled|early termination/i',
@@ -516,11 +520,6 @@
         },
         {
             type: 'checkbox',
-            label: 'Inliers',
-            option: 'inliers'
-        },
-        {
-            type: 'checkbox',
             label: 'Visits without data',
             option: 'visits_without_data'
         },
@@ -530,35 +529,31 @@
             option: 'unscheduled_visits'
         },
         {
+            type: 'checkbox',
+            label: 'Normal range inliers',
+            option: 'inliers'
+        },
+        {
             type: 'dropdown',
-            label: 'Normal Range Method',
+            label: 'Normal range method',
             option: 'normal_range_method',
-            values: ['Data-driven', 'Standard Deviations', 'Quantiles', 'User-defined']
+            values: ['None', 'LLN-ULN', 'Standard Deviation', 'Quantiles'],
+            require: true
         },
         {
             type: 'number',
-            label: 'Normal Range - Standard Deviations',
+            label: 'Number of standard deviations',
             option: 'normal_range_sd'
         },
         {
             type: 'number',
-            label: 'Normal Range - Lower Quantile',
+            label: 'Lower quantile',
             option: 'normal_range_quantile_low'
         },
         {
             type: 'number',
-            label: 'Normal Range - Upper Quantile',
+            label: 'Upper quantile',
             option: 'normal_range_quantile_high'
-        },
-        {
-            type: 'number',
-            label: 'Normal Range - Lower Value',
-            option: 'normal_range_value_low'
-        },
-        {
-            type: 'number',
-            label: 'Normal Range - Upper Value',
-            option: 'normal_range_value_high'
         }
     ];
 
@@ -1011,12 +1006,59 @@
         this.listing.draw(this.data.filtered);
     }
 
-    function init(data) {
+    function customizeControls() {
         var _this = this;
 
-        var chart = this;
+        var context = this,
+            controls = this.controls.wrap.selectAll('.control-group');
+        controls
+            .classed('hidden', function(d) {
+                return (
+                    (_this.config.normal_range_method !== 'Standard Deviation' &&
+                        /standard deviation/i.test(d.label)) ||
+                    (_this.config.normal_range_method !== 'Quantiles' && /quantile/i.test(d.label))
+                );
+            })
+            .filter(function(control) {
+                return control.label === 'X-axis';
+            })
+            .selectAll('option')
+            .property('label', function(d) {
+                return _this.config.time_cols
+                    .filter(function(time_col) {
+                        return time_col.value_col === d;
+                    })
+                    .pop().label;
+            });
 
-        //Attach various data arrays to charts.
+        controls.on('change', function(d) {
+            if (d.type === 'subsetter' || d.label === 'X-axis') {
+                d.value = d3
+                    .select(this)
+                    .selectAll('option')
+                    .filter(function() {
+                        return this.selected;
+                    })
+                    .text();
+                applyFilters.call(context, d);
+            } else if (d.label === 'Normal range method') {
+                var normal_range_method = d3
+                    .select(this)
+                    .select('option:checked')
+                    .text();
+
+                controls.classed('hidden', function(d) {
+                    return (
+                        (normal_range_method !== 'Standard Deviation' &&
+                            /standard deviation/i.test(d.label)) ||
+                        (normal_range_method !== 'Quantiles' && /quantile/i.test(d.label))
+                    );
+                });
+            }
+        });
+    }
+
+    function init(data) {
         defineData.call(this, data);
 
         //Capture unique set of measures in data.
@@ -1038,69 +1080,31 @@
         this.listing.init(this.data.raw);
 
         //Define custom event listener for filters.
-        var controls = this.controls.wrap.selectAll('.control-group');
-        controls
-            .filter(function(control) {
-                return control.label === 'X-axis';
-            })
-            .selectAll('option')
-            .property('label', function(d) {
-                return _this.config.time_cols
-                    .filter(function(time_col) {
-                        return time_col.value_col === d;
-                    })
-                    .pop().label;
-            });
-
-        controls.on('change', function(d) {
-            if (['dropdown', 'subsetter'].indexOf(d.type) > -1) {
-                d.value = d3
-                    .select(this)
-                    .selectAll('option')
-                    .filter(function() {
-                        return this.selected;
-                    })
-                    .text();
-                applyFilters.call(chart, d);
-            }
-        });
+        customizeControls.call(this);
     }
 
     function setCurrentMeasure() {
         this.currentMeasure = this.filters[0].val;
     }
 
-    function defineData$1() {
+    function defineMeasureData() {
         var _this = this;
 
         this.measure_data = this.raw_data.filter(function(d) {
             return d.measure_unit === _this.currentMeasure;
         });
-    }
-
-    function identifyNormalParticipants() {
-        var _this = this;
-
-        this.abnormalIDs = d3
-            .set(
-                this.measure_data
-                    .filter(function(d) {
-                        return d.abnormal;
-                    })
-                    .map(function(d) {
-                        return d[_this.config.id_col];
-                    })
-            )
-            .values();
-        this.measure_data.forEach(function(d) {
-            d.abnormalID = _this.abnormalIDs.indexOf(d[_this.config.id_col]) > -1;
-        });
+        this.results = this.measure_data
+            .map(function(d) {
+                return +d[_this.config.value_col];
+            })
+            .sort(function(a, b) {
+                return a - b;
+            });
     }
 
     function onInit() {
         setCurrentMeasure.call(this);
-        defineData$1.call(this);
-        identifyNormalParticipants.call(this);
+        defineMeasureData.call(this);
     }
 
     function minimize(chart) {
@@ -1284,6 +1288,81 @@
         this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
     }
 
+    function deriveStatistics() {
+        var _this = this;
+
+        if (this.config.normal_range_method === 'LLN-ULN') {
+            this.lln = function(d) {
+                return d instanceof Object
+                    ? +d[_this.config.lln_col]
+                    : d3.median(_this.measure_data, function(d) {
+                          return +d[_this.config.lln_col];
+                      });
+            };
+            this.uln = function(d) {
+                return d instanceof Object
+                    ? +d[_this.config.uln_col]
+                    : d3.median(_this.measure_data, function(d) {
+                          return +d[_this.config.uln_col];
+                      });
+            };
+        } else if (this.config.normal_range_method === 'Standard Deviations') {
+            this.mean = d3.mean(this.results);
+            this.sd = d3.deviation(this.results);
+            this.lln = function() {
+                return _this.mean - _this.config.normal_range_sd * _this.sd;
+            };
+            this.uln = function() {
+                return _this.mean + _this.config.normal_range_sd * _this.sd;
+            };
+        } else if (this.config.normal_range_method === 'Quantiles') {
+            this.lln = function() {
+                return d3.quantile(_this.results, _this.config.normal_range_quantile_low);
+            };
+            this.uln = function() {
+                return d3.quantile(_this.results, _this.config.normal_range_quantile_high);
+            };
+        } else {
+            this.lln = function(d) {
+                return d instanceof Object ? d[_this.config.value_col] + 1 : _this.results[0];
+            };
+            this.uln = function(d) {
+                return d instanceof Object
+                    ? d[_this.config.value_col] - 1
+                    : _this.results[_this.results.length - 1];
+            };
+        }
+    }
+
+    function deriveVariables$1() {
+        var _this = this;
+
+        this.measure_data.forEach(function(d) {
+            d.abnormal =
+                d[_this.config.value_col] < _this.lln(d) ||
+                d[_this.config.value_col] > _this.uln(d);
+        });
+    }
+
+    function identifyNormalParticipants() {
+        var _this = this;
+
+        this.abnormalIDs = d3
+            .set(
+                this.measure_data
+                    .filter(function(d) {
+                        return d.abnormal;
+                    })
+                    .map(function(d) {
+                        return d[_this.config.id_col];
+                    })
+            )
+            .values();
+        this.measure_data.forEach(function(d) {
+            d.abnormalID = _this.abnormalIDs.indexOf(d[_this.config.id_col]) > -1;
+        });
+    }
+
     function filterData() {
         this.raw_data = this.measure_data;
         if (!this.config.inliers)
@@ -1296,10 +1375,25 @@
             });
     }
 
+    function hideNormalRangeControls() {
+        //console.log(
+        //d3.select(this.parent.div)
+        //    .selectAll('.control-group')
+        //    .filter(d => ['normal_range_sd', 'normal_range_quantile_low', 'normal_range_quantile_high'].indexOf(d.option) > -1)
+        //    .classed('hidden', d =>
+        //        (d.option === 'normal_range_sd' && this.config.normal_range_method !== 'Standard Deviations') ||
+        //        (['normal_range_quantile_low', 'normal_range_quantile_high'].indexOf(d.option) > -1 &&  this.config.normal_range_method !== 'Quantiles')
+        //    ));
+    }
+
     function onPreprocess() {
         setXoptions.call(this);
         setYoptions.call(this);
+        deriveStatistics.call(this);
+        deriveVariables$1.call(this);
+        identifyNormalParticipants.call(this);
         filterData.call(this);
+        hideNormalRangeControls.call(this);
     }
 
     function onDatatransform() {}
@@ -1313,6 +1407,24 @@
             this.parentNode.appendChild(this);
         });
     };
+
+    function drawNormalRange() {
+        this.svg.select('.normal-range').remove();
+        this.svg
+            .insert('rect', '.line-supergroup')
+            .classed('normal-range', true)
+            .attr({
+                x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+                y: this.y(this.uln()),
+                width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+                height: this.y(this.lln()) - this.y(this.uln()),
+                fill: 'green',
+                'fill-opacity': 0.05,
+                stroke: 'green',
+                'stroke-opacity': 1,
+                'clip-path': 'url(#' + this.id + ')'
+            });
+    }
 
     /**
      * @author Peter Kelley
@@ -1621,23 +1733,9 @@
         } else {
             this.svg.selectAll('*').classed('hidden', false);
             this.svg.select('text.no-data').remove();
-            this.svg.select('.normal-range').remove();
-            this.svg
-                .insert('rect', '.line-supergroup')
-                .classed('normal-range', true)
-                .attr({
-                    x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-                    y: this.y(this.filtered_data[0][this.config.uln_col]),
-                    width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-                    height:
-                        this.y(this.filtered_data[0][this.config.lln_col]) -
-                        this.y(this.filtered_data[0][this.config.uln_col]),
-                    fill: 'green',
-                    'fill-opacity': 0.05,
-                    stroke: 'green',
-                    'stroke-opacity': 1,
-                    'clip-path': 'url(#' + this.id + ')'
-                });
+
+            //Draw normal range.
+            drawNormalRange.call(this);
 
             //Capture each multiple's scale.
             this.package = {

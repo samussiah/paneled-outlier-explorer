@@ -1,9 +1,7 @@
 import setCurrentMeasure from './onInit/setCurrentMeasure';
-import defineData from './onInit/defineData';
-import identifyNormalParticipants from './onInit/identifyNormalParticipants';
+import defineMeasureData from './onInit/defineMeasureData';
 
 export default function onInit() {
     setCurrentMeasure.call(this);
-    defineData.call(this);
-    identifyNormalParticipants.call(this);
+    defineMeasureData.call(this);
 }

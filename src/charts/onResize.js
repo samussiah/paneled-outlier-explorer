@@ -1,12 +1,13 @@
-import clone from '../util/clone';
-import { svg } from 'd3';
-import '../util/moveToFront';
+import definePackage from './onResize/definePackage';
 import drawNormalRange from './onResize/drawNormalRange';
 import brush from './onResize/brush';
 import adjustTicks from './onResize/adjustTicks';
 
 export default function onResize() {
     const context = this;
+
+    //Define datum for each multiple and attach it to multiple's container.
+    definePackage.call(this);
 
     //Draw normal range.
     if (this.filtered_data.length == 0) {
@@ -28,22 +29,6 @@ export default function onResize() {
 
         //Draw normal range.
         drawNormalRange.call(this);
-
-        //Capture each multiple's scale.
-        this.package = {
-            measure: this.currentMeasure,
-            container: this.wrap,
-            overlay: this.svg.append('g').classed('brush', true),
-            value: this.currentMeasure,
-            domain: clone(this.config.y.domain),
-            xScale: clone(this.x),
-            yScale: clone(this.y),
-            brush: svg
-                .brush()
-                .x(this.x)
-                .y(this.y)
-        };
-        this.wrap.datum(this.package);
 
         //Define invisible brush overlay.
         this.package.overlay.append('rect').attr({

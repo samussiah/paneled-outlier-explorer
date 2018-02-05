@@ -1,4 +1,5 @@
 import { select, selectAll } from 'd3';
+import '../../util/moveToFront';
 import brushMarks from './brushMarks';
 
 export default function brush() {

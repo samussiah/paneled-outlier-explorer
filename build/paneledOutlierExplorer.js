@@ -661,17 +661,6 @@
                     d[_this.config.measure_col] + ' (' + d[_this.config.unit_col] + ')';
             else d.measure_unit = d[_this.config.measure_col];
 
-            //Identify abnormal results.
-            var lo =
-                    d[_this.config.lln_col] !== undefined
-                        ? +d[_this.config.value_col] < +d[_this.config.lln_col]
-                        : false,
-                hi =
-                    d[_this.config.uln_col] !== undefined
-                        ? +d[_this.config.value_col] > +d[_this.config.uln_col]
-                        : false;
-            d.abnormal = lo || hi;
-
             //Identify unscheduled visits.
             d.unscheduled = false;
             if (ordinalTimeSettings) {
@@ -1381,6 +1370,7 @@
         var _this = this;
 
         this.measure_data.forEach(function(d) {
+            //Identify abnormal results.
             d.abnormal =
                 d[_this.config.value_col] < _this.lln(d) ||
                 d[_this.config.value_col] > _this.uln(d);
@@ -1410,23 +1400,12 @@
         this.raw_data = this.measure_data;
         if (!this.config.inliers)
             this.raw_data = this.raw_data.filter(function(d) {
-                return d.abnormalID;
+                return d.abnormalID || d.brushedID;
             });
         if (!this.config.unscheduled_visits)
             this.raw_data = this.raw_data.filter(function(d) {
                 return !d.unscheduled;
             });
-    }
-
-    function hideNormalRangeControls() {
-        //console.log(
-        //d3.select(this.parent.div)
-        //    .selectAll('.control-group')
-        //    .filter(d => ['normal_range_sd', 'normal_range_quantile_low', 'normal_range_quantile_high'].indexOf(d.option) > -1)
-        //    .classed('hidden', d =>
-        //        (d.option === 'normal_range_sd' && this.config.normal_range_method !== 'Standard Deviations') ||
-        //        (['normal_range_quantile_low', 'normal_range_quantile_high'].indexOf(d.option) > -1 &&  this.config.normal_range_method !== 'Quantiles')
-        //    ));
     }
 
     function onPreprocess() {
@@ -1436,7 +1415,6 @@
         deriveVariables$1.call(this);
         identifyNormalParticipants.call(this);
         filterData.call(this);
-        hideNormalRangeControls.call(this);
     }
 
     function onDatatransform() {}
@@ -1445,29 +1423,47 @@
         if (this.package) this.package.overlay.call(this.package.brush.clear());
     }
 
+    function definePackage() {
+        this.package = {
+            measure: this.currentMeasure,
+            container: this.wrap,
+            overlay: this.svg.append('g').classed('brush', true),
+            value: this.currentMeasure,
+            domain: clone(this.config.y.domain),
+            xScale: clone(this.x),
+            yScale: clone(this.y),
+            brush: d3.svg
+                .brush()
+                .x(this.x)
+                .y(this.y)
+        };
+        this.wrap.datum(this.package);
+    }
+
+    function drawNormalRange() {
+        this.svg.select('.normal-range').remove();
+        if (this.config.normal_range_method)
+            this.svg
+                .insert('rect', '.line-supergroup')
+                .classed('normal-range', true)
+                .attr({
+                    x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
+                    y: this.y(this.uln()),
+                    width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
+                    height: this.y(this.lln()) - this.y(this.uln()),
+                    fill: 'green',
+                    'fill-opacity': 0.05,
+                    stroke: 'green',
+                    'stroke-opacity': 1,
+                    'clip-path': 'url(#' + this.id + ')'
+                });
+    }
+
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
     };
-
-    function drawNormalRange() {
-        this.svg.select('.normal-range').remove();
-        this.svg
-            .insert('rect', '.line-supergroup')
-            .classed('normal-range', true)
-            .attr({
-                x: this.x(this.x_dom[0]) - 5, // make sure left side of normal range does not appear in chart
-                y: this.y(this.uln()),
-                width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
-                height: this.y(this.lln()) - this.y(this.uln()),
-                fill: 'green',
-                'fill-opacity': 0.05,
-                stroke: 'green',
-                'stroke-opacity': 1,
-                'clip-path': 'url(#' + this.id + ')'
-            });
-    }
 
     /**
      * @author Peter Kelley
@@ -1760,6 +1756,9 @@
     }
 
     function onResize() {
+        definePackage.call(this);
+
+        //Draw normal range.
         if (this.filtered_data.length == 0) {
             this.svg.selectAll('*').classed('hidden', true);
             this.svg.select('text.no-data').remove();
@@ -1779,22 +1778,6 @@
 
             //Draw normal range.
             drawNormalRange.call(this);
-
-            //Capture each multiple's scale.
-            this.package = {
-                measure: this.currentMeasure,
-                container: this.wrap,
-                overlay: this.svg.append('g').classed('brush', true),
-                value: this.currentMeasure,
-                domain: clone(this.config.y.domain),
-                xScale: clone(this.x),
-                yScale: clone(this.y),
-                brush: d3.svg
-                    .brush()
-                    .x(this.x)
-                    .y(this.y)
-            };
-            this.wrap.datum(this.package);
 
             //Define invisible brush overlay.
             this.package.overlay.append('rect').attr({

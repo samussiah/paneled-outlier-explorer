@@ -1,5 +1,4 @@
 export default function drawNormalRange() {
-    this.svg.select('.normal-range').remove();
     if (this.config.normal_range_method)
         this.svg
             .insert('rect', '.line-supergroup')

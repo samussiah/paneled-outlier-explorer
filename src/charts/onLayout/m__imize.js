@@ -1,6 +1,8 @@
 import minimize from './minimize';
 
 export default function m__imize(chart) {
+    chart.config.previous_plot_width = chart.plot_width;
+
     //Maximize chart.
     if (!chart.wrap.classed('expanded')) {
         //Clear previously expanded chart.

@@ -1,4 +1,5 @@
 export default function minimize(chart) {
+    delete chart.parent.expandedChart;
     //Modify chart config and redraw.
     chart.wrap
         .select('.m__imize-chart')

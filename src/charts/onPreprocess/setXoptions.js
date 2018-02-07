@@ -7,6 +7,7 @@ export default function setXoptions() {
         this.config.x,
         this.config.time_cols.find(time_col => time_col.value_col === this.config.x.column)
     );
+    this.config.x.label = '';
 
     //Remove visits without data from x-domain if x-type is ordinal.
     if (this.config.x.type === 'ordinal') {

@@ -54,7 +54,19 @@ export default function brush() {
             //brush marks
             brushMarks(chart, lines);
         })
-        .on('brushend', function() {});
+        .on('brushend', () => {
+            if (this.parent.data.selectedIDs.length > 0)
+                this.parent.multiples
+                    .forEach(multiple => {
+                        multiple.draw();
+                    });
+            console.log(chart.config.extent[0]);
+            console.log(chart.config.extent[1]);
+        });
+    if (this.parent.brushedMeasure === this.currentMeasure) {
+        console.log(chart.config.extent[0]);
+        console.log(chart.config.extent[1]);
+    }
 
     //Initialize brush on brush overlay.
     this.package.overlay.call(this.package.brush);

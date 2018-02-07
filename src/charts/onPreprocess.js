@@ -2,7 +2,6 @@ import setXoptions from './onPreprocess/setXoptions';
 import setYoptions from './onPreprocess/setYoptions';
 import deriveStatistics from './onPreprocess/deriveStatistics';
 import deriveVariables from './onPreprocess/deriveVariables';
-import identifyNormalParticipants from './onPreprocess/identifyNormalParticipants';
 import filterData from './onPreprocess/filterData';
 
 export default function onPreprocess() {
@@ -10,6 +9,5 @@ export default function onPreprocess() {
     setYoptions.call(this);
     deriveStatistics.call(this);
     deriveVariables.call(this);
-    identifyNormalParticipants.call(this);
     filterData.call(this);
 }

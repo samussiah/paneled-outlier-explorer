@@ -8,10 +8,6 @@ export default function drawNormalRange() {
                 y: this.y(this.uln()),
                 width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
                 height: this.y(this.lln()) - this.y(this.uln()),
-                fill: 'green',
-                'fill-opacity': 0.05,
-                stroke: 'green',
-                'stroke-opacity': 1,
                 'clip-path': `url(#${this.id})`
             });
 }

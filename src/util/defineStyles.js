@@ -33,6 +33,11 @@ export default function defineStyles() {
                 '    float: left;' +
                 '    clear: left;' +
                 '    margin: 0 0 2px 0;' +
+                '    border: 1px solid white;' +
+                '}',
+            '#paneled-outlier-explorer #left-side .wc-controls .control-group.inlier-highlighting {' +
+                '    background-color: rgba(0,255,0,.05);' +
+                '    border: 1px solid green;' +
                 '}',
             '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
                 '    display: inline-block;' +
@@ -131,6 +136,27 @@ export default function defineStyles() {
             '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' +
                 '    fill: red;' +
                 '    font-size: 0.8em;' +
+                '}',
+            '#paneled-outlier-explorer .normal-range {' +
+                '    fill: green;' +
+                '    fill-opacity: .05;' +
+                '    stroke: green;' +
+                '    stroke-opacity: 1;' +
+                '}',
+            '#paneled-outlier-explorer .n-inlier {' +
+                '    cursor: help;' +
+                '}',
+            '#paneled-outlier-explorer .n-inlier text {' +
+                '    fill: green;' +
+                '    text-anchor: end;' +
+                '    font-size: 10px;' +
+                '    font-weight: bold;' +
+                '}',
+            '#paneled-outlier-explorer .n-inlier rect {' +
+                '    fill: green;' +
+                '    fill-opacity: .05;' +
+                '    stroke: green;' +
+                '    stroke-opacity: 1;' +
                 '}',
 
         /***--------------------------------------------------------------------------------------\

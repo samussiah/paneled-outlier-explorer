@@ -2,6 +2,7 @@ import resetChart from './onResize/resetChart';
 import definePackage from './onResize/definePackage';
 import handleNoData from './onResize/handleNoData';
 import drawNormalRange from './onResize/drawNormalRange';
+import annotateInliers from './onResize/annotateInliers';
 import attachLines from './onResize/attachLines';
 import brush from './onResize/brush';
 import rotateXaxisTickLabels from './onResize/rotateXaxisTickLabels';
@@ -18,6 +19,9 @@ export default function onResize() {
     else {
         //Draw normal range.
         drawNormalRange.call(this);
+
+        //Annotate number of inliers.
+        annotateInliers.call(this);
 
         //Attach lines to chart object.
         attachLines.call(this);

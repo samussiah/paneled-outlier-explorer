@@ -38,7 +38,7 @@ export default function brush() {
                     .filter(
                         multiple =>
                             this.parent.data.selectedIDs.filter(
-                                ID => multiple.displayedIDs.indexOf(ID) < 0
+                                ID => multiple.currentIDs.indexOf(ID) < 0
                             ).length > 0
                     )
                     .forEach(multiple => {

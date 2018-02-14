@@ -109,6 +109,11 @@
                     '    float: left;' +
                     '    clear: left;' +
                     '    margin: 0 0 2px 0;' +
+                    '    border: 1px solid white;' +
+                    '}',
+                '#paneled-outlier-explorer #left-side .wc-controls .control-group.inlier-highlighting {' +
+                    '    background-color: rgba(0,255,0,.05);' +
+                    '    border: 1px solid green;' +
                     '}',
                 '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
                     '    display: inline-block;' +
@@ -207,6 +212,25 @@
                 '#paneled-outlier-explorer div.wc-layout.wc-small-multiples#Charts > div.wc-chart text.no-data {' +
                     '    fill: red;' +
                     '    font-size: 0.8em;' +
+                    '}',
+                '#paneled-outlier-explorer .normal-range {' +
+                    '    fill: green;' +
+                    '    fill-opacity: .05;' +
+                    '    stroke: green;' +
+                    '    stroke-opacity: 1;' +
+                    '}',
+                '#paneled-outlier-explorer .n-inlier {' + '    cursor: help;' + '}',
+                '#paneled-outlier-explorer .n-inlier text {' +
+                    '    fill: green;' +
+                    '    text-anchor: end;' +
+                    '    font-size: 10px;' +
+                    '    font-weight: bold;' +
+                    '}',
+                '#paneled-outlier-explorer .n-inlier rect {' +
+                    '    fill: green;' +
+                    '    fill-opacity: .05;' +
+                    '    stroke: green;' +
+                    '    stroke-opacity: 1;' +
                     '}',
 
                 /***--------------------------------------------------------------------------------------\
@@ -1125,13 +1149,21 @@
         this.measure_data = this.raw_data.filter(function(d) {
             return d.measure_unit === _this.currentMeasure;
         });
-        this.results = this.measure_data
+        this.measure_results = this.measure_data
             .map(function(d) {
                 return +d[_this.config.value_col];
             })
             .sort(function(a, b) {
                 return a - b;
             });
+        this.measure_IDs = d3
+            .set(
+                this.measure_data.map(function(d) {
+                    return d[_this.config.id_col];
+                })
+            )
+            .values()
+            .sort();
     }
 
     function onInit() {
@@ -1211,7 +1243,7 @@
         }
     }
 
-    function onLayout() {
+    function removeChart() {
         var _this = this;
 
         this.wrap
@@ -1237,8 +1269,11 @@
                 li.select('input').property('checked', false);
                 toggleChart(_this, li.node());
             });
+    }
 
-        //Add ability to maximize charts in the chart title.
+    function m__imizeChart() {
+        var _this = this;
+
         var m__imizeButton = this.wrap
             .select('.wc-chart-title')
             .append('span')
@@ -1248,11 +1283,35 @@
         m__imizeButton.on('click', function() {
             m__imize(_this);
         });
+    }
 
-        //Hide measures not listed in [ settings.measures ].
+    function classChart() {
         this.wrap
             .classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true)
             .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+    }
+
+    function addInlierAnnotation() {
+        this.inliersAnnotation = {
+            g: this.svg.append('g').classed('n-inlier', true)
+        };
+        this.inliersAnnotation.text = this.inliersAnnotation.g.append('text');
+        this.inliersAnnotation.rect = this.inliersAnnotation.g.append('rect');
+        this.inliersAnnotation.title = this.inliersAnnotation.g.append('title');
+    }
+
+    function onLayout() {
+        //Add button to the chart title that removes chart.
+        removeChart.call(this);
+
+        //Add button to the chart title that maximizes/minimizes chart.
+        m__imizeChart.call(this);
+
+        //Add measure-specific chart class and class that hides chart as needed.
+        classChart.call(this);
+
+        //Add node to svg for inliers annotation.
+        addInlierAnnotation.call(this);
     }
 
     function removeVisitsWithoutData() {
@@ -1344,8 +1403,8 @@
                       });
             };
         } else if (this.config.normal_range_method === 'Standard Deviation') {
-            this.mean = d3.mean(this.results);
-            this.sd = d3.deviation(this.results);
+            this.mean = d3.mean(this.measure_results);
+            this.sd = d3.deviation(this.measure_results);
             this.lln = function() {
                 return _this.mean - _this.config.normal_range_sd * _this.sd;
             };
@@ -1354,19 +1413,21 @@
             };
         } else if (this.config.normal_range_method === 'Quantiles') {
             this.lln = function() {
-                return d3.quantile(_this.results, _this.config.normal_range_quantile_low);
+                return d3.quantile(_this.measure_results, _this.config.normal_range_quantile_low);
             };
             this.uln = function() {
-                return d3.quantile(_this.results, _this.config.normal_range_quantile_high);
+                return d3.quantile(_this.measure_results, _this.config.normal_range_quantile_high);
             };
         } else {
             this.lln = function(d) {
-                return d instanceof Object ? d[_this.config.value_col] + 1 : _this.results[0];
+                return d instanceof Object
+                    ? d[_this.config.value_col] + 1
+                    : _this.measure_results[0];
             };
             this.uln = function(d) {
                 return d instanceof Object
                     ? d[_this.config.value_col] - 1
-                    : _this.results[_this.results.length - 1];
+                    : _this.measure_results[_this.measure_results.length - 1];
             };
         }
     }
@@ -1405,8 +1466,6 @@
     }
 
     function filterData() {
-        var _this = this;
-
         this.raw_data = this.measure_data;
 
         //Remove inlier IDs from data.
@@ -1420,15 +1479,6 @@
             this.raw_data = this.raw_data.filter(function(d) {
                 return !d.unscheduled;
             });
-
-        //Define set of displayed IDs.
-        this.displayedIDs = d3
-            .set(
-                this.raw_data.map(function(d) {
-                    return d[_this.config.id_col];
-                })
-            )
-            .values();
     }
 
     function onPreprocess() {
@@ -1439,7 +1489,21 @@
         filterData.call(this);
     }
 
-    function onDatatransform() {}
+    function displayedIDs() {
+        var _this = this;
+
+        this.currentIDs = d3
+            .set(
+                this.filtered_data.map(function(d) {
+                    return d[_this.config.id_col];
+                })
+            )
+            .values();
+    }
+
+    function onDatatransform() {
+        displayedIDs.call(this);
+    }
 
     function onDraw() {
         if (this.package) this.package.overlay.call(this.package.brush.clear());
@@ -1491,12 +1555,65 @@
                     y: this.y(this.uln()),
                     width: this.plot_width + 10, // make sure right side of normal range does not appear in chart
                     height: this.y(this.lln()) - this.y(this.uln()),
-                    fill: 'green',
-                    'fill-opacity': 0.05,
-                    stroke: 'green',
-                    'stroke-opacity': 1,
                     'clip-path': 'url(#' + this.id + ')'
                 });
+    }
+
+    function annotateInliers() {
+        var _this = this;
+
+        this.inliersAnnotation.g.classed('hidden', this.config.inliers);
+
+        if (!this.config.inliers) {
+            //text
+            var nInliers = this.measure_IDs.length - this.abnormalIDs.length;
+            this.inliersAnnotation.text
+                .attr({
+                    x: 0,
+                    dx: -10,
+                    y: this.plot_height,
+                    dy: 19
+                })
+                .text('' + nInliers);
+
+            //text box
+            var textDimensions = this.inliersAnnotation.text.node().getBBox();
+            this.inliersAnnotation.rect.attr({
+                x: textDimensions.x - 2,
+                y: textDimensions.y,
+                width: textDimensions.width + 4,
+                height: textDimensions.height
+            });
+
+            //tooltip
+            this.inliersAnnotation.title.text(
+                nInliers +
+                    ' of ' +
+                    this.measure_IDs.length +
+                    ' participants (' +
+                    d3.format('%')(nInliers / this.measure_IDs.length) +
+                    ') with entirely normal results are hidden.\nToggle the "Normal range inliers" checkbox to display these participants.'
+            );
+
+            //mosue hover
+            this.inliersAnnotation.g
+                .on('mouseover', function() {
+                    _this.controls.wrap
+                        .selectAll('.control-group')
+                        .filter(function(d) {
+                            return d.option === 'inliers';
+                        })
+                        .classed('inlier-highlighting', true);
+                })
+                .on('mouseout', function() {
+                    _this.controls.wrap
+                        .selectAll('.control-group')
+                        .filter(function(d) {
+                            return d.option === 'inliers';
+                        })
+                        .classed('inlier-highlighting', false);
+                });
+        }
     }
 
     function attachLines() {
@@ -1761,7 +1878,7 @@
                         .filter(function(multiple) {
                             return (
                                 _this.parent.data.selectedIDs.filter(function(ID) {
-                                    return multiple.displayedIDs.indexOf(ID) < 0;
+                                    return multiple.currentIDs.indexOf(ID) < 0;
                                 }).length > 0
                             );
                         })
@@ -1832,6 +1949,9 @@
         else {
             //Draw normal range.
             drawNormalRange.call(this);
+
+            //Annotate number of inliers.
+            annotateInliers.call(this);
 
             //Attach lines to chart object.
             attachLines.call(this);

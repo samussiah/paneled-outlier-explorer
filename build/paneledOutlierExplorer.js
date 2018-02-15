@@ -4,7 +4,7 @@
         : typeof define === 'function' && define.amd
           ? define(['d3', 'webcharts'], factory)
           : (global.paneledOutlierExplorer = factory(global.d3, global.webCharts));
-})(this, function(d3, webcharts) {
+})(this, function(d3$1, webcharts) {
     'use strict';
 
     if (typeof Object.assign != 'function') {
@@ -619,9 +619,9 @@
         var _this = this;
 
         //Define set of required variables.
-        this.config.variables = d3
+        this.config.variables = d3$1
             .set(
-                d3.merge([
+                d3$1.merge([
                     [this.config.measure_col],
                     [this.config.id_col],
                     this.config.time_cols.map(function(time_col) {
@@ -739,7 +739,7 @@
     function captureMeasures() {
         var _this = this;
 
-        this.config.allMeasures = d3
+        this.config.allMeasures = d3$1
             .set(
                 this.data.raw.map(function(d) {
                     return d.measure_unit;
@@ -780,7 +780,7 @@
                     _this.data.raw[0].hasOwnProperty(time_settings.order_col)
                 ) {
                     //Define a unique set of visits with visit order concatenated.
-                    visits = d3
+                    visits = d3$1
                         .set(
                             _this.data.raw.map(function(d) {
                                 return (
@@ -796,7 +796,7 @@
                             var aOrder = a.split('|')[0],
                                 bOrder = b.split('|')[0],
                                 diff = +aOrder - +bOrder;
-                            return diff ? diff : d3.ascending(a, b);
+                            return diff ? diff : d3$1.ascending(a, b);
                         })
                         .map(function(visit) {
                             return visit.split('|')[1];
@@ -804,7 +804,7 @@
                 } else {
                     //Otherwise sort a unique set of visits alphanumerically.
                     //Define a unique set of visits.
-                    visits = d3
+                    visits = d3$1
                         .set(
                             _this.data.raw.map(function(d) {
                                 return d[time_settings.value_col];
@@ -832,7 +832,7 @@
                 time_settings.domain = time_settings.order;
             } else if (time_settings.type === 'linear') {
                 time_settings.order = null;
-                time_settings.domain = d3.extent(_this.data.raw, function(d) {
+                time_settings.domain = d3$1.extent(_this.data.raw, function(d) {
                     return +d[time_settings.value_col];
                 });
             }
@@ -842,9 +842,9 @@
     function toggleCharts(chart) {
         var toggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-        var measureListCheckbox = d3.select('#measure-list-checkbox'),
+        var measureListCheckbox = d3$1.select('#measure-list-checkbox'),
             checked = measureListCheckbox.property('checked'),
-            measureItems = d3.selectAll('li.measure-item'),
+            measureItems = d3$1.selectAll('li.measure-item'),
             anyUnchecked = measureItems[0].some(function(measureItem) {
                 return !measureItem.getElementsByTagName('input')[0].checked;
             });
@@ -853,7 +853,7 @@
         if (toggle) {
             measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
             measureItems.each(function(d) {
-                d3
+                d3$1
                     .select(this)
                     .select('input')
                     .property('checked', checked);
@@ -872,14 +872,14 @@
 
     function toggleChart(chart, li) {
         //Determine state of checkbox.
-        var checkbox = d3.select(li).select('input'),
+        var checkbox = d3$1.select(li).select('input'),
             checked = checkbox.property('checked');
         checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-        d3
+        d3$1
             .select(chart.div)
             .selectAll('.wc-chart')
             .filter(function(di) {
-                return di.measure === d3.select(li).datum();
+                return di.measure === d3$1.select(li).datum();
             })
             .classed('hidden', !checked);
 
@@ -923,11 +923,11 @@
                         })
                         .classed('active', false);
                     if (d === 'Charts') {
-                        d3.select('#Listing').classed('hidden', true);
-                        d3.select('#Charts').classed('hidden', false);
+                        d3$1.select('#Listing').classed('hidden', true);
+                        d3$1.select('#Charts').classed('hidden', false);
                     } else {
-                        d3.select('#Charts').classed('hidden', true);
-                        d3.select('#Listing').classed('hidden', false);
+                        d3$1.select('#Charts').classed('hidden', true);
+                        d3$1.select('#Listing').classed('hidden', false);
                     }
                 }),
             //Create controls header.
@@ -972,7 +972,7 @@
             })
             .each(function(d) {
                 //Append div inside list item.
-                var measureItemContainer = d3
+                var measureItemContainer = d3$1
                     .select(this)
                     .append('div')
                     .classed('measure-item-container', true);
@@ -1011,7 +1011,7 @@
         this.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false);
 
         //De-highlight listing.
-        d3.select('#Listing-nav').classed('brushed', false);
+        d3$1.select('#Listing-nav').classed('brushed', false);
 
         //Define filtered data.
         if (d.type === 'subsetter') {
@@ -1084,7 +1084,7 @@
                 return d.type === 'subsetter' || d.label === 'X-axis';
             })
             .on('change', function(d) {
-                d.value = d3
+                d.value = d3$1
                     .select(this)
                     .selectAll('option')
                     .filter(function() {
@@ -1099,7 +1099,7 @@
             return d.label === 'Normal range method';
         });
         normalRangeControl.on('change', function(d) {
-            var normal_range_method = d3
+            var normal_range_method = d3$1
                 .select(this)
                 .select('option:checked')
                 .text();
@@ -1139,35 +1139,35 @@
         customizeControls.call(this);
     }
 
-    function setCurrentMeasure() {
-        this.currentMeasure = this.filters[0].val;
-    }
-
     function defineMeasureData() {
         var _this = this;
 
-        this.measure_data = this.raw_data.filter(function(d) {
-            return d.measure_unit === _this.currentMeasure;
+        this.measure = {
+            value: this.filters[0].val
+        };
+        this.measure.data = this.raw_data.filter(function(d) {
+            return d.measure_unit === _this.measure.value;
         });
-        this.measure_results = this.measure_data
+        this.measure.results = this.measure.data
             .map(function(d) {
                 return +d[_this.config.value_col];
             })
             .sort(function(a, b) {
                 return a - b;
             });
-        this.measure_IDs = d3
-            .set(
-                this.measure_data.map(function(d) {
-                    return d[_this.config.id_col];
-                })
-            )
-            .values()
-            .sort();
+        this.measure.IDs = {
+            all: d3$1
+                .set(
+                    this.measure.data.map(function(d) {
+                        return d[_this.config.id_col];
+                    })
+                )
+                .values()
+                .sort()
+        };
     }
 
     function onInit() {
-        setCurrentMeasure.call(this);
         defineMeasureData.call(this);
     }
 
@@ -1216,9 +1216,9 @@
 
             //Sort expanded chart first.
             chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
-                return a.measure === chart.currentMeasure
+                return a.measure === chart.measure.value
                     ? -1
-                    : b.measure === chart.currentMeasure
+                    : b.measure === chart.measure.value
                       ? 1
                       : chart.config.measures.indexOf(a.measure) -
                         chart.config.measures.indexOf(b.measure);
@@ -1263,8 +1263,8 @@
                 //Minimize chart.
                 if (_this.wrap.classed('full-screen')) m__imize(_this);
 
-                var li = d3.select(
-                    'li.measure-item.' + _this.currentMeasure.replace(/[^a-z0-9-]/gi, '-')
+                var li = d3$1.select(
+                    'li.measure-item.' + _this.measure.value.replace(/[^a-z0-9-]/gi, '-')
                 );
                 li.select('input').property('checked', false);
                 toggleChart(_this, li.node());
@@ -1287,8 +1287,8 @@
 
     function classChart() {
         this.wrap
-            .classed(this.currentMeasure.replace(/[^a-z0-9-]/gi, '-'), true)
-            .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
+            .classed(this.measure.value.replace(/[^a-z0-9-]/gi, '-'), true)
+            .classed('hidden', this.config.measures.indexOf(this.measure.value) === -1);
     }
 
     function addInlierAnnotation() {
@@ -1320,9 +1320,9 @@
         if (!this.config.visits_without_data) {
             this.config.x.domain = this.config.x.domain.filter(function(visit) {
                 return (
-                    d3
+                    d3$1
                         .set(
-                            _this.measure_data.map(function(d) {
+                            _this.measure.data.map(function(d) {
                                 return d[_this.config.x.column];
                             })
                         )
@@ -1377,7 +1377,7 @@
     function setYoptions() {
         var _this = this;
 
-        this.config.y.domain = d3.extent(this.measure_data, function(d) {
+        this.config.y.domain = d3$1.extent(this.measure.data, function(d) {
             return +d[_this.config.value_col];
         });
         var range = this.config.y.domain[1] - this.config.y.domain[0];
@@ -1391,20 +1391,20 @@
             this.lln = function(d) {
                 return d instanceof Object
                     ? +d[_this.config.lln_col]
-                    : d3.median(_this.measure_data, function(d) {
+                    : d3$1.median(_this.measure.data, function(d) {
                           return +d[_this.config.lln_col];
                       });
             };
             this.uln = function(d) {
                 return d instanceof Object
                     ? +d[_this.config.uln_col]
-                    : d3.median(_this.measure_data, function(d) {
+                    : d3$1.median(_this.measure.data, function(d) {
                           return +d[_this.config.uln_col];
                       });
             };
         } else if (this.config.normal_range_method === 'Standard Deviation') {
-            this.mean = d3.mean(this.measure_results);
-            this.sd = d3.deviation(this.measure_results);
+            this.mean = d3$1.mean(this.measure.results);
+            this.sd = d3$1.deviation(this.measure.results);
             this.lln = function() {
                 return _this.mean - _this.config.normal_range_sd * _this.sd;
             };
@@ -1413,21 +1413,24 @@
             };
         } else if (this.config.normal_range_method === 'Quantiles') {
             this.lln = function() {
-                return d3.quantile(_this.measure_results, _this.config.normal_range_quantile_low);
+                return d3$1.quantile(_this.measure.results, _this.config.normal_range_quantile_low);
             };
             this.uln = function() {
-                return d3.quantile(_this.measure_results, _this.config.normal_range_quantile_high);
+                return d3$1.quantile(
+                    _this.measure.results,
+                    _this.config.normal_range_quantile_high
+                );
             };
         } else {
             this.lln = function(d) {
                 return d instanceof Object
                     ? d[_this.config.value_col] + 1
-                    : _this.measure_results[0];
+                    : _this.measure.results[0];
             };
             this.uln = function(d) {
                 return d instanceof Object
                     ? d[_this.config.value_col] - 1
-                    : _this.measure_results[_this.measure_results.length - 1];
+                    : _this.measure.results[_this.measure.results.length - 1];
             };
         }
     }
@@ -1436,9 +1439,9 @@
         var _this = this;
 
         //Identify IDs with abnormal results.
-        this.abnormalIDs = d3
+        this.measure.IDs.abnormal = d3$1
             .set(
-                this.measure_data
+                this.measure.data
                     .filter(function(d) {
                         return (
                             d[_this.config.value_col] < _this.lln(d) ||
@@ -1451,9 +1454,9 @@
             )
             .values();
 
-        this.measure_data.forEach(function(d) {
+        this.measure.data.forEach(function(d) {
             //Identify IDs with abnormal results.
-            d.abnormalID = _this.abnormalIDs.indexOf(d[_this.config.id_col]) > -1;
+            d.abnormalID = _this.measure.IDs.abnormal.indexOf(d[_this.config.id_col]) > -1;
 
             //Identify abnormal results.
             d.abnormal =
@@ -1466,7 +1469,43 @@
     }
 
     function filterData() {
-        this.raw_data = this.measure_data;
+        var _this = this;
+
+        this.raw_data = this.measure.data;
+
+        //Count number of IDs given current filters.
+        if (
+            this.filters.some(function(filter) {
+                return filter.col !== 'measure_unit' && filter.val !== 'All';
+            })
+        )
+            this.measure.IDs.filtered = d3
+                .set(
+                    this.raw_data
+                        .filter(function(d) {
+                            var filtered = false;
+
+                            _this.filters
+                                .filter(function(filter) {
+                                    return filter.col !== 'measure_unit';
+                                })
+                                .forEach(function(filter) {
+                                    if (filtered === false && filter.val !== 'All')
+                                        filtered =
+                                            filter.val instanceof Array
+                                                ? filter.val.indexOf(d[filter.col]) < 0
+                                                : filter.val !== d[filter.col];
+                                });
+
+                            return !filtered;
+                        })
+                        .map(function(d) {
+                            return d[_this.config.id_col];
+                        })
+                )
+                .values()
+                .sort();
+        else this.measure.IDs.filtered = this.measure.IDs.all;
 
         //Remove inlier IDs from data.
         if (!this.config.inliers)
@@ -1479,6 +1518,19 @@
             this.raw_data = this.raw_data.filter(function(d) {
                 return !d.unscheduled;
             });
+
+        this.measure.IDs.current = this.measure.IDs.filtered.filter(function(ID) {
+            return (
+                d3$1
+                    .set(
+                        _this.raw_data.map(function(d) {
+                            return d[_this.config.id_col];
+                        })
+                    )
+                    .values()
+                    .indexOf(ID) > -1
+            );
+        });
     }
 
     function onPreprocess() {
@@ -1489,21 +1541,7 @@
         filterData.call(this);
     }
 
-    function displayedIDs() {
-        var _this = this;
-
-        this.currentIDs = d3
-            .set(
-                this.filtered_data.map(function(d) {
-                    return d[_this.config.id_col];
-                })
-            )
-            .values();
-    }
-
-    function onDatatransform() {
-        displayedIDs.call(this);
-    }
+    function onDatatransform() {}
 
     function onDraw() {
         if (this.package) this.package.overlay.call(this.package.brush.clear());
@@ -1518,14 +1556,14 @@
     function definePackage() {
         //Capture each multiple's scale.
         this.package = {
-            measure: this.currentMeasure,
+            measure: this.measure.value,
             container: this.wrap,
             overlay: this.svg.append('g').classed('brush', true),
-            value: this.currentMeasure,
+            value: this.measure.value,
             domain: clone(this.config.y.domain),
             xScale: clone(this.x),
             yScale: clone(this.y),
-            brush: d3.svg
+            brush: d3$1.svg
                 .brush()
                 .x(this.x)
                 .y(this.y)
@@ -1542,7 +1580,20 @@
         });
 
         //Attach additional data to SVG and marks.
-        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.currentMeasure });
+        this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.measure.value });
+    }
+
+    function handleNoData() {
+        this.svg
+            .append('text')
+            .classed('no-data', true)
+            .attr({
+                x: 0,
+                dx: -this.config.margin.left,
+                y: 0,
+                dy: 10
+            })
+            .text('No data selected.');
     }
 
     function drawNormalRange() {
@@ -1566,7 +1617,13 @@
 
         if (!this.config.inliers) {
             //text
-            var nInliers = this.measure_IDs.length - this.abnormalIDs.length;
+            var inlierIDs = this.measure.IDs.filtered.filter(function(ID) {
+                return _this.measure.IDs.abnormal.indexOf(ID) < 0;
+            });
+            var abnormalIDs = this.measure.IDs.abnormal.filter(function(ID) {
+                return _this.measure.IDs.filtered.indexOf(ID) > -1;
+            });
+            var nInlierIDs = inlierIDs.length;
             this.inliersAnnotation.text
                 .attr({
                     x: 0,
@@ -1574,7 +1631,7 @@
                     y: this.plot_height,
                     dy: 19
                 })
-                .text('' + nInliers);
+                .text('' + nInlierIDs);
 
             //text box
             var textDimensions = this.inliersAnnotation.text.node().getBBox();
@@ -1587,11 +1644,11 @@
 
             //tooltip
             this.inliersAnnotation.title.text(
-                nInliers +
+                nInlierIDs +
                     ' of ' +
-                    this.measure_IDs.length +
+                    this.measure.IDs.filtered.length +
                     ' participants (' +
-                    d3.format('%')(nInliers / this.measure_IDs.length) +
+                    d3$1.format('%')(nInlierIDs / this.measure.IDs.filtered.length) +
                     ') with entirely normal results are hidden.\nToggle the "Normal range inliers" checkbox to display these participants.'
             );
 
@@ -1646,7 +1703,7 @@
         });
     }
 
-    d3.selection.prototype.moveToFront = function() {
+    d3$1.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
         });
@@ -1818,7 +1875,7 @@
             })
             .classed('brushed', true)
             .each(function(d) {
-                d3.select(this.parentNode).moveToFront();
+                d3$1.select(this.parentNode).moveToFront();
             });
 
         //Draw listing displaying brushed IDs first.
@@ -1830,11 +1887,11 @@
                 return d.brushed;
             });
             this.parent.listing.draw(this.parent.data.brushed);
-            d3.select('#Listing-nav').classed('brushed', true);
+            d3$1.select('#Listing-nav').classed('brushed', true);
         } else {
             this.parent.data.brushed = [];
             this.parent.listing.draw(this.parent.data.filtered);
-            d3.select('#Listing-nav').classed('brushed', false);
+            d3$1.select('#Listing-nav').classed('brushed', false);
         }
     }
 
@@ -1849,7 +1906,7 @@
                 })
                 .classed('brushed', true)
                 .each(function() {
-                    d3.select(this.parentNode).moveToFront();
+                    d3$1.select(this.parentNode).moveToFront();
                 });
         }
 
@@ -1864,7 +1921,7 @@
 
                 //Attach current brushed chart to parent.
                 _this.parent.brushedChart = _this;
-                _this.parent.brushedMeasure = _this.currentMeasure;
+                _this.parent.brushedMeasure = _this.measure.value;
             })
             .on('brush', function() {})
             .on('brushend', function() {
@@ -1873,12 +1930,13 @@
                 //Brush marks.
                 brushMarks.call(_this);
 
+                //Redraw charts in which the currently brushed ID(s) are inliers.
                 if (_this.parent.data.selectedIDs.length > 0)
                     _this.parent.multiples
                         .filter(function(multiple) {
                             return (
                                 _this.parent.data.selectedIDs.filter(function(ID) {
-                                    return multiple.currentIDs.indexOf(ID) < 0;
+                                    return multiple.measure.IDs.current.indexOf(ID) < 0;
                                 }).length > 0
                             );
                         })
@@ -1897,7 +1955,7 @@
                 this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
                 this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
                 this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
-            this.currentMeasure === this.parent.brushedMeasure
+            this.measure.value === this.parent.brushedMeasure
         ) {
             if (this.config.x.type === 'ordinal') {
                 this.config.extent[0][0] =
@@ -1945,7 +2003,7 @@
         definePackage.call(this);
 
         //Draw normal range.
-        if (this.filtered_data.length == 0) handleNodata.call(this);
+        if (this.filtered_data.length == 0) handleNoData.call(this);
         else {
             //Draw normal range.
             drawNormalRange.call(this);
@@ -2011,7 +2069,7 @@
         var settings = arguments[1];
 
         //Define unique div within passed element argument.
-        var container = d3
+        var container = d3$1
                 .select(element)
                 .append('div')
                 .attr('id', 'paneled-outlier-explorer'),

@@ -2,8 +2,8 @@ import { set } from 'd3';
 
 export default function deriveVariables() {
     //Identify IDs with abnormal results.
-    this.abnormalIDs = set(
-        this.measure_data
+    this.measure.IDs.abnormal = set(
+        this.measure.data
             .filter(
                 d =>
                     d[this.config.value_col] < this.lln(d) || d[this.config.value_col] > this.uln(d)
@@ -11,9 +11,9 @@ export default function deriveVariables() {
             .map(d => d[this.config.id_col])
     ).values();
 
-    this.measure_data.forEach(d => {
+    this.measure.data.forEach(d => {
         //Identify IDs with abnormal results.
-        d.abnormalID = this.abnormalIDs.indexOf(d[this.config.id_col]) > -1;
+        d.abnormalID = this.measure.IDs.abnormal.indexOf(d[this.config.id_col]) > -1;
 
         //Identify abnormal results.
         d.abnormal =

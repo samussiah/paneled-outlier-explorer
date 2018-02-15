@@ -1,5 +1,1 @@
-import getCurrentIDs from './onDatatransform/getCurrentIDs';
-
-export default function onDatatransform() {
-    getCurrentIDs.call(this);
-}
+export default function onDatatransform() {}

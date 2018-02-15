@@ -5,7 +5,14 @@ export default function annotateInliers() {
 
     if (!this.config.inliers) {
         //text
-        const nInliers = this.measure_IDs.length - this.abnormalIDs.length;
+        const inlierIDs = this.measure.IDs.filtered.filter(
+            ID => this.measure.IDs.abnormal.indexOf(ID) < 0
+        );
+        const abnormalIDs = this.measure.IDs.abnormal.filter(
+            ID => this.measure.IDs.filtered.indexOf(ID) > -1
+        );
+        const nInlierIDs = inlierIDs.length;
+        const nAbnormalIDs = abnormalIDs.length;
         this.inliersAnnotation.text
             .attr({
                 x: 0,
@@ -13,7 +20,7 @@ export default function annotateInliers() {
                 y: this.plot_height,
                 dy: 19
             })
-            .text(`${nInliers}`);
+            .text(`${nInlierIDs}`);
 
         //text box
         const textDimensions = this.inliersAnnotation.text.node().getBBox();
@@ -26,8 +33,8 @@ export default function annotateInliers() {
 
         //tooltip
         this.inliersAnnotation.title.text(
-            `${nInliers} of ${this.measure_IDs.length} participants (${format('%')(
-                nInliers / this.measure_IDs.length
+            `${nInlierIDs} of ${this.measure.IDs.filtered.length} participants (${format('%')(
+                nInlierIDs / this.measure.IDs.filtered.length
             )}) with entirely normal results are hidden.\nToggle the "Normal range inliers" checkbox to display these participants.`
         );
 

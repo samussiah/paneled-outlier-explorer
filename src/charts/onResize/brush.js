@@ -24,7 +24,7 @@ export default function brush() {
 
             //Attach current brushed chart to parent.
             this.parent.brushedChart = this;
-            this.parent.brushedMeasure = this.currentMeasure;
+            this.parent.brushedMeasure = this.measure.value;
         })
         .on('brush', () => {})
         .on('brushend', () => {
@@ -33,12 +33,13 @@ export default function brush() {
             //Brush marks.
             brushMarks.call(this);
 
+            //Redraw charts in which the currently brushed ID(s) are inliers.
             if (this.parent.data.selectedIDs.length > 0)
                 this.parent.multiples
                     .filter(
                         multiple =>
                             this.parent.data.selectedIDs.filter(
-                                ID => multiple.currentIDs.indexOf(ID) < 0
+                                ID => multiple.measure.IDs.current.indexOf(ID) < 0
                             ).length > 0
                     )
                     .forEach(multiple => {
@@ -56,7 +57,7 @@ export default function brush() {
             this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
             this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
             this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
-        this.currentMeasure === this.parent.brushedMeasure
+        this.measure.value === this.parent.brushedMeasure
     ) {
         if (this.config.x.type === 'ordinal') {
             this.config.extent[0][0] =

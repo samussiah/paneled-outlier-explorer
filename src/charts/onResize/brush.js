@@ -52,6 +52,7 @@ export default function brush() {
 
     //Maintain brush on redraw.
     if (!this.config.extent) this.config.extent = this.package.brush.extent();
+    console.log(this.config.extent);
     if (
         (this.config.extent[0][0] !== this.package.brush.extent()[0][0] ||
             this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||

@@ -811,6 +811,9 @@ function defineData$1() {
     }).sort(function (a, b) {
         return a - b;
     });
+    this.data.yDomain = d3.extent(this.data.results);
+    this.data.yRange = this.data.yDomain[1] - this.data.yDomain[0];
+    this.data.yFormat = this.data.yRange < 0.1 ? '.3f' : this.data.yRange < 1 ? '.2f' : this.data.yRange < 10 ? '.1f' : '1d';
     this.data.IDs = {
         raw: d3.set(this.data.raw.map(function (d) {
             return d[_this.config.id_col];
@@ -818,15 +821,8 @@ function defineData$1() {
     };
 }
 
-function defineYsettings() {
-    this.config.y.domain = d3.extent(this.data.results);
-    var range = this.config.y.domain[1] - this.config.y.domain[0];
-    this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
-}
-
 function onInit() {
     defineData$1.call(this);
-    defineYsettings.call(this);
 }
 
 function minimize(chart) {
@@ -987,6 +983,11 @@ function defineXsettings() {
     this.config.margin.bottom = this.config.x.vertical_space;
 }
 
+function defineYsettings() {
+    this.config.y.domain = this.data.domain;
+    this.config.y.format = this.data.format;
+}
+
 function deriveStatistics() {
     var _this = this;
 
@@ -1083,6 +1084,7 @@ function defineDisplayedData() {
 
 function onPreprocess() {
     defineXsettings.call(this);
+    defineYsettings.call(this);
     deriveStatistics.call(this);
     deriveVariables$1.call(this);
     defineFilteredData.call(this);
@@ -1418,6 +1420,7 @@ function brush() {
 
     //Maintain brush on redraw.
     if (!this.config.extent) this.config.extent = this.package.brush.extent();
+    console.log(this.config.extent);
     if ((this.config.extent[0][0] !== this.package.brush.extent()[0][0] || this.config.extent[0][1] !== this.package.brush.extent()[0][1] || this.config.extent[1][0] !== this.package.brush.extent()[1][0] || this.config.extent[1][1] !== this.package.brush.extent()[1][1]) && this.data.measure === this.parent.brushedMeasure) {
         if (this.config.x.type === 'ordinal') {
             this.config.extent[0][0] = this.config.extent[0][0] * this.plot_width / this.config.previous_plot_width;

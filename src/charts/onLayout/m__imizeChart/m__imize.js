@@ -27,9 +27,9 @@ export default function m__imize(chart) {
 
         //Sort expanded chart first.
         chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
-            return a.measure === chart.measure.value
+            return a.measure === chart.data.measure
                 ? -1
-                : b.measure === chart.measure.value
+                : b.measure === chart.data.measure
                   ? 1
                   : chart.config.measures.indexOf(a.measure) -
                     chart.config.measures.indexOf(b.measure);

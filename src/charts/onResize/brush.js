@@ -4,9 +4,9 @@ import brushMarks from './brush/brushMarks';
 
 export default function brush() {
     //Highlight previously brushed points.
-    if (this.parent.data.selectedIDs.length) {
+    if (this.parent.data.IDs.selected.length) {
         this.lines
-            .filter(d => this.parent.data.selectedIDs.indexOf(d.id) > -1)
+            .filter(d => this.parent.data.IDs.selected.indexOf(d.id) > -1)
             .classed('brushed', true)
             .each(function() {
                 select(this.parentNode).moveToFront();
@@ -24,7 +24,7 @@ export default function brush() {
 
             //Attach current brushed chart to parent.
             this.parent.brushedChart = this;
-            this.parent.brushedMeasure = this.measure.value;
+            this.parent.brushedMeasure = this.data.measure;
         })
         .on('brush', () => {})
         .on('brushend', () => {
@@ -34,12 +34,12 @@ export default function brush() {
             brushMarks.call(this);
 
             //Redraw charts in which the currently brushed ID(s) are inliers.
-            if (this.parent.data.selectedIDs.length > 0)
+            if (this.parent.data.IDs.selected.length > 0)
                 this.parent.multiples
                     .filter(
                         multiple =>
-                            this.parent.data.selectedIDs.filter(
-                                ID => multiple.measure.IDs.current.indexOf(ID) < 0
+                            this.parent.data.IDs.selected.filter(
+                                ID => multiple.data.IDs.displayed.indexOf(ID) < 0
                             ).length > 0
                     )
                     .forEach(multiple => {
@@ -57,7 +57,7 @@ export default function brush() {
             this.config.extent[0][1] !== this.package.brush.extent()[0][1] ||
             this.config.extent[1][0] !== this.package.brush.extent()[1][0] ||
             this.config.extent[1][1] !== this.package.brush.extent()[1][1]) &&
-        this.measure.value === this.parent.brushedMeasure
+        this.data.measure === this.parent.brushedMeasure
     ) {
         if (this.config.x.type === 'ordinal') {
             this.config.extent[0][0] =

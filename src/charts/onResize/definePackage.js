@@ -4,10 +4,9 @@ import { svg } from 'd3';
 export default function definePackage() {
     //Capture each multiple's scale.
     this.package = {
-        measure: this.measure.value,
+        measure: this.data.measure,
         container: this.wrap,
         overlay: this.svg.append('g').classed('brush', true),
-        value: this.measure.value,
         domain: clone(this.config.y.domain),
         xScale: clone(this.x),
         yScale: clone(this.y),
@@ -28,5 +27,5 @@ export default function definePackage() {
     });
 
     //Attach additional data to SVG and marks.
-    this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.measure.value });
+    this.package.overlay.style('cursor', 'crosshair').datum({ measure: this.data.measure });
 }

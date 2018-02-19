@@ -1,13 +1,14 @@
-import setXoptions from './onPreprocess/setXoptions';
-import setYoptions from './onPreprocess/setYoptions';
+import defineXsettings from './onPreprocess/defineXsettings';
 import deriveStatistics from './onPreprocess/deriveStatistics';
 import deriveVariables from './onPreprocess/deriveVariables';
-import filterData from './onPreprocess/filterData';
+import defineFilteredData from './onPreprocess/defineFilteredData';
+import defineDisplayedData from './onPreprocess/defineDisplayedData';
 
 export default function onPreprocess() {
-    setXoptions.call(this);
-    setYoptions.call(this);
+    defineXsettings.call(this);
     deriveStatistics.call(this);
     deriveVariables.call(this);
-    filterData.call(this);
+    defineFilteredData.call(this);
+    defineDisplayedData.call(this);
+    this.raw_data = this.data.displayed;
 }

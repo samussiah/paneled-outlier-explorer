@@ -2,9 +2,6 @@ export default function deriveVariables() {
     const ordinalTimeSettings = this.config.time_cols.find(time_col => time_col.type === 'ordinal');
 
     this.data.raw.forEach(d => {
-        //brushed datum placeholder
-        d.brushed = false;
-
         //Concatenate measure and unit.
         if (d[this.config.unit_col])
             d.measure_unit = `${d[this.config.measure_col]} (${d[this.config.unit_col]})`;

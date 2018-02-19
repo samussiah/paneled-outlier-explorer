@@ -6,8 +6,6 @@ import layout from './init/layout';
 import customizeControls from './init/customizeControls';
 
 export default function init(data) {
-    const chart = this;
-
     //Attach various data arrays to charts.
     defineData.call(this, data);
 
@@ -25,7 +23,7 @@ export default function init(data) {
 
     //Initialize listing.
     this.listing.config.cols = Object.keys(data[0]).filter(
-        key => ['brushed', 'measure_unit', 'abnormal', 'abnormalID'].indexOf(key) === -1
+        key => ['measure_unit', 'unscheduled'].indexOf(key) === -1
     ); // remove system variables from listing
     this.listing.init(this.data.raw);
 

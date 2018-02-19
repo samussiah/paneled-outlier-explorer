@@ -1,5 +1,7 @@
-import defineMeasureData from './onInit/defineMeasureData';
+import defineData from './onInit/defineData';
+import defineYsettings from './onInit/defineYsettings';
 
 export default function onInit() {
-    defineMeasureData.call(this);
+    defineData.call(this);
+    defineYsettings.call(this);
 }

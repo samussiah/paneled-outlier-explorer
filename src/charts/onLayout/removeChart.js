@@ -20,7 +20,7 @@ export default function removeChart() {
             //Minimize chart.
             if (this.wrap.classed('full-screen')) m__imize(this);
 
-            const li = select('li.measure-item.' + this.measure.value.replace(/[^a-z0-9-]/gi, '-'));
+            const li = select('li.measure-item.' + this.data.measure.replace(/[^a-z0-9-]/gi, '-'));
             li.select('input').property('checked', false);
             toggleChart(this, li.node());
         });

@@ -1342,10 +1342,8 @@ function doLineSegmentsIntersect(p, p2, q, q2) {
     return t >= 0 && t <= 1 && u >= 0 && u <= 1;
 }
 
-function brushMarks() {
-    var _this = this;
-
-    var extent$$1 = this.config.extent;
+function highlightChart() {
+    var extent$$1 = this.package.brush.extent();
     var x0 = extent$$1[0][0]; // top left x-coordinate
     var y0 = extent$$1[1][1]; // top left y-coordinate
     var x1 = extent$$1[1][0]; // bottom right x-coordinate
@@ -1357,21 +1355,25 @@ function brushMarks() {
     var sides = [top, right, bottom, left];
 
     //Determine which lines fall inside the brush.
-    var brushedLines = this.lines.filter(function (d, i) {
-        var intersection = false;
-        d.lines.forEach(function (line, j) {
-            sides.forEach(function (side, k) {
-                if (!intersection) intersection = doLineSegmentsIntersect({ x: line.x0, y: line.y0 }, { x: line.x1, y: line.y1 }, { x: side.x0, y: side.y0 }, { x: side.x1, y: side.y1 });
+    this.lines.classed('brushed', function (d) {
+        d.intersection = false;
+        d.lines.forEach(function (line) {
+            sides.forEach(function (side) {
+                if (!d.intersection) d.intersection = doLineSegmentsIntersect({ x: line.x0, y: line.y0 }, { x: line.x1, y: line.y1 }, { x: side.x0, y: side.y0 }, { x: side.x1, y: side.y1 });
             });
         });
 
-        return intersection;
+        return d.intersection;
     });
-
-    //Attached brushed IDs to chart parent object.
-    this.parent.data.IDs.selected = brushedLines.data().map(function (d) {
+    this.parent.data.IDs.selected = this.lines.data().filter(function (d) {
+        return d.intersection;
+    }).map(function (d) {
         return d.id;
     });
+}
+
+function highlightCharts() {
+    var _this = this;
 
     //Highlight brushed lines.
     this.parent.wrap.selectAll('.line-supergroup g.line path').classed('brushed', false).filter(function (d) {
@@ -1414,11 +1416,14 @@ function brush() {
         //Attach current brushed chart to parent.
         _this.parent.brushedChart = _this;
         _this.parent.brushedMeasure = _this.data.measure;
-    }).on('brush', function () {}).on('brushend', function () {
+    }).on('brush', function () {
+        //Add highlighting to brushed chart.
+        highlightChart.call(_this);
+    }).on('brushend', function () {
         _this.config.extent = _this.package.brush.extent();
 
-        //Brush marks.
-        brushMarks.call(_this);
+        //Add highlighting to all charts.
+        highlightCharts.call(_this);
 
         //Redraw charts in which the currently brushed ID(s) are inliers.
         if (_this.parent.data.IDs.selected.length > 0) _this.parent.multiples.filter(function (multiple) {
@@ -1442,7 +1447,7 @@ function brush() {
         }
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
-        brushMarks.call(this);
+        highlightCharts.call(this);
     }
 }
 

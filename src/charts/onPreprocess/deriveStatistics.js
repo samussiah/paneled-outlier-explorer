@@ -19,8 +19,7 @@ export default function deriveStatistics() {
         this.lln = () => quantile(this.data.results, this.config.normal_range_quantile_low);
         this.uln = () => quantile(this.data.results, this.config.normal_range_quantile_high);
     } else {
-        this.lln = d =>
-            d instanceof Object ? d[this.config.value_col] + 1 : this.data.results[0];
+        this.lln = d => (d instanceof Object ? d[this.config.value_col] + 1 : this.data.results[0]);
         this.uln = d =>
             d instanceof Object
                 ? d[this.config.value_col] - 1

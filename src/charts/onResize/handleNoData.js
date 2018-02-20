@@ -1,4 +1,5 @@
 export default function handleNoData() {
+    this.svg.selectAll('*').style('visibility', 'hidden');
     this.svg
         .append('text')
         .classed('no-data', true)

@@ -15,8 +15,7 @@ export default function onResize() {
     definePackage.call(this);
 
     //Draw normal range.
-    if (this.filtered_data.length == 0)
-        handleNoData.call(this);
+    if (this.filtered_data.length == 0) handleNoData.call(this);
     else {
         //Draw normal range.
         drawNormalRange.call(this);

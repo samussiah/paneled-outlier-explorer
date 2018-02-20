@@ -83,11 +83,20 @@ export default function defineStyles() {
             '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
                 '    float: left;' +
                 '    cursor: pointer;' +
-                '    font-size: 150%;' +
+                '    font-size: 24px;' +
                 '    display: block;' +
                 '    color: white;' +
                 '    text-align: center;' +
                 '    padding: 14px 16px;' +
+                '    text-decoration: none;' +
+                '}',
+            '#paneled-outlier-explorer ul#navigation-bar li#population-annotation {' +
+                '    float: right;' +
+                '    font-size: 16px;' +
+                '    display: block;' +
+                '    color: white;' +
+                '    text-align: center;' +
+                '    padding: 22px 16px;' +
                 '    text-decoration: none;' +
                 '}',
             '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +

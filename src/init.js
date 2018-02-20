@@ -3,6 +3,7 @@ import captureMeasures from './init/captureMeasures';
 import defineVisitOrder from './init/defineVisitOrder';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
+import updatePopulationAnnotation from './init/updatePopulationAnnotation';
 import customizeControls from './init/customizeControls';
 
 export default function init(data) {
@@ -17,6 +18,9 @@ export default function init(data) {
 
     //Define layout of renderer.
     layout.call(this);
+
+    //Update population annotation with initial statistics.
+    updatePopulationAnnotation.call(this);
 
     //Initialize charts.
     multiply(this, this.data.raw, 'measure_unit', this.config.allMeasures);

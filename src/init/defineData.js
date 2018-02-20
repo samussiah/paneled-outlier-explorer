@@ -14,13 +14,14 @@ export default function defineData(data) {
     this.data.IDs = {
         raw: set(this.data.initial.map(d => d[this.config.id_col])).values()
     };
-    this.data.IDs.filtered = this.data.IDs.raw;
-    this.data.IDs.selected = [];
 
     //Remove invalid data.
     this.data.raw = this.data.initial.filter(
         d => !/^\s*$/.test(d[this.config.measure_col]) && /^[0-9.]+$/.test(d[this.config.value_col])
     );
+    this.data.filtered = this.data.raw;
+    this.data.IDs.filtered = set(this.data.filtered.map(d => d[this.config.id_col])).values();
+    this.data.IDs.selected = [];
 
     //Derive additional variables.
     deriveVariables.call(this);

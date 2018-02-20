@@ -1,4 +1,5 @@
 import { select, set } from 'd3';
+import updatePopulationAnnotation from '../updatePopulationAnnotation';
 
 export default function applyFilters(d) {
     this.data.IDs.selected = [];
@@ -19,14 +20,16 @@ export default function applyFilters(d) {
     if (d.type === 'subsetter') {
         this.data.filtered = this.data.raw;
         this.controls.config.inputs
-            .filter(input => input.type === 'subsetter' && input.value !== 'All')
+            .filter(
+                input =>
+                    input.type === 'subsetter' && input.value !== 'All' && input.value !== undefined
+            )
             .forEach(input => {
-                this.data.filtered = this.data.filtered
-                    .filter(d => input.value === d[input.value_col]);
+                this.data.filtered = this.data.filtered.filter(
+                    d => input.value === d[input.value_col]
+                );
             });
         this.data.IDs.filtered = set(this.data.filtered.map(d => d[this.config.id_col])).values();
+        updatePopulationAnnotation.call(this);
     }
-
-    //Redraw listing.
-    this.listing.draw(this.data.filtered);
 }

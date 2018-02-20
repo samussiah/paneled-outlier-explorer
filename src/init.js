@@ -27,7 +27,7 @@ export default function init(data) {
 
     //Initialize listing.
     this.listing.config.cols = Object.keys(data[0]).filter(
-        key => ['measure_unit', 'unscheduled'].indexOf(key) === -1
+        key => ['measure_unit', 'unscheduled', 'outlier'].indexOf(key) === -1
     ); // remove system variables from listing
     this.listing.init(this.data.raw);
 

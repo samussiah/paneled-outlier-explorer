@@ -80,24 +80,22 @@ export default function defineStyles() {
                 '    width: 75%;' +
                 '    float: right;' +
                 '}',
+            '#paneled-outlier-explorer ul#navigation-bar li {' +
+                '    display: block;' +
+                '    color: white;' +
+                '    text-align: center;' +
+                '}',
             '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
                 '    float: left;' +
                 '    cursor: pointer;' +
                 '    font-size: 24px;' +
-                '    display: block;' +
-                '    color: white;' +
-                '    text-align: center;' +
                 '    padding: 14px 16px;' +
                 '    text-decoration: none;' +
                 '}',
             '#paneled-outlier-explorer ul#navigation-bar li#population-annotation {' +
                 '    float: right;' +
                 '    font-size: 16px;' +
-                '    display: block;' +
-                '    color: white;' +
-                '    text-align: center;' +
-                '    padding: 22px 16px;' +
-                '    text-decoration: none;' +
+                '    padding: 18px 16px;' +
                 '}',
             '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +
                 '    background-color: #111;' +
@@ -179,6 +177,8 @@ export default function defineStyles() {
                 '    overflow-x: scroll;' +
                 '}',
             '#paneled-outlier-explorer div.wc-chart#Listing table {' +
+                '    width: 100%;' +
+                '    display: table;' +
                 '}',
 
         /***--------------------------------------------------------------------------------------\

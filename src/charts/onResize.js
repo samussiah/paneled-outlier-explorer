@@ -4,6 +4,7 @@ import handleNoData from './onResize/handleNoData';
 import drawNormalRange from './onResize/drawNormalRange';
 import annotateInliers from './onResize/annotateInliers';
 import attachLines from './onResize/attachLines';
+import identifyPoints from './onResize/identifyPoints';
 import brush from './onResize/brush';
 import rotateXaxisTickLabels from './onResize/rotateXaxisTickLabels';
 
@@ -25,6 +26,9 @@ export default function onResize() {
 
         //Attach lines to chart object.
         attachLines.call(this);
+
+        //Identify lines with only one node.
+        identifyPoints.call(this);
 
         //Add brush functionality.
         brush.call(this);

@@ -239,6 +239,10 @@
                     '    stroke: green;' +
                     '    stroke-opacity: 1;' +
                     '}',
+                '#paneled-outlier-explorer .single-point {' +
+                    '    stroke-width: 3;' +
+                    '    stroke-opacity: 1;' +
+                    '}',
 
                 /***--------------------------------------------------------------------------------------\
       Listing
@@ -1730,6 +1734,14 @@
         });
     }
 
+    function identifyPoints() {
+        this.lines
+            .filter(function(d) {
+                return d.lines.length === 0;
+            })
+            .classed('single-point', true);
+    }
+
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
             this.parentNode.appendChild(this);
@@ -1853,6 +1865,8 @@
     }
 
     function highlightChart() {
+        var _this = this;
+
         var extent$$1 = this.package.brush.extent();
         var x0 = extent$$1[0][0]; // top left x-coordinate
         var y0 = extent$$1[1][1]; // top left y-coordinate
@@ -1867,20 +1881,32 @@
         //Determine which lines fall inside the brush.
         this.lines.classed('brushed', function(d) {
             d.intersection = false;
-            d.lines.forEach(function(line) {
-                sides.forEach(function(side) {
-                    if (!d.intersection)
-                        d.intersection = doLineSegmentsIntersect(
-                            { x: line.x0, y: line.y0 },
-                            { x: line.x1, y: line.y1 },
-                            { x: side.x0, y: side.y0 },
-                            { x: side.x1, y: side.y1 }
-                        );
+            //lines
+            if (d.lines.length) {
+                d.lines.forEach(function(line) {
+                    sides.forEach(function(side) {
+                        if (!d.intersection)
+                            d.intersection = doLineSegmentsIntersect(
+                                { x: line.x0, y: line.y0 },
+                                { x: line.x1, y: line.y1 },
+                                { x: side.x0, y: side.y0 },
+                                { x: side.x1, y: side.y1 }
+                            );
+                    });
                 });
-            });
+            } else {
+                //points
+                var x =
+                    _this.config.x.type === 'linear'
+                        ? d.values[0].values.x
+                        : _this.x(d.values[0].values.x) + _this.x.rangeBand() / 2;
+                var y = d.values[0].values.y;
+                d.intersection = x0 <= x && x <= x1 && y1 <= y && y <= y0;
+            }
 
             return d.intersection;
         });
+
         this.parent.data.IDs.selected = this.lines
             .data()
             .filter(function(d) {
@@ -2041,6 +2067,9 @@
 
             //Attach lines to chart object.
             attachLines.call(this);
+
+            //Identify lines with only one node.
+            identifyPoints.call(this);
 
             //Add brush functionality.
             brush.call(this);

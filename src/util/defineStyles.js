@@ -165,6 +165,10 @@ export default function defineStyles() {
                 '    stroke: green;' +
                 '    stroke-opacity: 1;' +
                 '}',
+            '#paneled-outlier-explorer .single-point {' +
+                '    stroke-width: 3;' +
+                '    stroke-opacity: 1;' +
+                '}',
 
         /***--------------------------------------------------------------------------------------\
           Listing

@@ -18,7 +18,7 @@ export default function brush() {
     this.package.brush
         .on('brushstart', () => {
             //Clear previous brush.
-            if (this.parent.brushedChart)
+            if (this.parent.brushedChart && this.parent.brushedMeasure !== this.data.measure)
                 this.parent.brushedChart.package.overlay.call(
                     this.parent.brushedChart.package.brush.clear()
                 );

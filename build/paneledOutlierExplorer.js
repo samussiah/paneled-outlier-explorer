@@ -438,6 +438,7 @@
         filters: null,
         rotate_x_tick_labels: true,
         inliers: false,
+        visits_without_data: false,
 
         x: {
             type: null, // sync to [ time_cols[0].type ]
@@ -495,6 +496,11 @@
             type: 'checkbox',
             label: 'Inliers',
             option: 'inliers'
+        },
+        {
+            type: 'checkbox',
+            label: 'Visits without data',
+            option: 'visits_without_data'
         }
     ];
 
@@ -935,7 +941,7 @@
         layout.call(this);
 
         //Initialize charts.
-        webcharts.multiply(this, this.data.raw, 'measure_unit');
+        webcharts.multiply(this, this.data.raw, 'measure_unit', this.config.allMeasures);
 
         //Initialize listing.
         this.listing.config.cols = Object.keys(data[0]).filter(function(key) {
@@ -1121,21 +1127,45 @@
             .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
     }
 
+    function removeVisitsWithoutData() {
+        var _this = this;
+
+        if (!this.config.visits_without_data)
+            this.config.x.domain = this.config.x.domain.filter(function(visit) {
+                return (
+                    d3
+                        .set(
+                            _this.measure_data.map(function(d) {
+                                return d[_this.config.x.column];
+                            })
+                        )
+                        .values()
+                        .indexOf(visit) > -1
+                );
+            });
+    }
+
     function setXoptions() {
         var _this = this;
 
-        //Sync config with X-axis selection.
-        var xInput = this.controls.config.inputs.find(function(input) {
-                return input.label === 'X-axis';
-            }),
-            time_col = this.config.time_cols.find(function(time_col) {
+        //Update x-object.
+        Object.assign(
+            this.config.x,
+            this.config.time_cols.find(function(time_col) {
                 return time_col.value_col === _this.config.x.column;
-            });
+            })
+        );
 
-        this.config.x.type = time_col.type;
-        this.config.x.order = time_col.order;
-        this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
-        this.config.margin.bottom = time_col.vertical_space;
+        //Remove visits without data from x-domain if x-type is ordinal.
+        if (this.config.x.type === 'ordinal') {
+            removeVisitsWithoutData.call(this);
+        }
+
+        //Delete domain setting if x-type is linear
+        if (this.config.x.type !== 'ordinal') delete this.config.x.domain;
+
+        //Update bottom margin.
+        this.config.margin.bottom = this.config.x.vertical_space;
     }
 
     function setYoptions() {

@@ -22,7 +22,7 @@ export default function init(data) {
     layout.call(this);
 
     //Initialize charts.
-    multiply(this, this.data.raw, 'measure_unit');
+    multiply(this, this.data.raw, 'measure_unit', this.config.allMeasures);
 
     //Initialize listing.
     this.listing.config.cols = Object.keys(data[0]).filter(

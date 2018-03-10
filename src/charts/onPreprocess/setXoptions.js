@@ -1,12 +1,20 @@
-export default function setXoptions() {
-    //Sync config with X-axis selection.
-    const xInput = this.controls.config.inputs.find(input => input.label === 'X-axis'),
-        time_col = this.config.time_cols.find(
-            time_col => time_col.value_col === this.config.x.column
-        );
+import removeVisitsWithoutData from './setXoptions/removeVisitsWithoutData';
 
-    this.config.x.type = time_col.type;
-    this.config.x.order = time_col.order;
-    this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
-    this.config.margin.bottom = time_col.vertical_space;
+export default function setXoptions() {
+    //Update x-object.
+    Object.assign(
+        this.config.x,
+        this.config.time_cols.find(time_col => time_col.value_col === this.config.x.column)
+    );
+
+    //Remove visits without data from x-domain if x-type is ordinal.
+    if (this.config.x.type === 'ordinal') {
+        removeVisitsWithoutData.call(this);
+    }
+
+    //Delete domain setting if x-type is linear
+    if (this.config.x.type !== 'ordinal') delete this.config.x.domain;
+
+    //Update bottom margin.
+    this.config.margin.bottom = this.config.x.vertical_space;
 }

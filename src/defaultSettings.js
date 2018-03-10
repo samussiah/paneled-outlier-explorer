@@ -31,6 +31,7 @@ export default {
     filters: null,
     rotate_x_tick_labels: true,
     inliers: false,
+    visits_without_data: false,
 
     x: {
         type: null, // sync to [ time_cols[0].type ]
@@ -88,6 +89,11 @@ export const controlInputs = [
         type: 'checkbox',
         label: 'Inliers',
         option: 'inliers'
+    },
+    {
+        type: 'checkbox',
+        label: 'Visits without data',
+        option: 'visits_without_data'
     }
 ];
 

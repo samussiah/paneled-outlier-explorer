@@ -1,10 +1,9 @@
 import defineData from './init/defineData';
 import captureMeasures from './init/captureMeasures';
 import defineVisitOrder from './init/defineVisitOrder';
-import { select } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
-import applyFilters from './init/applyFilters';
+import customizeControls from './init/customizeControls';
 
 export default function init(data) {
     const chart = this;
@@ -31,24 +30,5 @@ export default function init(data) {
     this.listing.init(this.data.raw);
 
     //Define custom event listener for filters.
-    const controls = this.controls.wrap.selectAll('.control-group');
-    controls
-        .filter(control => control.label === 'X-axis')
-        .selectAll('option')
-        .property(
-            'label',
-            d => this.config.time_cols.filter(time_col => time_col.value_col === d).pop().label
-        );
-
-    controls.on('change', function(d) {
-        if (['dropdown', 'subsetter'].indexOf(d.type) > -1) {
-            d.value = select(this)
-                .selectAll('option')
-                .filter(function() {
-                    return this.selected;
-                })
-                .text();
-            applyFilters.call(chart, d);
-        }
-    });
+    customizeControls.call(this);
 }

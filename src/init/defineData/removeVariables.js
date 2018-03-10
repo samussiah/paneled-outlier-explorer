@@ -1,6 +1,7 @@
 import { set, merge } from 'd3';
 
 export default function removeVariables() {
+    //Define set of required variables.
     this.config.variables = set(
         merge([
             [this.config.measure_col],
@@ -17,8 +18,21 @@ export default function removeVariables() {
         .values()
         .filter(variable => Object.keys(this.data.initial[0]).indexOf(variable) > -1);
 
+    //Delete extraneous variables.
     this.data.initial.forEach(d => {
         for (const variable in d)
             if (this.config.variables.indexOf(variable) < 0) delete d[variable];
     });
+
+    //If data do not have normal range variables update normal range method setting and options.
+    if (
+        this.config.variables.indexOf(this.config.lln_col) < 0 ||
+        this.config.variables.indexOf(this.config.uln_col) < 0
+    ) {
+        if (this.config.normal_range_method === 'LLN-ULN')
+            this.config.normal_range_method = 'Standard Deviation';
+        this.controls.config.inputs
+            .find(input => input.option === 'normal_range_method')
+            .values.splice(1, 1);
+    }
 }

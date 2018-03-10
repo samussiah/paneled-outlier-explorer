@@ -1,4 +1,5 @@
 import removeVisitsWithoutData from './setXoptions/removeVisitsWithoutData';
+import removeUnscheduledVisits from './setXoptions/removeUnscheduledVisits';
 
 export default function setXoptions() {
     //Update x-object.
@@ -9,7 +10,9 @@ export default function setXoptions() {
 
     //Remove visits without data from x-domain if x-type is ordinal.
     if (this.config.x.type === 'ordinal') {
+        this.config.x.domain = this.config.x.order;
         removeVisitsWithoutData.call(this);
+        removeUnscheduledVisits.call(this);
     }
 
     //Delete domain setting if x-type is linear

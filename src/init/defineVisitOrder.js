@@ -48,6 +48,7 @@ export default function defineVisitOrder() {
             //Define domain.
             time_settings.domain = time_settings.order;
         } else if (time_settings.type === 'linear') {
+            time_settings.order = null;
             time_settings.domain = extent(this.data.raw, d => +d[time_settings.value_col]);
         }
     });

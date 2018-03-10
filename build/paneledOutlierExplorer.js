@@ -439,12 +439,14 @@
         rotate_x_tick_labels: true,
         inliers: false,
         visits_without_data: false,
+        unscheduled_visits: false,
+        unscheduled_visit_pattern: '/unscheduled|early termination/i',
+        unscheduled_visit_values: null, // takes precedence over unscheduled_visit_pattern   visits_without_data: false,
 
         x: {
             type: null, // sync to [ time_cols[0].type ]
             column: null, // sync to [ time_cols[0].value_col ]
-            label: '',
-            behavior: 'flex' // sync to [ time_cols[0].label ]
+            label: '' // sync to [ time_cols[0].label ]
         },
         y: {
             type: 'linear',
@@ -482,6 +484,19 @@
         syncedSettings.y.column = settings.value_col;
         syncedSettings.marks[0].per = [settings.id_col, settings.measure_col];
 
+        //Convert unscheduled_visit_pattern from string to regular expression.
+        if (
+            typeof syncedSettings.unscheduled_visit_pattern === 'string' &&
+            syncedSettings.unscheduled_visit_pattern !== ''
+        ) {
+            var flags = settings.unscheduled_visit_pattern.replace(/.*?\/([gimy]*)$/, '$1'),
+                pattern = settings.unscheduled_visit_pattern.replace(
+                    new RegExp('^/(.*?)/' + flags + '$'),
+                    '$1'
+                );
+            syncedSettings.unscheduled_visit_regex = new RegExp(pattern, flags);
+        }
+
         return syncedSettings;
     }
 
@@ -501,6 +516,11 @@
             type: 'checkbox',
             label: 'Visits without data',
             option: 'visits_without_data'
+        },
+        {
+            type: 'checkbox',
+            label: 'Unscheduled visits',
+            option: 'unscheduled_visits'
         }
     ];
 
@@ -523,6 +543,17 @@
                     multiple: false
                 });
             });
+
+        //Remove unscheduled visit control if unscheduled visit pattern is unscpecified.
+        if (!(settings.unscheduled_visit_regex || settings.unscheduled_visit_values))
+            controlInputs.splice(
+                controlInputs
+                    .map(function(controlInput) {
+                        return controlInput.label;
+                    })
+                    .indexOf('Unscheduled visits'),
+                1
+            );
 
         return syncedControlInputs;
     }
@@ -567,6 +598,10 @@
     function deriveVariables() {
         var _this = this;
 
+        var ordinalTimeSettings = this.config.time_cols.find(function(time_col) {
+            return time_col.type === 'ordinal';
+        });
+
         this.data.raw.forEach(function(d) {
             //brushed datum placeholder
             d.brushed = false;
@@ -587,6 +622,20 @@
                         ? +d[_this.config.value_col] > +d[_this.config.uln_col]
                         : false;
             d.abnormal = lo || hi;
+
+            //Identify unscheduled visits.
+            d.unscheduled = false;
+            if (ordinalTimeSettings) {
+                if (_this.config.unscheduled_visit_values)
+                    d.unscheduled =
+                        _this.config.unscheduled_visit_values.indexOf(
+                            d[ordinalTimeSettings.value_col]
+                        ) > -1;
+                else if (_this.config.unscheduled_visit_regex)
+                    d.unscheduled = _this.config.unscheduled_visit_regex.test(
+                        d[ordinalTimeSettings.value_col]
+                    );
+            }
         });
     }
 
@@ -720,6 +769,7 @@
                 //Define domain.
                 time_settings.domain = time_settings.order;
             } else if (time_settings.type === 'linear') {
+                time_settings.order = null;
                 time_settings.domain = d3.extent(_this.data.raw, function(d) {
                     return +d[time_settings.value_col];
                 });
@@ -1130,7 +1180,7 @@
     function removeVisitsWithoutData() {
         var _this = this;
 
-        if (!this.config.visits_without_data)
+        if (!this.config.visits_without_data) {
             this.config.x.domain = this.config.x.domain.filter(function(visit) {
                 return (
                     d3
@@ -1143,6 +1193,22 @@
                         .indexOf(visit) > -1
                 );
             });
+        }
+    }
+
+    function removeUnscheduledVisits() {
+        var _this = this;
+
+        if (!this.config.unscheduled_visits) {
+            if (this.config.unscheduled_visit_values)
+                this.config.x.domain = this.config.x.domain.filter(function(visit) {
+                    return _this.config.unscheduled_visit_values.indexOf(visit) < 0;
+                });
+            else if (this.config.unscheduled_visit_regex)
+                this.config.x.domain = this.config.x.domain.filter(function(visit) {
+                    return !_this.config.unscheduled_visit_regex.test(visit);
+                });
+        }
     }
 
     function setXoptions() {
@@ -1158,7 +1224,9 @@
 
         //Remove visits without data from x-domain if x-type is ordinal.
         if (this.config.x.type === 'ordinal') {
+            this.config.x.domain = this.config.x.order;
             removeVisitsWithoutData.call(this);
+            removeUnscheduledVisits.call(this);
         }
 
         //Delete domain setting if x-type is linear
@@ -1178,18 +1246,22 @@
         this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
     }
 
-    function handleInliers() {
-        if (this.config.inliers) this.raw_data = this.measure_data;
-        else
-            this.raw_data = this.measure_data.filter(function(d) {
+    function filterData() {
+        this.raw_data = this.measure_data;
+        if (!this.config.inliers)
+            this.raw_data = this.raw_data.filter(function(d) {
                 return d.abnormalID;
+            });
+        if (!this.config.unscheduled_visits)
+            this.raw_data = this.raw_data.filter(function(d) {
+                return !d.unscheduled;
             });
     }
 
     function onPreprocess() {
         setXoptions.call(this);
         setYoptions.call(this);
-        handleInliers.call(this);
+        filterData.call(this);
     }
 
     function onDatatransform() {}

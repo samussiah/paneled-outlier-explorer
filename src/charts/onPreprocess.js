@@ -1,9 +1,9 @@
 import setXoptions from './onPreprocess/setXoptions';
 import setYoptions from './onPreprocess/setYoptions';
-import handleInliers from './onPreprocess/handleInliers';
+import filterData from './onPreprocess/filterData';
 
 export default function onPreprocess() {
     setXoptions.call(this);
     setYoptions.call(this);
-    handleInliers.call(this);
+    filterData.call(this);
 }

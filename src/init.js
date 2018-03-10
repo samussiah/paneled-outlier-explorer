@@ -1,5 +1,6 @@
 import defineData from './init/defineData';
 import captureMeasures from './init/captureMeasures';
+import defineVisitOrder from './init/defineVisitOrder';
 import { select } from 'd3';
 import { multiply } from 'webcharts';
 import layout from './init/layout';
@@ -13,6 +14,9 @@ export default function init(data) {
 
     //Capture unique set of measures in data.
     captureMeasures.call(this);
+
+    //Capture ordered set of visits.
+    defineVisitOrder.call(this);
 
     //Define layout of renderer.
     layout.call(this);

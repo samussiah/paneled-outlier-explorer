@@ -1,7 +1,7 @@
 import { set } from 'd3';
 
 export default function captureMeasures() {
-    this.config.allMeasures = set(this.data.sorted.map(d => d.measure_unit))
+    this.config.allMeasures = set(this.data.raw.map(d => d.measure_unit))
         .values()
         .sort((a, b) => {
             const leftSort = a < b,

@@ -1,3 +1,9 @@
+import setCurrentMeasure from './onInit/setCurrentMeasure';
+import defineData from './onInit/defineData';
+import identifyNormalParticipants from './onInit/identifyNormalParticipants';
+
 export default function onInit() {
-    this.currentMeasure = this.filters[0].val;
+    setCurrentMeasure.call(this);
+    defineData.call(this);
+    identifyNormalParticipants.call(this);
 }

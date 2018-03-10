@@ -7,6 +7,75 @@
 })(this, function(d3, webcharts) {
     'use strict';
 
+    if (typeof Object.assign != 'function') {
+        (function() {
+            Object.assign = function(target) {
+                'use strict';
+
+                if (target === undefined || target === null) {
+                    throw new TypeError('Cannot convert undefined or null to object');
+                }
+
+                var output = Object(target);
+                for (var index = 1; index < arguments.length; index++) {
+                    var source = arguments[index];
+                    if (source !== undefined && source !== null) {
+                        for (var nextKey in source) {
+                            if (source.hasOwnProperty(nextKey)) {
+                                output[nextKey] = source[nextKey];
+                            }
+                        }
+                    }
+                }
+                return output;
+            };
+        })();
+    }
+
+    if (!Array.prototype.find) {
+        Object.defineProperty(Array.prototype, 'find', {
+            value: function value(predicate) {
+                // 1. Let O be ? ToObject(this value).
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
+                }
+
+                var o = Object(this);
+
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
+
+                // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                if (typeof predicate !== 'function') {
+                    throw new TypeError('predicate must be a function');
+                }
+
+                // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                var thisArg = arguments[1];
+
+                // 5. Let k be 0.
+                var k = 0;
+
+                // 6. Repeat, while k < len
+                while (k < len) {
+                    // a. Let Pk be ! ToString(k).
+                    // b. Let kValue be ? Get(O, Pk).
+                    // c. Let testResult be ToBoolean(? Call(predicate, T, � kValue, k, O �)).
+                    // d. If testResult is true, return kValue.
+                    var kValue = o[k];
+                    if (predicate.call(thisArg, kValue, k, o)) {
+                        return kValue;
+                    }
+                    // e. Increase k by 1.
+                    k++;
+                }
+
+                // 7. Return undefined.
+                return undefined;
+            }
+        });
+    }
+
     function defineStyles() {
         var styles = [
                 /***--------------------------------------------------------------------------------------\
@@ -338,42 +407,9 @@
         throw new Error('Unable to copy [obj]! Its type is not supported.');
     }
 
-    if (typeof Object.assign != 'function') {
-        (function() {
-            Object.assign = function(target) {
-                'use strict';
-
-                if (target === undefined || target === null) {
-                    throw new TypeError('Cannot convert undefined or null to object');
-                }
-
-                var output = Object(target);
-                for (var index = 1; index < arguments.length; index++) {
-                    var source = arguments[index];
-                    if (source !== undefined && source !== null) {
-                        for (var nextKey in source) {
-                            if (source.hasOwnProperty(nextKey)) {
-                                output[nextKey] = source[nextKey];
-                            }
-                        }
-                    }
-                }
-                return output;
-            };
-        })();
-    }
-
     var defaultSettings = {
         measure_col: 'TEST',
         time_cols: [
-            {
-                value_col: 'DY',
-                type: 'linear',
-                order: null,
-                label: 'Study Day',
-                rotate_tick_labels: false,
-                vertical_space: 0
-            },
             {
                 value_col: 'VISIT',
                 type: 'ordinal',
@@ -381,6 +417,14 @@
                 label: 'Visit',
                 rotate_tick_labels: true,
                 vertical_space: 75
+            },
+            {
+                value_col: 'DY',
+                type: 'linear',
+                order: null,
+                label: 'Study Day',
+                rotate_tick_labels: false,
+                vertical_space: 0
             },
             {
                 value_col: 'VISITN',
@@ -399,11 +443,13 @@
         measures: null,
         filters: null,
         rotate_x_tick_labels: true,
+        inliers: false,
 
         x: {
             type: null, // sync to [ time_cols[0].type ]
             column: null, // sync to [ time_cols[0].value_col ]
-            label: '' // sync to [ time_cols[0].label ]
+            label: '',
+            behavior: 'flex' // sync to [ time_cols[0].label ]
         },
         y: {
             type: 'linear',
@@ -423,8 +469,8 @@
         ],
         resizable: false,
         scale_text: false,
-        width: 400,
-        height: 200,
+        width: 350,
+        height: 175,
         margin: {
             bottom: 0,
             left: 50
@@ -450,6 +496,11 @@
             label: 'X-axis',
             option: 'x.column',
             require: true
+        },
+        {
+            type: 'checkbox',
+            label: 'Inliers',
+            option: 'inliers'
         }
     ];
 
@@ -476,58 +527,93 @@
         return syncedControlInputs;
     }
 
-    function defineData(data) {
+    function removeVariables() {
         var _this = this;
 
-        this.data = {
-            raw: data,
-            sorted: data
-                .filter(function(d) {
-                    return (
-                        /^[0-9.]+$/.test(d[_this.config.value_col]) &&
-                        !/^\s*$/.test(d[_this.config.measure_col])
-                    );
-                })
-                .sort(function(a, b) {
-                    var aValue = a[_this.config.measure_col],
-                        bValue = b[_this.config.measure_col],
-                        leftSort = aValue < bValue,
-                        rightSort = aValue > bValue,
-                        aID = a[_this.config.id_col],
-                        bID = b[_this.config.id_col],
-                        aTime = a[_this.config.time_col],
-                        bTime = b[_this.config.time_col];
+        this.config.variables = d3
+            .set(
+                d3.merge([
+                    [this.config.measure_col],
+                    [this.config.id_col],
+                    this.config.time_cols.map(function(time_col) {
+                        return time_col.value_col;
+                    }),
+                    [this.config.value_col],
+                    [this.config.unit_col],
+                    [this.config.lln_col],
+                    [this.config.uln_col],
+                    this.config.filters
+                        ? this.config.filters.map(function(filter) {
+                              return filter.value_col;
+                          })
+                        : []
+                ])
+            )
+            .values()
+            .filter(function(variable) {
+                return Object.keys(_this.data.initial[0]).indexOf(variable) > -1;
+            });
 
-                    var sort = void 0;
-                    if (_this.config.measures && _this.config.measures.length) {
-                        var aPos = _this.config.measures.indexOf(aValue),
-                            bPos = _this.config.measures.indexOf(bValue),
-                            diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
+        this.data.initial.forEach(function(d) {
+            for (var variable in d) {
+                if (_this.config.variables.indexOf(variable) < 0) delete d[variable];
+            }
+        });
+    }
 
-                        sort = diff
-                            ? diff
-                            : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
-                    } else sort = leftSort ? -1 : rightSort ? 1 : 0;
+    function deriveVariables() {
+        var _this = this;
 
-                    if (!sort) sort = aID < bID ? -1 : aID > bID ? 1 : +aTime - +bTime;
-
-                    return sort;
-                })
-        };
-        if (this.data.raw.length !== this.data.sorted.length)
-            console.warn(
-                this.data.raw.length -
-                    this.data.sorted.length +
-                    ' non-numeric observations have been removed from the data.'
-            );
-        this.data.sorted.forEach(function(d) {
+        this.data.raw.forEach(function(d) {
             d.brushed = false;
             if (d[_this.config.unit_col])
                 d.measure_unit =
                     d[_this.config.measure_col] + ' (' + d[_this.config.unit_col] + ')';
             else d.measure_unit = d[_this.config.measure_col];
+
+            var lo =
+                    d[_this.config.lln_col] !== undefined
+                        ? +d[_this.config.value_col] < +d[_this.config.lln_col]
+                        : false,
+                hi =
+                    d[_this.config.uln_col] !== undefined
+                        ? +d[_this.config.value_col] > +d[_this.config.uln_col]
+                        : false;
+            d.abnormal = lo || hi;
         });
-        this.data.filtered = this.data.sorted;
+    }
+
+    function defineData(data) {
+        var _this = this;
+
+        this.data = {
+            initial: data
+        };
+
+        //Remove extraneous variables.
+        removeVariables.call(this);
+
+        //Remove invalid data.
+        this.data.raw = this.data.initial.filter(function(d) {
+            return (
+                !/^\s*$/.test(d[_this.config.measure_col]) &&
+                /^[0-9.]+$/.test(d[_this.config.value_col])
+            );
+        });
+
+        //Derive additional variables.
+        deriveVariables.call(this);
+
+        //Warn user of dropped records.
+        if (this.data.raw.length !== this.data.initial.length)
+            console.warn(
+                this.data.initial.length -
+                    this.data.raw.length +
+                    ' non-numeric observations have been removed from the data.'
+            );
+
+        //Define placeholder data array.s
+        this.data.filtered = this.data.raw;
         this.data.brushed = [];
         this.data.selectedIDs = [];
     }
@@ -537,7 +623,7 @@
 
         this.config.allMeasures = d3
             .set(
-                this.data.sorted.map(function(d) {
+                this.data.raw.map(function(d) {
                     return d.measure_unit;
                 })
             )
@@ -738,7 +824,7 @@
 
         //Define filtered data.
         if (d.type === 'subsetter') {
-            this.data.filtered = this.data.sorted.filter(function(d) {
+            this.data.filtered = this.data.raw.filter(function(d) {
                 var filtered = false;
 
                 _this.controls.config.inputs
@@ -763,23 +849,23 @@
 
         var chart = this;
 
-        //Attach data arrays to central chart object.
+        //Attach various data arrays to charts.
         defineData.call(this, data);
 
-        //Capture unique measures in an array and define initially displayed measures.
+        //Capture unique set of measures in data.
         captureMeasures.call(this);
 
         //Define layout of renderer.
         layout.call(this);
 
         //Initialize charts.
-        webcharts.multiply(this, this.data.sorted, 'measure_unit');
+        webcharts.multiply(this, this.data.raw, 'measure_unit');
 
         //Initialize listing.
         this.listing.config.cols = Object.keys(data[0]).filter(function(key) {
-            return ['brushed', 'measure_unit'].indexOf(key) === -1;
+            return ['brushed', 'measure_unit', 'abnormal', 'abnormalID'].indexOf(key) === -1;
         }); // remove system variables from listing
-        this.listing.init(this.data.sorted);
+        this.listing.init(this.data.raw);
 
         //Define custom event listener for filters.
         var controls = this.controls.wrap.selectAll('.control-group');
@@ -797,19 +883,54 @@
             });
 
         controls.on('change', function(d) {
-            d.value = d3
-                .select(this)
-                .selectAll('option')
-                .filter(function() {
-                    return this.selected;
-                })
-                .text();
-            applyFilters.call(chart, d);
+            if (['dropdown', 'subsetter'].indexOf(d.type) > -1) {
+                d.value = d3
+                    .select(this)
+                    .selectAll('option')
+                    .filter(function() {
+                        return this.selected;
+                    })
+                    .text();
+                applyFilters.call(chart, d);
+            }
+        });
+    }
+
+    function setCurrentMeasure() {
+        this.currentMeasure = this.filters[0].val;
+    }
+
+    function defineData$1() {
+        var _this = this;
+
+        this.measure_data = this.raw_data.filter(function(d) {
+            return d.measure_unit === _this.currentMeasure;
+        });
+    }
+
+    function identifyNormalParticipants() {
+        var _this = this;
+
+        this.abnormalIDs = d3
+            .set(
+                this.measure_data
+                    .filter(function(d) {
+                        return d.abnormal;
+                    })
+                    .map(function(d) {
+                        return d[_this.config.id_col];
+                    })
+            )
+            .values();
+        this.measure_data.forEach(function(d) {
+            d.abnormalID = _this.abnormalIDs.indexOf(d[_this.config.id_col]) > -1;
         });
     }
 
     function onInit() {
-        this.currentMeasure = this.filters[0].val;
+        setCurrentMeasure.call(this);
+        defineData$1.call(this);
+        identifyNormalParticipants.call(this);
     }
 
     function minimize(chart) {
@@ -924,33 +1045,45 @@
             .classed('hidden', this.config.measures.indexOf(this.currentMeasure) === -1);
     }
 
-    function onPreprocess() {
+    function setXoptions() {
         var _this = this;
 
-        //Set the y-domain individually for each measure.
-        this.config.y.domain = d3.extent(
-            this.raw_data.filter(function(d) {
-                return d.measure_unit === _this.currentMeasure;
-            }),
-            function(d) {
-                return +d[_this.config.value_col];
-            }
-        );
-        var range = this.config.y.domain[1] - this.config.y.domain[0];
-        this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
-
         //Sync config with X-axis selection.
-        var xInput = this.controls.config.inputs.filter(function(input) {
+        var xInput = this.controls.config.inputs.find(function(input) {
                 return input.label === 'X-axis';
-            })[0],
-            time_col = this.config.time_cols.filter(function(time_col) {
+            }),
+            time_col = this.config.time_cols.find(function(time_col) {
                 return time_col.value_col === _this.config.x.column;
-            })[0];
+            });
 
         this.config.x.type = time_col.type;
         this.config.x.order = time_col.order;
         this.config.x.rotate_tick_labels = time_col.rotate_tick_labels;
         this.config.margin.bottom = time_col.vertical_space;
+    }
+
+    function setYoptions() {
+        var _this = this;
+
+        this.config.y.domain = d3.extent(this.measure_data, function(d) {
+            return +d[_this.config.value_col];
+        });
+        var range = this.config.y.domain[1] - this.config.y.domain[0];
+        this.config.y.format = range < 0.1 ? '.3f' : range < 1 ? '.2f' : range < 10 ? '.1f' : '1d';
+    }
+
+    function handleInliers() {
+        if (this.config.inliers) this.raw_data = this.measure_data;
+        else
+            this.raw_data = this.measure_data.filter(function(d) {
+                return d.abnormalID;
+            });
+    }
+
+    function onPreprocess() {
+        setXoptions.call(this);
+        setYoptions.call(this);
+        handleInliers.call(this);
     }
 
     function onDatatransform() {}
@@ -1371,6 +1504,7 @@
         onDestroy: onDestroy$1
     };
 
+    //Utility polyfills
     function paneledOutlierExplorer() {
         var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'body';
         var settings = arguments[1];

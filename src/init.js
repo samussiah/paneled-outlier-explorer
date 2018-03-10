@@ -8,23 +8,23 @@ import applyFilters from './init/applyFilters';
 export default function init(data) {
     const chart = this;
 
-    //Attach data arrays to central chart object.
+    //Attach various data arrays to charts.
     defineData.call(this, data);
 
-    //Capture unique measures in an array and define initially displayed measures.
+    //Capture unique set of measures in data.
     captureMeasures.call(this);
 
     //Define layout of renderer.
     layout.call(this);
 
     //Initialize charts.
-    multiply(this, this.data.sorted, 'measure_unit');
+    multiply(this, this.data.raw, 'measure_unit');
 
     //Initialize listing.
     this.listing.config.cols = Object.keys(data[0]).filter(
-        key => ['brushed', 'measure_unit'].indexOf(key) === -1
+        key => ['brushed', 'measure_unit', 'abnormal', 'abnormalID'].indexOf(key) === -1
     ); // remove system variables from listing
-    this.listing.init(this.data.sorted);
+    this.listing.init(this.data.raw);
 
     //Define custom event listener for filters.
     const controls = this.controls.wrap.selectAll('.control-group');
@@ -37,12 +37,14 @@ export default function init(data) {
         );
 
     controls.on('change', function(d) {
-        d.value = select(this)
-            .selectAll('option')
-            .filter(function() {
-                return this.selected;
-            })
-            .text();
-        applyFilters.call(chart, d);
+        if (['dropdown', 'subsetter'].indexOf(d.type) > -1) {
+            d.value = select(this)
+                .selectAll('option')
+                .filter(function() {
+                    return this.selected;
+                })
+                .text();
+            applyFilters.call(chart, d);
+        }
     });
 }

@@ -15,20 +15,32 @@ export default function highlightChart() {
     //Determine which lines fall inside the brush.
     this.lines.classed('brushed', d => {
         d.intersection = false;
-        d.lines.forEach(line => {
-            sides.forEach(side => {
-                if (!d.intersection)
-                    d.intersection = doLineSegmentsIntersect(
-                        { x: line.x0, y: line.y0 },
-                        { x: line.x1, y: line.y1 },
-                        { x: side.x0, y: side.y0 },
-                        { x: side.x1, y: side.y1 }
-                    );
+        //lines
+        if (d.lines.length) {
+            d.lines.forEach(line => {
+                sides.forEach(side => {
+                    if (!d.intersection)
+                        d.intersection = doLineSegmentsIntersect(
+                            { x: line.x0, y: line.y0 },
+                            { x: line.x1, y: line.y1 },
+                            { x: side.x0, y: side.y0 },
+                            { x: side.x1, y: side.y1 }
+                        );
+                });
             });
-        });
+        } else {
+            //points
+            const x =
+                this.config.x.type === 'linear'
+                    ? d.values[0].values.x
+                    : this.x(d.values[0].values.x) + this.x.rangeBand() / 2;
+            const y = d.values[0].values.y;
+            d.intersection = x0 <= x && x <= x1 && y1 <= y && y <= y0;
+        }
 
         return d.intersection;
     });
+
     this.parent.data.IDs.selected = this.lines
         .data()
         .filter(d => d.intersection)

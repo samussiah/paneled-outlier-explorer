@@ -1,7 +1,5 @@
-import setCurrentMeasure from './onInit/setCurrentMeasure';
-import defineMeasureData from './onInit/defineMeasureData';
+import defineData from './onInit/defineData';
 
 export default function onInit() {
-    setCurrentMeasure.call(this);
-    defineMeasureData.call(this);
+    defineData.call(this);
 }

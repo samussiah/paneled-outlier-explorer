@@ -1,17 +1,16 @@
-import setXoptions from './onPreprocess/setXoptions';
-import setYoptions from './onPreprocess/setYoptions';
+import defineXsettings from './onPreprocess/defineXsettings';
+import defineYsettings from './onPreprocess/defineYsettings';
 import deriveStatistics from './onPreprocess/deriveStatistics';
 import deriveVariables from './onPreprocess/deriveVariables';
-import identifyNormalParticipants from './onPreprocess/identifyNormalParticipants';
-import filterData from './onPreprocess/filterData';
-import hideNormalRangeControls from './onPreprocess/hideNormalRangeControls';
+import defineFilteredData from './onPreprocess/defineFilteredData';
+import defineDisplayedData from './onPreprocess/defineDisplayedData';
 
 export default function onPreprocess() {
-    setXoptions.call(this);
-    setYoptions.call(this);
+    defineXsettings.call(this);
+    defineYsettings.call(this);
     deriveStatistics.call(this);
     deriveVariables.call(this);
-    identifyNormalParticipants.call(this);
-    filterData.call(this);
-    hideNormalRangeControls.call(this);
+    defineFilteredData.call(this);
+    defineDisplayedData.call(this);
+    this.raw_data = this.data.displayed;
 }

@@ -34,7 +34,7 @@ export default function paneledOutlierExplorer(element = 'body', settings) {
             inputs: syncedControlInputs
         }),
         chart = createChart(containerElement, syncedSettings, controls),
-        listing = createTable(containerElement, {}, controls);
+        listing = createTable(containerElement, {nRowsPerPage: 25}, controls);
 
     //Attach stuff to chart.
     chart.container = container;

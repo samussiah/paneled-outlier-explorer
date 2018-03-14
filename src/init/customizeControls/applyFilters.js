@@ -1,8 +1,8 @@
-import { select } from 'd3';
+import { select, set } from 'd3';
+import updatePopulationAnnotation from '../updatePopulationAnnotation';
 
 export default function applyFilters(d) {
-    this.data.brushed = [];
-    this.data.selectedIDs = [];
+    this.data.IDs.selected = [];
 
     //Reset brush.
     this.multiples.forEach(multiple => {
@@ -18,18 +18,18 @@ export default function applyFilters(d) {
 
     //Define filtered data.
     if (d.type === 'subsetter') {
-        this.data.filtered = this.data.raw.filter(d => {
-            let filtered = false;
-
-            this.controls.config.inputs.filter(d => d.type === 'subsetter').forEach(filter => {
-                if (!filtered && filter.value && filter.value !== 'All')
-                    filtered = d[filter.value_col] !== filter.value;
+        this.data.filtered = this.data.raw;
+        this.controls.config.inputs
+            .filter(
+                input =>
+                    input.type === 'subsetter' && input.value !== 'All' && input.value !== undefined
+            )
+            .forEach(input => {
+                this.data.filtered = this.data.filtered.filter(
+                    d => input.value === d[input.value_col]
+                );
             });
-
-            return !filtered;
-        });
+        this.data.IDs.filtered = set(this.data.filtered.map(d => d[this.config.id_col])).values();
+        updatePopulationAnnotation.call(this);
     }
-
-    //Redraw listing.
-    this.listing.draw(this.data.filtered);
 }

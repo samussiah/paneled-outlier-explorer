@@ -1,6 +1,8 @@
 import minimize from './minimize';
 
 export default function m__imize(chart) {
+    chart.config.previous_plot_width = chart.plot_width;
+
     //Maximize chart.
     if (!chart.wrap.classed('expanded')) {
         //Clear previously expanded chart.
@@ -25,9 +27,9 @@ export default function m__imize(chart) {
 
         //Sort expanded chart first.
         chart.parent.wrap.selectAll('.wc-chart').sort(function(a, b) {
-            return a.measure === chart.currentMeasure
+            return a.measure === chart.data.measure
                 ? -1
-                : b.measure === chart.currentMeasure
+                : b.measure === chart.data.measure
                   ? 1
                   : chart.config.measures.indexOf(a.measure) -
                     chart.config.measures.indexOf(b.measure);

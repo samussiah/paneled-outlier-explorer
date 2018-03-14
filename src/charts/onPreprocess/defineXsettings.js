@@ -1,12 +1,13 @@
-import removeVisitsWithoutData from './setXoptions/removeVisitsWithoutData';
-import removeUnscheduledVisits from './setXoptions/removeUnscheduledVisits';
+import removeVisitsWithoutData from './defineXsettings/removeVisitsWithoutData';
+import removeUnscheduledVisits from './defineXsettings/removeUnscheduledVisits';
 
-export default function setXoptions() {
+export default function defineXsettings() {
     //Update x-object.
     Object.assign(
         this.config.x,
         this.config.time_cols.find(time_col => time_col.value_col === this.config.x.column)
     );
+    this.config.x.label = '';
 
     //Remove visits without data from x-domain if x-type is ordinal.
     if (this.config.x.type === 'ordinal') {

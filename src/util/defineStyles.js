@@ -33,6 +33,11 @@ export default function defineStyles() {
                 '    float: left;' +
                 '    clear: left;' +
                 '    margin: 0 0 2px 0;' +
+                '    border: 1px solid white;' +
+                '}',
+            '#paneled-outlier-explorer #left-side .wc-controls .control-group.inlier-highlighting {' +
+                '    background-color: rgba(0,255,0,.05);' +
+                '    border: 1px solid green;' +
                 '}',
             '#paneled-outlier-explorer #left-side .wc-controls .control-group > * {' +
                 '    display: inline-block;' +
@@ -75,15 +80,22 @@ export default function defineStyles() {
                 '    width: 75%;' +
                 '    float: right;' +
                 '}',
-            '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
-                '    float: left;' +
-                '    cursor: pointer;' +
-                '    font-size: 150%;' +
+            '#paneled-outlier-explorer ul#navigation-bar li {' +
                 '    display: block;' +
                 '    color: white;' +
                 '    text-align: center;' +
+                '}',
+            '#paneled-outlier-explorer ul#navigation-bar li.navigation {' +
+                '    float: left;' +
+                '    cursor: pointer;' +
+                '    font-size: 24px;' +
                 '    padding: 14px 16px;' +
                 '    text-decoration: none;' +
+                '}',
+            '#paneled-outlier-explorer ul#navigation-bar li#population-annotation {' +
+                '    float: right;' +
+                '    font-size: 16px;' +
+                '    padding: 18px 16px;' +
                 '}',
             '#paneled-outlier-explorer ul#navigation-bar li.navigation.active {' +
                 '    background-color: #111;' +
@@ -132,6 +144,27 @@ export default function defineStyles() {
                 '    fill: red;' +
                 '    font-size: 0.8em;' +
                 '}',
+            '#paneled-outlier-explorer .normal-range {' +
+                '    fill: green;' +
+                '    fill-opacity: .05;' +
+                '    stroke: green;' +
+                '    stroke-opacity: 1;' +
+                '}',
+            '#paneled-outlier-explorer .n-inlier {' +
+                '    cursor: help;' +
+                '}',
+            '#paneled-outlier-explorer .n-inlier text {' +
+                '    fill: green;' +
+                '    text-anchor: end;' +
+                '    font-size: 10px;' +
+                '    font-weight: bold;' +
+                '}',
+            '#paneled-outlier-explorer .n-inlier rect {' +
+                '    fill: green;' +
+                '    fill-opacity: .05;' +
+                '    stroke: green;' +
+                '    stroke-opacity: 1;' +
+                '}',
 
         /***--------------------------------------------------------------------------------------\
           Listing
@@ -144,6 +177,8 @@ export default function defineStyles() {
                 '    overflow-x: scroll;' +
                 '}',
             '#paneled-outlier-explorer div.wc-chart#Listing table {' +
+                '    width: 100%;' +
+                '    display: table;' +
                 '}',
 
         /***--------------------------------------------------------------------------------------\

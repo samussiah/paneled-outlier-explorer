@@ -1,6 +1,7 @@
 import { select, selectAll } from 'd3';
 import '../../util/moveToFront';
-import brushMarks from './brush/brushMarks';
+import highlightChart from './brush/highlightChart';
+import highlightCharts from './brush/highlightCharts';
 
 export default function brush() {
     //Highlight previously brushed points.
@@ -17,7 +18,7 @@ export default function brush() {
     this.package.brush
         .on('brushstart', () => {
             //Clear previous brush.
-            if (this.parent.brushedChart)
+            if (this.parent.brushedChart && this.parent.brushedMeasure !== this.data.measure)
                 this.parent.brushedChart.package.overlay.call(
                     this.parent.brushedChart.package.brush.clear()
                 );
@@ -26,12 +27,15 @@ export default function brush() {
             this.parent.brushedChart = this;
             this.parent.brushedMeasure = this.data.measure;
         })
-        .on('brush', () => {})
+        .on('brush', () => {
+            //Add highlighting to brushed chart.
+            highlightChart.call(this);
+        })
         .on('brushend', () => {
             this.config.extent = this.package.brush.extent();
 
-            //Brush marks.
-            brushMarks.call(this);
+            //Add highlighting to all charts.
+            highlightCharts.call(this);
 
             //Redraw charts in which the currently brushed ID(s) are inliers.
             if (this.parent.data.IDs.selected.length > 0)
@@ -67,6 +71,6 @@ export default function brush() {
         }
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);
-        brushMarks.call(this);
+        highlightCharts.call(this);
     }
 }

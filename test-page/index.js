@@ -1,16 +1,13 @@
 d3.csv(
-    'https://rawgit.com/RhoInc/viz-library/master/data/safetyData/ADBDS.csv',
+    'https://raw.githubusercontent.com/RhoInc/data-library/master/data/clinical-trials/renderer-specific/adbds.csv',
     function(d) {
         return d;
     },
-    function(error,data) {
-        if (error)
-            console.log(error);
-
-        var settings = {};
+    function(data) {
         var instance = paneledOutlierExplorer(
-            '#container',
-            settings
+            '#container', // element
+            {
+            } // settings
         );
         instance.init(data);
     }

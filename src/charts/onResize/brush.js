@@ -65,9 +65,9 @@ export default function brush() {
     ) {
         if (this.config.x.type === 'ordinal') {
             this.config.extent[0][0] =
-                this.config.extent[0][0] * this.plot_width / this.config.previous_plot_width;
+                (this.config.extent[0][0] * this.plot_width) / this.config.previous_plot_width;
             this.config.extent[1][0] =
-                this.config.extent[1][0] * this.plot_width / this.config.previous_plot_width;
+                (this.config.extent[1][0] * this.plot_width) / this.config.previous_plot_width;
         }
         this.package.brush.extent(this.config.extent);
         this.package.overlay.call(this.package.brush);

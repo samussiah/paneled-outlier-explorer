@@ -11,7 +11,11 @@ export default function defineData() {
     this.data.yFormat =
         this.data.yRange < 0.1
             ? '.3f'
-            : this.data.yRange < 1 ? '.2f' : this.data.yRange < 10 ? '.1f' : '1d';
+            : this.data.yRange < 1
+            ? '.2f'
+            : this.data.yRange < 10
+            ? '.1f'
+            : '1d';
     this.data.IDs = {
         raw: set(this.data.raw.map(d => d[this.config.id_col]))
             .values()

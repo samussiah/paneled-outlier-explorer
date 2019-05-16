@@ -12,7 +12,9 @@ export default function removeVariables() {
             [this.config.unit_col],
             [this.config.lln_col],
             [this.config.uln_col],
-            this.config.filters ? this.config.filters.map(filter => filter.value_col) : []
+            this.config.filters
+                ? this.config.filters.map(filter => (filter.value_col ? filter.value_col : filter))
+                : []
         ])
     )
         .values()

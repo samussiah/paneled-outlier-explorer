@@ -2,8 +2,8 @@
     typeof exports === 'object' && typeof module !== 'undefined'
         ? (module.exports = factory(require('d3'), require('webcharts')))
         : typeof define === 'function' && define.amd
-          ? define(['d3', 'webcharts'], factory)
-          : (global.paneledOutlierExplorer = factory(global.d3, global.webCharts));
+        ? define(['d3', 'webcharts'], factory)
+        : (global.paneledOutlierExplorer = factory(global.d3, global.webCharts));
 })(this, function(d3, webcharts) {
     'use strict';
 
@@ -665,7 +665,15 @@
 
                     return diff
                         ? diff
-                        : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                        : aPos > -1
+                        ? -1
+                        : bPos > -1
+                        ? 1
+                        : leftSort
+                        ? -1
+                        : rightSort
+                        ? 1
+                        : 0;
                 } else return leftSort ? -1 : rightSort ? 1 : 0;
             });
         this.config.measures =
@@ -732,9 +740,9 @@
                             return time_settings.order.indexOf(visit) < 0;
                         })
                     );
-                } else
-                    //Otherwise use data-driven visit order.
-                    time_settings.order = visitOrder;
+                }
+                //Otherwise use data-driven visit order.
+                else time_settings.order = visitOrder;
 
                 //Define domain.
                 time_settings.domain = time_settings.order;
@@ -761,8 +769,7 @@
         if (toggle) {
             measureListCheckbox.attr('title', checked ? 'Remove all charts' : 'Display all charts');
             measureItems.each(function(d) {
-                d3
-                    .select(this)
+                d3.select(this)
                     .select('input')
                     .property('checked', checked);
                 toggleChart(chart, this, d);
@@ -783,8 +790,7 @@
         var checkbox = d3.select(li).select('input'),
             checked = checkbox.property('checked');
         checkbox.attr('title', checked ? 'Remove chart' : 'Display chart');
-        d3
-            .select(chart.div)
+        d3.select(chart.div)
             .selectAll('.wc-chart')
             .filter(function(di) {
                 return di.measure === d3.select(li).datum();
@@ -1096,7 +1102,11 @@
         this.data.yFormat =
             this.data.yRange < 0.1
                 ? '.3f'
-                : this.data.yRange < 1 ? '.2f' : this.data.yRange < 10 ? '.1f' : '1d';
+                : this.data.yRange < 1
+                ? '.2f'
+                : this.data.yRange < 10
+                ? '.1f'
+                : '1d';
         this.data.IDs = {
             raw: d3
                 .set(
@@ -1161,9 +1171,9 @@
                 return a.measure === chart.data.measure
                     ? -1
                     : b.measure === chart.data.measure
-                      ? 1
-                      : chart.config.measures.indexOf(a.measure) -
-                        chart.config.measures.indexOf(b.measure);
+                    ? 1
+                    : chart.config.measures.indexOf(a.measure) -
+                      chart.config.measures.indexOf(b.measure);
             });
 
             //Scroll window to expanded chart.
@@ -1895,9 +1905,9 @@
         ) {
             if (this.config.x.type === 'ordinal') {
                 this.config.extent[0][0] =
-                    this.config.extent[0][0] * this.plot_width / this.config.previous_plot_width;
+                    (this.config.extent[0][0] * this.plot_width) / this.config.previous_plot_width;
                 this.config.extent[1][0] =
-                    this.config.extent[1][0] * this.plot_width / this.config.previous_plot_width;
+                    (this.config.extent[1][0] * this.plot_width) / this.config.previous_plot_width;
             }
             this.package.brush.extent(this.config.extent);
             this.package.overlay.call(this.package.brush);

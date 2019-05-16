@@ -32,15 +32,17 @@ export default function customizeControls() {
         );
 
     //Add custom x-domain and filter functionality.
-    controls.filter(d => d.type === 'subsetter' || d.label === 'X-axis').on('change', function(d) {
-        d.value = select(this)
-            .selectAll('option')
-            .filter(function() {
-                return this.selected;
-            })
-            .text();
-        applyFilters.call(context, d);
-    });
+    controls
+        .filter(d => d.type === 'subsetter' || d.label === 'X-axis')
+        .on('change', function(d) {
+            d.value = select(this)
+                .selectAll('option')
+                .filter(function() {
+                    return this.selected;
+                })
+                .text();
+            applyFilters.call(context, d);
+        });
 
     //Add custom normal range functionality.
     const normalRangeControl = controls.filter(d => d.label === 'Normal range method');

@@ -14,7 +14,15 @@ export default function captureMeasures() {
 
                 return diff
                     ? diff
-                    : aPos > -1 ? -1 : bPos > -1 ? 1 : leftSort ? -1 : rightSort ? 1 : 0;
+                    : aPos > -1
+                    ? -1
+                    : bPos > -1
+                    ? 1
+                    : leftSort
+                    ? -1
+                    : rightSort
+                    ? 1
+                    : 0;
             } else return leftSort ? -1 : rightSort ? 1 : 0;
         });
     this.config.measures =

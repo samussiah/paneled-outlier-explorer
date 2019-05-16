@@ -30,9 +30,9 @@ export default function m__imize(chart) {
             return a.measure === chart.data.measure
                 ? -1
                 : b.measure === chart.data.measure
-                  ? 1
-                  : chart.config.measures.indexOf(a.measure) -
-                    chart.config.measures.indexOf(b.measure);
+                ? 1
+                : chart.config.measures.indexOf(a.measure) -
+                  chart.config.measures.indexOf(b.measure);
         });
 
         //Scroll window to expanded chart.

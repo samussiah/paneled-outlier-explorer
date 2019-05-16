@@ -415,6 +415,14 @@
         syncedSettings.width = syncedSettings.multiples_sizing.width;
         syncedSettings.height = syncedSettings.multiples_sizing.height;
 
+        //handle a string arguments to array settings
+        var array_settings = ['filters'];
+        array_settings.forEach(function(s) {
+            if (!(syncedSettings[s] instanceof Array))
+                syncedSettings[s] =
+                    typeof syncedSettings[s] === 'string' ? [syncedSettings[s]] : [];
+        });
+
         //Convert unscheduled_visit_pattern from string to regular expression.
         if (
             typeof syncedSettings.unscheduled_visit_pattern === 'string' &&
@@ -486,7 +494,7 @@
             return d.value_col || d;
         });
 
-        if (settings.filters)
+        if (settings.filters.length > 0)
             settings.filters.forEach(function(filter) {
                 syncedControlInputs.push({
                     type: 'subsetter',
@@ -532,7 +540,7 @@
                     [this.config.uln_col],
                     this.config.filters
                         ? this.config.filters.map(function(filter) {
-                              return filter.value_col;
+                              return filter.value_col ? filter.value_col : filter;
                           })
                         : []
                 ])

@@ -88,6 +88,13 @@ export function syncSettings(settings) {
     syncedSettings.width = syncedSettings.multiples_sizing.width;
     syncedSettings.height = syncedSettings.multiples_sizing.height;
 
+    //handle a string arguments to array settings
+    const array_settings = ['filters'];
+    array_settings.forEach(function(s) {
+        if (!(syncedSettings[s] instanceof Array))
+            syncedSettings[s] = typeof syncedSettings[s] === 'string' ? [syncedSettings[s]] : [];
+    });
+
     //Convert unscheduled_visit_pattern from string to regular expression.
     if (
         typeof syncedSettings.unscheduled_visit_pattern === 'string' &&
@@ -157,7 +164,7 @@ export function syncControlInputs(controlInputs, settings) {
         controlInput => controlInput.label === 'X-axis'
     )[0].values = settings.time_cols.map(d => d.value_col || d);
 
-    if (settings.filters)
+    if (settings.filters.length > 0)
         settings.filters.forEach(filter => {
             syncedControlInputs.push({
                 type: 'subsetter',

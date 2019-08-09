@@ -37,6 +37,11 @@ export default function brush() {
             //Add highlighting to all charts.
             highlightCharts.call(this);
 
+            //trigger custom participantsSelected event
+            this.parent.participantsSelected = this.parent.data.IDs.selected;
+            this.parent.events.participantsSelected.data = this.parent.participantsSelected;
+            this.parent.wrap.node().dispatchEvent(this.parent.events.participantsSelected);
+
             //Redraw charts in which the currently brushed ID(s) are inliers.
             if (this.parent.data.IDs.selected.length > 0)
                 this.parent.multiples

@@ -5,6 +5,7 @@ import { multiply } from 'webcharts';
 import layout from './init/layout';
 import updatePopulationAnnotation from './init/updatePopulationAnnotation';
 import customizeControls from './init/customizeControls';
+import initCustomEvents from './init/initCustomEvents';
 
 export default function init(data) {
     //Attach various data arrays to charts.
@@ -33,4 +34,7 @@ export default function init(data) {
 
     //Define custom event listener for filters.
     customizeControls.call(this);
+
+    //initialize custom events
+    initCustomEvents.call(this);
 }

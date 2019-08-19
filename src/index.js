@@ -1,6 +1,7 @@
 //Utility polyfills
 import './util/object-assign';
 import './util/array-find';
+import './util/polyfills';
 
 import { select } from 'd3';
 import defineStyles from './util/defineStyles';

@@ -2,6 +2,7 @@ import clone from './util/clone';
 
 export const rendererSettings = {
     measure_col: 'TEST',
+    measure_order_col: 'TESTN',
     time_cols: [
         {
             value_col: 'VISIT',
@@ -171,7 +172,13 @@ export function syncControlInputs(controlInputs, settings) {
                 value_col: filter.value_col || filter,
                 label: filter.label || filter.value_col || filter,
                 description: 'filter',
-                multiple: false
+                multiple: false,
+                all: filter.all !== undefined
+                    ? filter.all
+                    : true,
+                start: filter.start !== undefined
+                    ? filter.start
+                    : null,
             });
         });
 

@@ -4,17 +4,31 @@ d3.csv(
         return d;
     },
     function(data) {
-        var instance = paneledOutlierExplorer(
+        const measures = [...new Set(data.map(d => d.TEST)).values()]
+            .sort(() => .5 - Math.random());
+        data.forEach(d => {
+            d.TESTN = measures.findIndex(measure => measure === d.TEST);
+        });
+
+        const instance = paneledOutlierExplorer(
             '#container', // element
             {
+                filters: [
+                    {value_col: 'SITEID', label: 'Site ID', start: '01'},
+                    {value_col: 'SEX', label: 'Sex'},
+                    {value_col: 'RACE', label: 'Race'},
+                    {value_col: 'ARM', label: 'Treatment Group'},
+                    {value_col: 'USUBJID', label: 'Participant ID'},
+                ],
+                inliers: true,
             } // settings
         );
         instance.init(data);
-        console.log(instance)
+
         //quick test of participantSelected event
-        instance.wrap.on("participantsSelected",function(){
-          console.log("Participant Selected Event:")
-          console.log(d3.event.data)
-        })
+        instance.wrap.on('participantsSelected', function() {
+          console.log('Participant Selected Event:');
+          console.log(d3.event.data);
+        });
     }
 );

@@ -5,6 +5,7 @@ export default function removeVariables() {
     this.config.variables = set(
         merge([
             [this.config.measure_col],
+            [this.config.measure_order_col],
             [this.config.id_col],
             this.config.time_cols.map(time_col => time_col.value_col),
             this.config.time_cols.map(time_col => time_col.order_col),

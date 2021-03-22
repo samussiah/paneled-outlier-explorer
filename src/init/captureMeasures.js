@@ -1,30 +1,19 @@
-import { set } from 'd3';
+import { dataOps } from 'webcharts';
 
 export default function captureMeasures() {
-    this.config.allMeasures = set(this.data.raw.map(d => d.measure_unit))
-        .values()
-        .sort((a, b) => {
-            const leftSort = a < b,
-                rightSort = a > b;
+    // Define set of measure values with units (in ADaM units are already attached; in SDTM units are captured in a separate variable).
+    this.config.allMeasures = this.data.raw[0].hasOwnProperty(this.config.measure_order_col)
+        ? [...new Set(this.data.raw.map(d => +d[this.config.measure_order_col])).values()]
+              .sort((a, b) => a - b)
+              .map(
+                  value =>
+                      this.data.raw.find(d => +d[this.config.measure_order_col] === value)
+                          .measure_unit
+              ) // sort measures by measure order
+        : [...new Set(this.data.raw.map(d => d.measure_unit)).values()].sort(
+              dataOps.naturalSorter
+          ); // sort measures alphabetically
 
-            if (this.config.measures && this.config.measures.length) {
-                const aPos = this.config.measures.indexOf(a),
-                    bPos = this.config.measures.indexOf(b),
-                    diff = aPos > -1 && bPos > -1 ? aPos - bPos : null;
-
-                return diff
-                    ? diff
-                    : aPos > -1
-                    ? -1
-                    : bPos > -1
-                    ? 1
-                    : leftSort
-                    ? -1
-                    : rightSort
-                    ? 1
-                    : 0;
-            } else return leftSort ? -1 : rightSort ? 1 : 0;
-        });
     this.config.measures =
         this.config.measures && this.config.measures.length
             ? this.config.measures

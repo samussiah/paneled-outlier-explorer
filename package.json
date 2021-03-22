@@ -2,7 +2,7 @@
   "name": "paneled-outlier-explorer",
   "version": "1.2.0",
   "description": "Paneled line charts of data points over time with point and line brushing",
-  "main": "./build/paneledOutlierExplorer.js",
+  "main": "./paneledOutlierExplorer.js",
   "module": "./src/index.js",
   "repository": {
     "type": "git",
@@ -32,7 +32,7 @@
     "build-md": "node ./scripts/configuration-markdown.js",
     "bundle": "rollup -c",
     "format": "npm run format-src && npm run format-bundle",
-    "format-bundle": "prettier --single-quote --tab-width=4 --print-width=100 --write  ./build/paneledOutlierExplorer.js",
+    "format-bundle": "prettier --single-quote --tab-width=4 --print-width=100 --write  ./paneledOutlierExplorer.js",
     "format-src": "prettier --single-quote --tab-width=4 --print-width=100 --write \"src/**/!(*defineStyles).js\"",
     "test-page": "start chrome ./test-page/index.html && start firefox ./test-page/index.html && start iexplore file://%CD%/test-page/index.html",
     "watch": "rollup -c -w"
